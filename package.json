@@ -1,0 +1,34 @@
+{
+  "name": "cytoscape-view-utilities",
+  "version": "1.0.0",
+  "description": "Package of view utilities for cytoscape.js",
+  "main": "cytoscape-view-utilities.js",
+  "spm": {
+    "main": "cytoscape-view-utilities.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iVis-at-Bilkent/view-utilities.git"
+  },
+  "keywords": [
+    "cytoscape",
+    "cyext"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iVis-at-Bilkent/view-utilities/issues"
+  },
+  "homepage": "https://github.com/iVis-at-Bilkent/view-utilities",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-jshint": "^1.8.5",
+    "gulp-prompt": "^0.1.1",
+    "gulp-replace": "^0.4.0",
+    "gulp-shell": "^0.2.9",
+    "jshint-stylish": "^1.0.0",
+    "run-sequence": "^1.0.0"
+  }
+}
