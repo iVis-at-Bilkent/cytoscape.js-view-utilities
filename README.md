@@ -12,8 +12,8 @@ Package of view utilities for cytoscape.js
 `cy.viewUtilities(options)`
 Initializes the extension and sets options. This can be used to override default options.
 
-`eles.search(searchFor, searchBy)`
-Searchs for `searchFor` string. `searchBy` is temporary option for the search and if not specified default `searchBy` will be used.
+`eles.search(text, searchBy)`
+Searchs for `text` string. `searchBy` is temporary option for the search (and will be used as `searchBy(text)`) and if not specified default `searchBy` will be used. 
 
 `eles.highlight()`
 Highlights eles & unhighlights others.
@@ -57,7 +57,7 @@ Shows hidden eles.
                     'background-opacity': 0.3
                 }
             },
-            searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search will be used as searchBy(text).
+            searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search.
 ```
 
 
