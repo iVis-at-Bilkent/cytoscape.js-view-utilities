@@ -7,6 +7,7 @@
 
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 		<script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 
 		<!-- for testing with local version of cytoscape.js -->
@@ -21,12 +22,10 @@
 			}
 
 			#cy {
-				position: absolute;
-				left: 0;
-				top: 0;
-				bottom: 0;
-				right: 0;
 				z-index: 999;
+                width: 85%;
+                height: 85%;
+                float: left;
 			}
 
 			h1 {
@@ -37,66 +36,89 @@
 		</style>
 
 		<script>
-			document.addEventListener('DOMContentLoaded', function(){
 
-				var cy = window.cy = cytoscape({
-					container: document.getElementById('cy'),
+			document.addEventListener("DOMContentLoaded", function(){
 
-					style: [
-						{
-							selector: 'node',
-							style: {
-								'content': 'data(name)'
-							}
-						},
+                var cy = window.cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    layout: { name: "cose" },
+                    style: [
+                        {
+                            selector: 'node',
+                            style: {
+                                'content': 'data(name)'
+                            }
+                        },
 
-						{
-							selector: 'edge',
-							style: {
-								'target-arrow-shape': 'triangle'
-							}
-						},
+                        {
+                            selector: 'edge',
+                            style: {
+                                'target-arrow-shape': 'triangle'
+                            }
+                        },
 
-						{
-							selector: ':selected',
-							style: {
+                        {
+                            selector: ':selected',
+                            style: {
 
-							}
-						}
-					],
+                            }
+                        }
+                    ],
 
-					elements: {
-						nodes: [
-							{ data: { id: 'j', name: 'Jerry' } },
-							{ data: { id: 'e', name: 'Elaine' } },
-							{ data: { id: 'k', name: 'Kramer' } },
-							{ data: { id: 'g', name: 'George' } }
-						],
-						edges: [
-							{ data: { source: 'j', target: 'e' } },
-							{ data: { source: 'j', target: 'k' } },
-							{ data: { source: 'j', target: 'g' } },
-							{ data: { source: 'e', target: 'j' } },
-							{ data: { source: 'e', target: 'k' } },
-							{ data: { source: 'k', target: 'j' } },
-							{ data: { source: 'k', target: 'e' } },
-							{ data: { source: 'k', target: 'g' } },
-							{ data: { source: 'g', target: 'j' } }
-						]
-					},
-				});
+                    elements: {
+                        nodes: [
+                            { data: { id: 'j', name: 'Jerry' } },
+                            { data: { id: 'e', name: 'Elaine' } },
+                            { data: { id: 'k', name: 'Kramer', parent: "e" } },
+                            { data: { id: 'g', name: 'George' , parent: "e" } },
+                            { data: { id: 'w', name: 'Washington' , parent: "e" } }
+                        ],
+                        edges: [
+                            { data: { source: 'j', target: 'e' } },
+                            { data: { source: 'j', target: 'k' } },
+                            { data: { source: "k", target: "w" } },
+                            { data: { source: "g", target: "w" } }
+                        ]
+                    }
+                });
 
-				// demo your collection ext
-				cy.elements().view-utilities( /* args... */ );
+                cy.viewUtilities({
+                    searchBy: ["name"]
+                });
 
+                $("#hide").click(function () {
+                    cy.$(":selected").hide();
+                });
+
+                $("#showAll").click(function () {
+                    cy.elements().show();
+                });
+
+                $("#highlightNeighbors").click(function () {
+                    cy.$(":selected").highlightNeighbors();
+                });
+
+                $("#removeHighlights").click(function () {
+                    cy.removeHighlights();
+                });
+
+                $("#search").click(function () {
+                    var text = $("#toSearch").val();
+                    cy.elements().search(text).highlightNeighbors();
+                });
 			});
 		</script>
 	</head>
 
 	<body>
-		<h1>cytoscape-view-utilities demo</h1>
+		<h1>cytoscape.js-view-utilities demo</h1>
 
-		<div id="cy"></div>
+        <input type="text" id="toSearch"> <b id="search" style="cursor: pointer; color: darkslateblue">Search</b> <br/>
+        <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
+        <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b>
+
+            <div id="cy"></div>
+        </div>
 
 	</body>
 

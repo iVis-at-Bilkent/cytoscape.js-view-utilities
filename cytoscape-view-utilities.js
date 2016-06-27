@@ -12,17 +12,19 @@
             node: {
                 highlighted: {}, // styles for when nodes are highlighted.
                 unhighlighted: { // styles for when nodes are unhighlighted.
-                    'opacity': 0.3,
-                    'text-opacity': 0.3,
-                    'background-opacity': 0.3
+                    'opacity': 0.3
+                },
+                hidden: {
+                    "display": "none"
                 }
             },
             edge: {
-                highlighted: {}, // styles for when edges are highlighted.
+                highlighted: { }, // styles for when edges are highlighted.
                 unhighlighted: { // styles for when edges are unhighlighted.
-                    'border-opacity': 0.3,
-                    'text-opacity': 0.3,
-                    'background-opacity': 0.3
+                    'opacity': 0.3
+                },
+                hidden: {
+                    "display": "none"
                 }
             },
             searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search.
@@ -36,7 +38,7 @@
         }
 
         function unhighlight(eles) {
-            eles.removeClass("highlighted")
+            eles.removeClass("highlighted");
             eles.addClass("unhighlighted");
             eles.data("highlighted", false);
         }
@@ -54,19 +56,24 @@
                 var cy = this;
 
                 cy
+                    .style()
                     .selector("node.highlighted")
                     .css(options.node.highlighted)
                     .selector("node.unhighlighted")
                     .css(options.node.unhighlighted)
+                    .selector("node.hidden")
+                    .css(options.node.hidden)
                     .selector("edge.highlighted")
                     .css(options.edge.highlighted)
                     .selector("edge.unhighlighted")
-                    .css(options.edge.unhighlighted);
+                    .css(options.edge.unhighlighted)
+                    .selector("edge.hidden")
+                    .css(options.edge.hidden)
+                    .update();
 
 
                 cytoscape("collection", "search", function (text, searchBy) {
                     var eles = this;
-                    var cy = eles.cy();
 
                     if (!searchBy)
                         searchBy = options.searchBy;
@@ -77,7 +84,7 @@
                      else{
                         res = eles.filter(function (i, ele) {
                             return searchBy.map(function (field) {
-                                return ele[field];
+                                return ele.data(field) ? ele.data(field) : "";
                             }).join("$^>").indexOf(text) >= 0;
                         });
                     }
@@ -89,7 +96,9 @@
                     var eles = this;
                     var cy = eles.cy();
 
-                    var others = cy.$(":visible[!highlighted]").difference(eles);
+
+
+                    var others = cy.elements().difference(eles.union(eles.ancestors()));
 
                     highlight(eles);
                     unhighlight(others);
@@ -118,7 +127,6 @@
 
                 cytoscape("collection", "unhighlightNeighbors", function () {
                     var eles = this;
-                    var cy = eles.cy();
 
                     var allEles = getWithNeighbors(eles);
 
@@ -127,20 +135,20 @@
 
                 cytoscape("collection", "highlightNeighbours", function () {
                     var eles = this;
-                    var cy = eles.cy();
 
                     return eles.highlightNeighbors();
                 });
 
                 cytoscape("collection", "unhighlightNeighbours", function () {
                     var eles = this;
-                    var cy = eles.cy();
 
                     return eles.unhighlightNeighbors();
                 });
 
-                cytoscape("collection", "removeHighlights", function () {
-                    var eles = this;
+                cytoscape("core", "removeHighlights", function () {
+                    var cy = this;
+                    var eles = cy.elements();
+
                     eles
                         .removeClass("highlighted")
                         .removeClass("unhighlighted")
@@ -154,18 +162,19 @@
 
 
                 cytoscape("collection", "hide", function () {
-                    var eles = this;
-                    eles.data("hidden", true);
-                    eles.css("display: none");
+                    var eles = this.union(this.connectedEdges());
 
+                    eles.data("hidden", true);
+                    eles.addClass("hidden");
+                    eles.unselect();
 
                     return this;
                 });
 
                 cytoscape("collection", "show", function () {
-                    var eles = this;
+                    var eles = this.union(this.connectedEdges());
                     eles.data("hidden", false);
-                    eles.css("display: element");
+                    eles.removeClass("hidden");
 
                     return this;
                 });

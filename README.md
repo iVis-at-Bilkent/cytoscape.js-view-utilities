@@ -10,12 +10,15 @@ Package of view utilities for cytoscape.js
 ## API
 
 `cy.viewUtilities(options)`
+
 Initializes the extension and sets options. This can be used to override default options.
 
 `eles.search(text, searchBy)`
+
 Searchs for `text` string. `searchBy` is temporary option for the search (and will be used as `searchBy(text)`) and if not specified default `searchBy` will be used. 
 
 `eles.highlight()`
+
 Highlights eles & unhighlights others.
 
 `eles.unhighlight()`
@@ -23,19 +26,24 @@ Just unighlights eles.
 
 `eles.highlightNeighbors()`
 * Aliases: `eles.highlightNeighbours()`
+
 Highlights eles' neighborhood & unhighlights others' neighborhood.
 
 `eles.unhighlightNeighbors()`
 * Aliases: `eles.unhighlightNeighbours()`
+
 Just unhighlights eles and their neighbors.
 
-`eles.removeHighlights()`
-Remove highlights & unhighlights from eles.
+`cy.removeHighlights()`
+
+Remove highlights & unhighlights from all eles.
 
 `eles.hide()`
+
 Hides eles.
 
 `eles.show()`
+
 Shows hidden eles.
 
 
