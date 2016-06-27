@@ -9,7 +9,7 @@ Package of view utilities for cytoscape.js
 
 ## API
 
-`eles.viewUtilities(options)`
+`cy.viewUtilities(options)`
 Initializes the extension and sets options. This can be used to override default options.
 
 `eles.search(searchFor, searchBy)`
