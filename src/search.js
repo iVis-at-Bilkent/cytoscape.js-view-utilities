@@ -1,5 +1,4 @@
-
-module.exports = function (cytoscape, options) {
+module.exports = function (cytoscape, cy, options) {
 
     cytoscape("collection", "search", function (text, searchBy) {
         var eles = this;
@@ -10,7 +9,7 @@ module.exports = function (cytoscape, options) {
         var res;
         if (typeof searchBy == "function")
             res = searchBy(text);
-        else{
+        else {
             res = eles.filter(function (i, ele) {
                 return searchBy.map(function (field) {
                         return ele.data(field) ? ele.data(field) : "";

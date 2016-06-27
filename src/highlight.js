@@ -1,5 +1,17 @@
+module.exports = function (cytoscape, cy, options, ur) {
 
-module.exports = function (cytoscape, options) {
+    cy
+        .style()
+        .selector("node.highlighted")
+        .css(options.node.highlighted)
+        .selector("node.unhighlighted")
+        .css(options.node.unhighlighted)
+        .selector("edge.highlighted")
+        .css(options.edge.highlighted)
+        .selector("edge.unhighlighted")
+        .css(options.edge.unhighlighted)
+        .update();
+
 
     function highlight(eles) {
         eles.removeClass("unhighlighted");
@@ -18,9 +30,8 @@ module.exports = function (cytoscape, options) {
     }
 
     cytoscape("collection", "highlight", function () {
-        var eles = this;
+        var eles = this; //.filter("[!highlighted]")
         var cy = eles.cy();
-
 
 
         var others = cy.elements().difference(eles.union(eles.ancestors()));
@@ -33,7 +44,7 @@ module.exports = function (cytoscape, options) {
     });
 
     cytoscape("collection", "unhighlight", function () {
-        var eles = this;
+        var eles = this;//.filter("[highlighted], [^highlighted]");
 
         unhighlight(eles);
 
@@ -84,4 +95,19 @@ module.exports = function (cytoscape, options) {
         var ele = this;
         return ele.is(":visible[highlighted]") ? true : false;
     });
+    
+    if (ur) {
+        var funcs = {};
+        
+        function urRemoveHighlights() {
+
+            var highlighteds = cy.$("[highlighted]");
+            cy.removeHighlights();
+
+            return highlighteds;
+
+        }
+
+        ur.action("removeHighlights", urRemoveHighlights, funs.highlight);
+    }
 };

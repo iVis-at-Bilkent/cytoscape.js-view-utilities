@@ -19,7 +19,7 @@
                 }
             },
             edge: {
-                highlighted: { }, // styles for when edges are highlighted.
+                highlighted: {}, // styles for when edges are highlighted.
                 unhighlighted: { // styles for when edges are unhighlighted.
                     'opacity': 0.3
                 },
@@ -44,25 +44,12 @@
                 initialized = true;
                 var cy = this;
 
-                cy
-                    .style()
-                    .selector("node.highlighted")
-                    .css(options.node.highlighted)
-                    .selector("node.unhighlighted")
-                    .css(options.node.unhighlighted)
-                    .selector("node.hidden")
-                    .css(options.node.hidden)
-                    .selector("edge.highlighted")
-                    .css(options.edge.highlighted)
-                    .selector("edge.unhighlighted")
-                    .css(options.edge.unhighlighted)
-                    .selector("edge.hidden")
-                    .css(options.edge.hidden)
-                    .update();
+                if (cy.undoRedo)
+                    var ur = cy.undoRedo(null, true);
 
-                highlight(cytoscape, options);
-                search(cytoscape, options);
-                hideShow(cytoscape, options);
+                highlight(cytoscape, cy, options, ur);
+                hideShow(cytoscape, cy, options, ur);
+                search(cytoscape, cy, options);
 
             }
             return this;

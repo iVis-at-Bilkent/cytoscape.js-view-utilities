@@ -22,6 +22,7 @@ Searchs for `text` string. `searchBy` is temporary option for the search (and wi
 Highlights eles & unhighlights others.
 
 `eles.unhighlight()`
+
 Just unighlights eles.
 
 `eles.highlightNeighbors()`

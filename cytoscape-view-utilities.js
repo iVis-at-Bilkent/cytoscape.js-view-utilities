@@ -1,29 +1,60 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = function (cytoscape, cy, options, ur) {
 
-module.exports = function (cytoscape, options) {
+    cy
+        .style()
+        .selector("node.hidden")
+        .css(options.node.hidden)
+        .selector("edge.hidden")
+        .css(options.edge.hidden);
 
     cytoscape("collection", "hide", function () {
-        var eles = this.union(this.connectedEdges());
+        var eles = this.filter("[!hidden]").union(this.connectedEdges());
 
         eles.data("hidden", true);
         eles.addClass("hidden");
         eles.unselect();
 
-        return this;
+        return eles;
     });
 
     cytoscape("collection", "show", function () {
-        var eles = this.union(this.connectedEdges());
+        var eles = this.filter("[hidden]").union(this.connectedEdges());
         eles.data("hidden", false);
         eles.removeClass("hidden");
 
-        return this;
+        return eles;
     });
+
+    if (ur) {
+        function urShow(eles) {
+            return eles.show();
+        }
+
+        function urHide(eles) {
+            return eles.hide();
+        }
+
+        ur.action("show", urShow, urHide);
+        ur.action("hide", urHide, urShow);
+    }
 
 };
 },{}],2:[function(require,module,exports){
+module.exports = function (cytoscape, cy, options, ur) {
 
-module.exports = function (cytoscape, options) {
+    cy
+        .style()
+        .selector("node.highlighted")
+        .css(options.node.highlighted)
+        .selector("node.unhighlighted")
+        .css(options.node.unhighlighted)
+        .selector("edge.highlighted")
+        .css(options.edge.highlighted)
+        .selector("edge.unhighlighted")
+        .css(options.edge.unhighlighted)
+        .update();
+
 
     function highlight(eles) {
         eles.removeClass("unhighlighted");
@@ -42,9 +73,8 @@ module.exports = function (cytoscape, options) {
     }
 
     cytoscape("collection", "highlight", function () {
-        var eles = this;
+        var eles = this; //.filter("[!highlighted]")
         var cy = eles.cy();
-
 
 
         var others = cy.elements().difference(eles.union(eles.ancestors()));
@@ -57,7 +87,7 @@ module.exports = function (cytoscape, options) {
     });
 
     cytoscape("collection", "unhighlight", function () {
-        var eles = this;
+        var eles = this;//.filter("[highlighted], [^highlighted]");
 
         unhighlight(eles);
 
@@ -108,6 +138,34 @@ module.exports = function (cytoscape, options) {
         var ele = this;
         return ele.is(":visible[highlighted]") ? true : false;
     });
+    
+    if (ur) {
+        var funcs = {};
+        var toFunc = ["highlight", "unhighlight", "highlightNeighbors", "highlightNeighbours", "unhighlightNeighbors", "unhighlightNeighbours" ];
+        for (var i = 0; i < toFunc.length; i++){
+            console.log(toFunc[i]);
+            var funcName = toFunc[i];
+            funcs[toFunc[i]] = function (eles) {
+                return eles[funcName]();
+            };
+            if (i % 2 == 1) {
+                ur.action(toFunc[i], funcs[toFunc[i]], funcs[toFunc[i-1]]);
+                ur.action(toFunc[i-1], funcs[toFunc[i-1]], funcs[toFunc[i]]);
+            }
+
+        }
+
+        ur.action("removeHighlights", function (_highlighteds) {
+
+            var highlighteds = cy.$("[highlighted]");
+            cy.removeHighlights();
+
+            return highlighteds;
+
+        }, function (highlighteds) {
+            return highlighteds.highlight();
+        });
+    }
 };
 },{}],3:[function(require,module,exports){
 ;(function () {
@@ -131,7 +189,7 @@ module.exports = function (cytoscape, options) {
                 }
             },
             edge: {
-                highlighted: { }, // styles for when edges are highlighted.
+                highlighted: {}, // styles for when edges are highlighted.
                 unhighlighted: { // styles for when edges are unhighlighted.
                     'opacity': 0.3
                 },
@@ -156,25 +214,12 @@ module.exports = function (cytoscape, options) {
                 initialized = true;
                 var cy = this;
 
-                cy
-                    .style()
-                    .selector("node.highlighted")
-                    .css(options.node.highlighted)
-                    .selector("node.unhighlighted")
-                    .css(options.node.unhighlighted)
-                    .selector("node.hidden")
-                    .css(options.node.hidden)
-                    .selector("edge.highlighted")
-                    .css(options.edge.highlighted)
-                    .selector("edge.unhighlighted")
-                    .css(options.edge.unhighlighted)
-                    .selector("edge.hidden")
-                    .css(options.edge.hidden)
-                    .update();
+                if (cy.undoRedo)
+                    var ur = cy.undoRedo(null, true);
 
-                highlight(cytoscape, options);
-                search(cytoscape, options);
-                hideShow(cytoscape, options);
+                highlight(cytoscape, cy, options, ur);
+                hideShow(cytoscape, cy, options, ur);
+                search(cytoscape, cy, options);
 
             }
             return this;
@@ -199,8 +244,7 @@ module.exports = function (cytoscape, options) {
 })();
 
 },{"./hide-show":1,"./highlight":2,"./search":4}],4:[function(require,module,exports){
-
-module.exports = function (cytoscape, options) {
+module.exports = function (cytoscape, cy, options) {
 
     cytoscape("collection", "search", function (text, searchBy) {
         var eles = this;
@@ -211,7 +255,7 @@ module.exports = function (cytoscape, options) {
         var res;
         if (typeof searchBy == "function")
             res = searchBy(text);
-        else{
+        else {
             res = eles.filter(function (i, ele) {
                 return searchBy.map(function (field) {
                         return ele.data(field) ? ele.data(field) : "";

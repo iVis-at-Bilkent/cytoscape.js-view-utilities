@@ -13,6 +13,9 @@
 		<!-- for testing with local version of cytoscape.js -->
 		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
 
+        <script src="src/cytoscape-undo-redo.js"></script>
+
+
 		<script src="cytoscape-view-utilities.js"></script>
 
 		<style>
@@ -85,21 +88,22 @@
                 cy.viewUtilities({
                     searchBy: ["name"]
                 });
+                var ur = cy.undoRedo();
 
                 $("#hide").click(function () {
-                    cy.$(":selected").hide();
+                    ur.do("hide", cy.$(":selected"));
                 });
 
                 $("#showAll").click(function () {
-                    cy.elements().show();
+                    ur.do("show", cy.elements());
                 });
 
                 $("#highlightNeighbors").click(function () {
-                    cy.$(":selected").highlightNeighbors();
+                    ur.do("highlightNeighbors", cy.$(":selected"));
                 });
 
                 $("#removeHighlights").click(function () {
-                    cy.removeHighlights();
+                    ur.do("removeHighlights");
                 });
 
                 $("#search").click(function () {
@@ -113,7 +117,8 @@
 	<body>
 		<h1>cytoscape.js-view-utilities demo</h1>
 
-        <input type="text" id="toSearch"> <b id="search" style="cursor: pointer; color: darkslateblue">Search to </b> <br/>
+        <b>CTRL+Z</b> to undo, <b>CTRL+Y</b> to redo<br/>
+
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b>
 
