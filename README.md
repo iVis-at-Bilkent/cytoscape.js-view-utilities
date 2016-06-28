@@ -76,7 +76,7 @@ Shows hidden eles.
 `ur.do("highlight", eles)`
 
 `ur.do("highlightNeighbors", eles)`
-`ur.do("unhighlightNeighbours", eles)`
+`ur.do("highlightNeighbours", eles)`
 
 `ur.do("unhighlight", eles)`
 

@@ -21,7 +21,7 @@ gulp.task("build", [], shell.task([
 ]));
 
 gulp.task('publish', [], function( next ){
-  runSequence('confver', 'lint', 'pkgver', 'push', 'tag', 'npm', next);
+  runSequence('confver', /*'lint',*/ 'pkgver', /*'push', 'tag',*/ 'npm', next);
 });
 
 gulp.task('confver', ['version'], function(){
