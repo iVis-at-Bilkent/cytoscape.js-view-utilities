@@ -99,7 +99,8 @@
                 });
 
                 $("#highlightNeighbors").click(function () {
-                    ur.do("highlightNeighbors", cy.$(":selected"));
+                    if(cy.$(":selected").length > 0)
+                        ur.do("highlightNeighbors", cy.$(":selected"));
                 });
 
                 $("#removeHighlights").click(function () {

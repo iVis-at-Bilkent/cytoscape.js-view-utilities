@@ -19,7 +19,7 @@ Searchs for `text` string. `searchBy` is temporary option for the search (and wi
 
 `eles.highlight()`
 
-Highlights eles & unhighlights others.
+Highlights eles & unhighlights others at first use.
 
 `eles.unhighlight()`
 
@@ -28,7 +28,7 @@ Just unighlights eles.
 `eles.highlightNeighbors()`
 * Aliases: `eles.highlightNeighbours()`
 
-Highlights eles' neighborhood & unhighlights others' neighborhood.
+Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
 
 `eles.unhighlightNeighbors()`
 * Aliases: `eles.unhighlightNeighbours()`
@@ -70,10 +70,25 @@ Shows hidden eles.
 ```
 
 
+## Default Undo-Redo Actions
+
+
+`ur.do("highlight", eles)`
+
+`ur.do("highlightNeighbors", eles)`
+`ur.do("unhighlightNeighbours", eles)`
+
+`ur.do("unhighlight", eles)`
+
+`ur.do("unhighlightNeighbors", eles)` 
+`ur.do("unhighlightNeighbours", eles)`
+
+`ur.do("removeHighlights", eles)`
+
 ## Dependencies
 
  * Cytoscape.js ^1.7.3
- * Also works well with cytoscape-snap-to-grid
+ * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 
 ## Usage instructions
