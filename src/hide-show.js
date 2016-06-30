@@ -10,7 +10,7 @@ module.exports = function (cytoscape, cy, options, ur) {
     cytoscape("collection", "hide", function () {
         var eles = this.filter("[!hidden]").union(this.connectedEdges());
 
-        eles.data("hidden", true);
+        eles.scratch("hidden", true);
         eles.addClass("hidden");
         eles.unselect();
 
@@ -19,7 +19,7 @@ module.exports = function (cytoscape, cy, options, ur) {
 
     cytoscape("collection", "show", function () {
         var eles = this.filter("[hidden]").union(this.connectedEdges());
-        eles.data("hidden", false);
+        eles.scratch("hidden", false);
         eles.removeClass("hidden");
 
         return eles;

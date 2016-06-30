@@ -11,7 +11,7 @@ module.exports = function (cytoscape, cy, options, ur) {
     cytoscape("collection", "hide", function () {
         var eles = this.filter("[!hidden]").union(this.connectedEdges());
 
-        eles.data("hidden", true);
+        eles.scratch("hidden", true);
         eles.addClass("hidden");
         eles.unselect();
 
@@ -20,7 +20,7 @@ module.exports = function (cytoscape, cy, options, ur) {
 
     cytoscape("collection", "show", function () {
         var eles = this.filter("[hidden]").union(this.connectedEdges());
-        eles.data("hidden", false);
+        eles.scratch("hidden", false);
         eles.removeClass("hidden");
 
         return eles;
@@ -59,13 +59,13 @@ module.exports = function (cytoscape, cy, options, ur) {
     function highlight(eles) {
         eles.removeClass("unhighlighted");
         eles.addClass("highlighted");
-        eles.data("highlighted", true);
+        eles.scratch("highlighted", true);
     }
 
     function unhighlight(eles) {
         eles.removeClass("highlighted");
         eles.addClass("unhighlighted");
-        eles.data("highlighted", false);
+        eles.scratch("highlighted", false);
     }
 
     function getWithNeighbors(eles) {
@@ -186,9 +186,11 @@ module.exports = function (cytoscape, cy, options, ur) {
         }
 
         ur.action("highlightNeighbors", urHighlightNeighbors, urUndoHighlight);
+        ur.action("highlightNeighbours", urHighlightNeighbors, urUndoHighlight);
         ur.action("highlight", urHighlight, urUndoHighlight);
         ur.action("unhighlight", urUnhighlight, urUndoUnhighlight);
         ur.action("unhighlightNeighbors", urUnhighlight, urUndoUnhighlight);
+        ur.action("unhighlightNeighbours", urUnhighlight, urUndoUnhighlight);
         ur.action("removeHighlights", urRemoveHighlights, urUndoUnhighlight);
     }
 };

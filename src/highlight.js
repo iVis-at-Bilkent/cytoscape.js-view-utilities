@@ -16,13 +16,13 @@ module.exports = function (cytoscape, cy, options, ur) {
     function highlight(eles) {
         eles.removeClass("unhighlighted");
         eles.addClass("highlighted");
-        eles.data("highlighted", true);
+        eles.scratch("highlighted", true);
     }
 
     function unhighlight(eles) {
         eles.removeClass("highlighted");
         eles.addClass("unhighlighted");
-        eles.data("highlighted", false);
+        eles.scratch("highlighted", false);
     }
 
     function getWithNeighbors(eles) {
