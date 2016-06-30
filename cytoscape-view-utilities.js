@@ -9,7 +9,10 @@ module.exports = function (cytoscape, cy, options, ur) {
         .css(options.edge.hidden);
 
     cytoscape("collection", "hide", function () {
-        var eles = this.filter("[!hidden]").union(this.connectedEdges());
+        var eles = this.filter(function (i, ele) {
+            return !ele.scratch("hidden");
+        });
+        eles = eles.union(eles.connectedEdges());
 
         eles.scratch("hidden", true);
         eles.addClass("hidden");
@@ -19,7 +22,10 @@ module.exports = function (cytoscape, cy, options, ur) {
     });
 
     cytoscape("collection", "show", function () {
-        var eles = this.filter("[hidden]").union(this.connectedEdges());
+        var eles = this.filter(function (i, ele) {
+            return ele.scratch("hidden");
+        });
+        eles = eles.union(eles.connectedEdges());
         eles.scratch("hidden", false);
         eles.removeClass("hidden");
 
@@ -158,7 +164,6 @@ module.exports = function (cytoscape, cy, options, ur) {
         }
 
         function urUndoRemoveHighlights(eles) {
-            console.log(eles.highlighteds)
             eles.highlighteds.highlight();
             eles.unhighlighteds.unhighlight();
         }
