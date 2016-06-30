@@ -39,11 +39,11 @@ Just unhighlights eles and their neighbors.
 
 Remove highlights & unhighlights from all eles.
 
-`eles.hide()`
+`eles.hideEles()`
 
 Hides eles.
 
-`eles.show()`
+`eles.showEles()`
 
 Shows hidden eles.
 

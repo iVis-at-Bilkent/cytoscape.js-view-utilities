@@ -7,7 +7,7 @@ module.exports = function (cytoscape, cy, options, ur) {
         .selector("edge.hidden")
         .css(options.edge.hidden);
 
-    cytoscape("collection", "hide", function () {
+    cytoscape("collection", "hideEles", function () {
         var eles = this.filter(function (i, ele) {
             return !ele.scratch("hidden");
         });
@@ -20,7 +20,7 @@ module.exports = function (cytoscape, cy, options, ur) {
         return eles;
     });
 
-    cytoscape("collection", "show", function () {
+    cytoscape("collection", "showEles", function () {
         var eles = this.filter(function (i, ele) {
             return ele.scratch("hidden");
         });
@@ -33,11 +33,11 @@ module.exports = function (cytoscape, cy, options, ur) {
 
     if (ur) {
         function urShow(eles) {
-            return eles.show();
+            return eles.showEles();
         }
 
         function urHide(eles) {
-            return eles.hide();
+            return eles.hideEles();
         }
 
         ur.action("show", urShow, urHide);
