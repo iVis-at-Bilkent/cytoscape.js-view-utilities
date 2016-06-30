@@ -36,7 +36,7 @@ module.exports = function (cytoscape, cy, options, ur) {
 
         var others = cy.elements().difference(eles.union(eles.ancestors()));
 
-        if (cy.$(":visible[?highlighted]").length == 0)
+        if (cy.$(".highlighted:visible").length == 0)
             unhighlight(others);
 
         highlight(eles);
@@ -87,7 +87,7 @@ module.exports = function (cytoscape, cy, options, ur) {
         var cy = this;
         var eles = cy.elements();
 
-        eles
+        return eles
             .removeClass("highlighted")
             .removeClass("unhighlighted")
             .removeData("highlighted");
@@ -95,7 +95,7 @@ module.exports = function (cytoscape, cy, options, ur) {
 
     cytoscape("collection", "isHighlighted", function () {
         var ele = this;
-        return ele.is(":visible[?highlighted]") ? true : false;
+        return ele.is(".highlighted:visible") ? true : false;
     });
     
     if (ur) {
@@ -107,19 +107,27 @@ module.exports = function (cytoscape, cy, options, ur) {
 
         function urRemoveHighlights() {
 
-            var highlighteds = cy.$("[?highlighted]");
+            var highlighteds = cy.$(".highlighted");
+            var unhighlighteds = cy.$(".unhighlighted");
             cy.removeHighlights();
 
-            return highlighteds;
+            return { highlighteds: highlighteds, unhighlighteds: unhighlighteds };
+        }
+
+        function urUndoRemoveHighlights(eles) {
+            console.log(eles.highlighteds)
+            eles.highlighteds.highlight();
+            eles.unhighlighteds.unhighlight();
         }
 
         function urUndoHighlight(eles) {
             var res = eles.unhighlight();
 
-            if (cy.$(":visible[?highlighted]").length == 0)
+            if (cy.$(".highlighted:visible").length == 0)
                 cy.removeHighlights();
             return res;
         }
+
 
         function urHighlightNeighbors(eles) {
             var res;
@@ -148,6 +156,6 @@ module.exports = function (cytoscape, cy, options, ur) {
         ur.action("unhighlight", urUnhighlight, urUndoUnhighlight);
         ur.action("unhighlightNeighbors", urUnhighlight, urUndoUnhighlight);
         ur.action("unhighlightNeighbours", urUnhighlight, urUndoUnhighlight);
-        ur.action("removeHighlights", urRemoveHighlights, urUndoUnhighlight);
+        ur.action("removeHighlights", urRemoveHighlights, urUndoRemoveHighlights);
     }
 };
