@@ -8,15 +8,19 @@ module.exports = function (cytoscape, cy, options, ur) {
         .selector("edge.hidden")
         .css(options.edge.hidden);
 
+    function elesScratchHidden(eles, val){
+        return eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").hidden = val;
+        });
+    }
+
     cytoscape("collection", "hideEles", function () {
         var eles = this.not(".hidden");
         eles = eles.union(eles.connectedEdges());
 
-        eles.each(function (i, ele) {
-            if (!ele.scratch("_viewUtilities"))
-                ele.scratch("_viewUtilities", {});
-            ele.scratch("_viewUtilities").hidden = true;
-        })
+        elesScratchHidden(eles, true)
             .addClass("hidden")
             .unselect();
 
@@ -26,11 +30,8 @@ module.exports = function (cytoscape, cy, options, ur) {
     cytoscape("collection", "showEles", function () {
         var eles = this.filter(".hidden");
         eles = eles.union(eles.connectedEdges());
-        eles.each(function (i, ele) {
-            if (!ele.scratch("_viewUtilities"))
-                ele.scratch("_viewUtilities", {});
-            ele.scratch("_viewUtilities").hidden = false;
-        })
+        
+        elesScratchHidden(eles, false)
             .removeClass("hidden");
 
         return eles;
@@ -65,25 +66,24 @@ module.exports = function (cytoscape, cy, options, ur) {
         .css(options.edge.unhighlighted)
         .update();
 
+    function elesScratchHighlighted(eles, val) {
+        return eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").highlighted = val;
+        });
+    }
 
     function highlight(eles) {
-        eles.removeClass("unhighlighted")
-            .addClass("highlighted")
-            .each(function (i, ele) {
-                if (!ele.scratch("_viewUtilities"))
-                    ele.scratch("_viewUtilities", {});
-                ele.scratch("_viewUtilities").highlighted = true;
-            });
+        elesScratchHighlighted(eles, true)
+            .removeClass("unhighlighted")
+            .addClass("highlighted");
     }
 
     function unhighlight(eles) {
-        eles.removeClass("highlighted")
-            .addClass("unhighlighted")
-            .each(function (i, ele) {
-                if (!ele.scratch("_viewUtilities"))
-                    ele.scratch("_viewUtilities", {});
-                ele.scratch("_viewUtilities").highlighted = false;
-            });
+        elesScratchHighlighted(eles, false)
+            .removeClass("highlighted")
+            .addClass("unhighlighted");
     }
 
     function getWithNeighbors(eles) {
