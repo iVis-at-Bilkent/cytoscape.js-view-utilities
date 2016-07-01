@@ -106,9 +106,6 @@ module.exports = function (cytoscape, cy, options, ur) {
     });
 
     if (ur) {
-        var funcs = {};
-
-        var highlightHistories = {};
 
 
         function urRemoveHighlights() {
