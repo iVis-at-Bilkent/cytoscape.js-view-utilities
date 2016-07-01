@@ -8,25 +8,29 @@ module.exports = function (cytoscape, cy, options, ur) {
         .css(options.edge.hidden);
 
     cytoscape("collection", "hideEles", function () {
-        var eles = this.filter(function (i, ele) {
-            return !ele.scratch("hidden");
-        });
+        var eles = this.not(".hidden");
         eles = eles.union(eles.connectedEdges());
 
-        eles.scratch("hidden", true);
-        eles.addClass("hidden");
-        eles.unselect();
+        eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").hidden = true;
+        })
+            .addClass("hidden")
+            .unselect();
 
         return eles;
     });
 
     cytoscape("collection", "showEles", function () {
-        var eles = this.filter(function (i, ele) {
-            return ele.scratch("hidden");
-        });
+        var eles = this.filter(".hidden");
         eles = eles.union(eles.connectedEdges());
-        eles.scratch("hidden", false);
-        eles.removeClass("hidden");
+        eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").hidden = false;
+        })
+            .removeClass("hidden");
 
         return eles;
     });

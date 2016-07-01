@@ -9,25 +9,29 @@ module.exports = function (cytoscape, cy, options, ur) {
         .css(options.edge.hidden);
 
     cytoscape("collection", "hideEles", function () {
-        var eles = this.filter(function (i, ele) {
-            return !ele.scratch("hidden");
-        });
+        var eles = this.not(".hidden");
         eles = eles.union(eles.connectedEdges());
 
-        eles.scratch("hidden", true);
-        eles.addClass("hidden");
-        eles.unselect();
+        eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").hidden = true;
+        })
+            .addClass("hidden")
+            .unselect();
 
         return eles;
     });
 
     cytoscape("collection", "showEles", function () {
-        var eles = this.filter(function (i, ele) {
-            return ele.scratch("hidden");
-        });
+        var eles = this.filter(".hidden");
         eles = eles.union(eles.connectedEdges());
-        eles.scratch("hidden", false);
-        eles.removeClass("hidden");
+        eles.each(function (i, ele) {
+            if (!ele.scratch("_viewUtilities"))
+                ele.scratch("_viewUtilities", {});
+            ele.scratch("_viewUtilities").hidden = false;
+        })
+            .removeClass("hidden");
 
         return eles;
     });
@@ -63,15 +67,23 @@ module.exports = function (cytoscape, cy, options, ur) {
 
 
     function highlight(eles) {
-        eles.removeClass("unhighlighted");
-        eles.addClass("highlighted");
-        eles.scratch("highlighted", true);
+        eles.removeClass("unhighlighted")
+            .addClass("highlighted")
+            .each(function (i, ele) {
+                if (!ele.scratch("_viewUtilities"))
+                    ele.scratch("_viewUtilities", {});
+                ele.scratch("_viewUtilities").highlighted = true;
+            });
     }
 
     function unhighlight(eles) {
-        eles.removeClass("highlighted");
-        eles.addClass("unhighlighted");
-        eles.scratch("highlighted", false);
+        eles.removeClass("highlighted")
+            .addClass("unhighlighted")
+            .each(function (i, ele) {
+                if (!ele.scratch("_viewUtilities"))
+                    ele.scratch("_viewUtilities", {});
+                ele.scratch("_viewUtilities").highlighted = false;
+            });
     }
 
     function getWithNeighbors(eles) {
@@ -146,12 +158,11 @@ module.exports = function (cytoscape, cy, options, ur) {
         var ele = this;
         return ele.is(".highlighted:visible") ? true : false;
     });
-    
+
     if (ur) {
         var funcs = {};
 
         var highlightHistories = {};
-        
 
 
         function urRemoveHighlights() {
@@ -160,7 +171,7 @@ module.exports = function (cytoscape, cy, options, ur) {
             var unhighlighteds = cy.$(".unhighlighted");
             cy.removeHighlights();
 
-            return { highlighteds: highlighteds, unhighlighteds: unhighlighteds };
+            return {highlighteds: highlighteds, unhighlighteds: unhighlighteds};
         }
 
         function urUndoRemoveHighlights(eles) {
