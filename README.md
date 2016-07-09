@@ -85,6 +85,10 @@ Shows hidden eles.
 
 `ur.do("removeHighlights", eles)`
 
+`ur.do("hide", eles)`
+
+`ur.do("show", eles)`
+
 ## Dependencies
 
  * Cytoscape.js ^1.7.3
