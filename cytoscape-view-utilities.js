@@ -222,13 +222,13 @@ module.exports = function (cytoscape, cy, options, ur) {
             }
         }
 
-        function urRemoveHighlights() {
+        function urRemoveHighlights(args) {
             var res = getStatus();
 
-            if (eles.firstTime)
+            if (args.firstTime)
                 cy.removeHighlights();
             else
-                generalRedo(eles);
+                generalRedo(args);
 
             res.current = getStatus();
 
