@@ -35,6 +35,10 @@ Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
 
 Just unhighlights eles and their neighbors.
 
+`eles.removeHighlights()`
+
+Remove highlights & unhighlights from eles.
+
 `cy.removeHighlights()`
 
 Remove highlights & unhighlights from all eles.

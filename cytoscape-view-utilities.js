@@ -144,14 +144,20 @@ module.exports = function (cytoscape, cy, options, ur) {
         return eles.unhighlightNeighbors();
     });
 
-    cytoscape("core", "removeHighlights", function () {
-        var cy = this;
-        var eles = cy.elements();
+    cytoscape("collection", "removeHighlights", function () {
+        var eles = this;
 
         return eles
             .removeClass("highlighted")
             .removeClass("unhighlighted")
             .removeData("highlighted");
+    });
+
+    cytoscape("core", "removeHighlights", function () {
+        var cy = this;
+        var eles = cy.elements();
+
+        return eles.removeHighlights();
     });
 
     cytoscape("collection", "isHighlighted", function () {
@@ -161,58 +167,81 @@ module.exports = function (cytoscape, cy, options, ur) {
 
     if (ur) {
 
+        function getStatus(eles) {
+            eles = eles ? eles : cy.elements();
+            return {
+                highlighteds: eles.filter(".highlighted:visible"),
+                unhighlighteds: eles.filter(".unhighlighted:visible"),
+                notHighlighteds: eles.filter(":visible").not(".highlighted, .unhighlighted")
+            };
+        }
+
+        function generalUndo(args) {
+
+            var current = args.current;
+            var highlighteds = args.highlighteds.highlight();
+            var unhighlighteds = args.unhighlighteds.unhighlight();
+            var notHighlighteds = args.notHighlighteds.removeHighlights();
+
+
+            return {
+                highlighteds: highlighteds,
+                unhighlighteds: unhighlighteds,
+                notHighlighteds: notHighlighteds,
+                current: current
+            };
+        }
+
+        function generalRedo(args) {
+
+            var current = args.current;
+            var highlighteds = args.current.highlighteds.highlight();
+            var unhighlighteds = args.current.unhighlighteds.unhighlight();
+            var notHighlighteds = args.current.notHighlighteds.removeHighlights();
+
+            return {
+                highlighteds: highlighteds,
+                unhighlighteds: unhighlighteds,
+                notHighlighteds: notHighlighteds,
+                current: current
+            };
+        }
+
+        function generateDoFunc(func) {
+            return function (eles) {
+                var res = getStatus();
+
+                if (eles.firstTime)
+                    eles[func]();
+                else
+                    generalRedo(eles);
+
+                res.current = getStatus();
+
+                return res;
+            }
+        }
 
         function urRemoveHighlights() {
+            var res = getStatus();
 
-            var highlighteds = cy.$(".highlighted");
-            var unhighlighteds = cy.$(".unhighlighted");
-            cy.removeHighlights();
-
-            return {highlighteds: highlighteds, unhighlighteds: unhighlighteds};
-        }
-
-        function urUndoRemoveHighlights(eles) {
-           // eles.highlighteds.highlight();
-            eles.unhighlighteds.unhighlight();
-        }
-
-        function urUndoHighlight(eles) {
-            var res = eles.unhighlight();
-
-            if (cy.$(".highlighted:visible").length == 0)
-                cy.removeHighlights();
-            return res;
-        }
-
-
-        function urHighlightNeighbors(eles) {
-            var res;
             if (eles.firstTime)
-                res = eles.highlightNeighbors();
+                cy.removeHighlights();
             else
-                res = eles.highlight();
+                generalRedo(eles);
+
+            res.current = getStatus();
+
             return res;
         }
 
-        function urHighlight(eles) {
-            return eles.highlight();
-        }
-
-        function urUnhighlight(eles) {
-            return eles.unhighlight();
-        }
-
-        function urUndoUnhighlight(eles) {
-            return eles.highlight();
-        }
-
-        ur.action("highlightNeighbors", urHighlightNeighbors, urUndoHighlight);
-        ur.action("highlightNeighbours", urHighlightNeighbors, urUndoHighlight);
-        ur.action("highlight", urHighlight, urUndoHighlight);
-        ur.action("unhighlight", urUnhighlight, urUndoUnhighlight);
-        ur.action("unhighlightNeighbors", urUnhighlight, urUndoUnhighlight);
-        ur.action("unhighlightNeighbours", urUnhighlight, urUndoUnhighlight);
-        ur.action("removeHighlights", urRemoveHighlights, urUndoRemoveHighlights);
+        ur.action("highlightNeighbors", generateDoFunc("highlightNeighbors"), generalUndo);
+        ur.action("highlightNeighbours", generateDoFunc("highlightNeighbours"), generalUndo);
+        ur.action("highlight", generateDoFunc("highlight"), generalUndo);
+        ur.action("unhighlight", generateDoFunc("unhighlight"), generalUndo);
+        ur.action("unhighlightNeighbors", generateDoFunc("unhighlightNeighbors"), generalUndo);
+        ur.action("unhighlightNeighbours", generateDoFunc("unhighlightNeighbours"), generalUndo);
+        ur.action("removeHighlights", urRemoveHighlights, generalUndo);
     }
 };
 },{}],3:[function(require,module,exports){
