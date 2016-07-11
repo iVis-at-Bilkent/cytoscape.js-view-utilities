@@ -118,7 +118,7 @@ module.exports = function (cytoscape, cy, options, ur) {
         }
 
         function urUndoRemoveHighlights(eles) {
-            eles.highlighteds.highlight();
+           // eles.highlighteds.highlight();
             eles.unhighlighteds.unhighlight();
         }
 

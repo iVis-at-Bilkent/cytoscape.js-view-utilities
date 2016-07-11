@@ -160,9 +160,6 @@ module.exports = function (cytoscape, cy, options, ur) {
     });
 
     if (ur) {
-        var funcs = {};
-
-        var highlightHistories = {};
 
 
         function urRemoveHighlights() {
@@ -175,7 +172,7 @@ module.exports = function (cytoscape, cy, options, ur) {
         }
 
         function urUndoRemoveHighlights(eles) {
-            eles.highlighteds.highlight();
+           // eles.highlighteds.highlight();
             eles.unhighlighteds.unhighlight();
         }
 
