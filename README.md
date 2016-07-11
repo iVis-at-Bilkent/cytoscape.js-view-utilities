@@ -83,7 +83,7 @@ Shows hidden eles.
 `ur.do("unhighlightNeighbors", eles)` 
 `ur.do("unhighlightNeighbours", eles)`
 
-`ur.do("removeHighlights", eles)`
+`ur.do("removeHighlights")`
 
 `ur.do("hide", eles)`
 
