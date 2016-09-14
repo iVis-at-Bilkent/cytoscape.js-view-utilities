@@ -1,11 +1,9 @@
 cytoscape-view-utilities
 ================================================================================
 
-
 ## Description
 
-Package of view utilities for cytoscape.js
-
+A Cytoscape.js extension to provide miscellenaous view utilities such as highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
 ## API
 
