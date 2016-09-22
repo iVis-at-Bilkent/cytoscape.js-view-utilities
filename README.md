@@ -93,7 +93,8 @@ Shows hidden eles.
 
 ## Dependencies
 
- * Cytoscape.js ^1.7.3
+ * Cytoscape.js ^2.7.0
+ * jQuery ^1.7.0 || ^2.0.0 || ^3.0.0
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 
@@ -109,9 +110,10 @@ Download the library:
 CommonJS:
 ```js
 var cytoscape = require('cytoscape');
-var view-utilities = require('cytoscape-view-utilities');
+var jquery = require('jquery');
+var viewUtilities = require('cytoscape-view-utilities');
 
-view-utilities( cytoscape ); // register extension
+viewUtilities( cytoscape, jquery ); // register extension
 ```
 
 AMD:
