@@ -35,14 +35,21 @@
         var search = require("./search");
         var highlight = require("./highlight");
 
-        var initialized = false;
-
         cytoscape('core', 'viewUtilities', function (opts) {
+            var cy = this;
+            
             $.extend(true, options, opts);
+            
+            function getScratch(eleOrCy) {
+              if (!eleOrCy.scratch("_viewUtilities")) {
+                eleOrCy.scratch("_viewUtilities", {});
+              }
+              
+              return eleOrCy.scratch("_viewUtilities");
+            }
 
-            if (!initialized) {
-                initialized = true;
-                var cy = this;
+            if (!getScratch(cy).initialized) {
+                getScratch(cy).initialized = true;
 
                 if (cy.undoRedo)
                     var ur = cy.undoRedo(null, true);
