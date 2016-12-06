@@ -68,6 +68,8 @@ Shows hidden eles.
                     'background-opacity': 0.3
                 }
             },
+            setVisibilityOnHide: false, // whether to set visibility on hide/show
+            setDisplayOnHide: true, // whether to set display on hide/show
             searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search.
 ```
 

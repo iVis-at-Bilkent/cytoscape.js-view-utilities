@@ -13,20 +13,16 @@
                 highlighted: {}, // styles for when nodes are highlighted.
                 unhighlighted: { // styles for when nodes are unhighlighted.
                     'opacity': 0.3
-                },
-                hidden: {
-                    "display": "none"
                 }
             },
             edge: {
                 highlighted: {}, // styles for when edges are highlighted.
                 unhighlighted: { // styles for when edges are unhighlighted.
                     'opacity': 0.3
-                },
-                hidden: {
-                    "display": "none"
                 }
             },
+            setVisibilityOnHide: false, // whether to set visibility on hide/show
+            setDisplayOnHide: true, // whether to set display on hide/show
             searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search.
         };
 

@@ -1,37 +1,35 @@
 module.exports = function (cytoscape, cy, options, ur) {
-
-    cy
-        .style()
-        .selector("node.hidden")
-        .css(options.node.hidden)
-        .selector("edge.hidden")
-        .css(options.edge.hidden);
-
-    function elesScratchHidden(eles, val){
-        return eles.each(function (i, ele) {
-            if (!ele.scratch("_viewUtilities"))
-                ele.scratch("_viewUtilities", {});
-            ele.scratch("_viewUtilities").hidden = val;
-        });
-    }
-
+    
     cytoscape("collection", "hideEles", function () {
-        var eles = this.not(".hidden");
+        var eles = this.filter(":visible");
         eles = eles.union(eles.connectedEdges());
 
-        elesScratchHidden(eles, true)
-            .addClass("hidden")
-            .unselect();
+        eles.unselect();
+        
+        if(options.setVisibilityOnHide) {
+          eles.css('visibility', 'hidden');
+        }
+        
+        if(options.setDisplayOnHide) {
+          eles.css('display', 'none');
+        }
 
         return eles;
     });
 
     cytoscape("collection", "showEles", function () {
-        var eles = this.filter(".hidden");
+        var eles = this.not(":visible");
         eles = eles.union(eles.connectedEdges());
         
-        elesScratchHidden(eles, false)
-            .removeClass("hidden");
+        eles.unselect();
+        
+        if(options.setVisibilityOnHide) {
+          eles.css('visibility', 'visible');
+        }
+        
+        if(options.setDisplayOnHide) {
+          eles.css('display', 'element');
+        }
 
         return eles;
     });
