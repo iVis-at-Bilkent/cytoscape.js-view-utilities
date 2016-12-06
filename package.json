@@ -1,6 +1,6 @@
 {
   "name": "cytoscape-view-utilities",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Package of view utilities for cytoscape.js",
   "main": "cytoscape-view-utilities.js",
   "spm": {
