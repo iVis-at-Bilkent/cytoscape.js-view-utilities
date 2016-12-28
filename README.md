@@ -7,48 +7,41 @@ A Cytoscape.js extension to provide miscellenaous view utilities such as highlig
 
 ## API
 
-`cy.viewUtilities(options)`
+`var instance = cy.viewUtilities(options)`
 
 Initializes the extension and sets options. This can be used to override default options.
 
-`eles.search(text, searchBy)`
+An instance has a number of functions available:
 
-Searchs for `text` string. `searchBy` is temporary option for the search (and will be used as `searchBy(text)`) and if not specified default `searchBy` will be used. 
-
-`eles.highlight()`
+`instance.highlight(eles)`
 
 Highlights eles & unhighlights others at first use.
 
-`eles.unhighlight()`
+`instance.unhighlight(eles)`
 
 Just unighlights eles.
 
-`eles.highlightNeighbors()`
-* Aliases: `eles.highlightNeighbours()`
+`instance.highlightNeighbors(eles)`
+* Aliases: `instance.highlightNeighbours(eles)`
 
 Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
 
-`eles.unhighlightNeighbors()`
-* Aliases: `eles.unhighlightNeighbours()`
+`instance.unhighlightNeighbors(eles)`
+* Aliases: `instance.unhighlightNeighbours(eles)`
 
 Just unhighlights eles and their neighbors.
 
-`eles.removeHighlights()`
+`instance.removeHighlights(eles)`
 
-Remove highlights & unhighlights from eles.
+Remove highlights & unhighlights from eles. If eles parameter is not specified sets it to 'cy.elements()'.
 
-`cy.removeHighlights()`
+`instance.hide(eles)`
 
-Remove highlights & unhighlights from all eles.
+Hides given eles.
 
-`eles.hideEles()`
+`instance.show(eles)`
 
-Hides eles.
-
-`eles.showEles()`
-
-Shows hidden eles.
-
+Unhides given eles.
 
 ## Default Options
 ```javascript
@@ -70,7 +63,6 @@ Shows hidden eles.
             },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
             setDisplayOnHide: true, // whether to set display on hide/show
-            searchBy: ["id"] // Array of data fields will a string be searched on or function which executes search.
 ```
 
 

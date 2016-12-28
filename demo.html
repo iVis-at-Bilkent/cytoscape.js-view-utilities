@@ -82,29 +82,23 @@
                     }
                 });
 
-                cy.viewUtilities({
-                    searchBy: ["name"]
+                var api = cy.viewUtilities({
                 });
 
                 $("#hide").click(function () {
-                    cy.$(":selected").hideEles();
+                    api.hide(cy.$(":selected"));
                 });
 
                 $("#showAll").click(function () {
-                    cy.elements().showEles();
+                    api.show(cy.elements());
                 });
 
                 $("#highlightNeighbors").click(function () {
-                    cy.$(":selected").highlightNeighbors();
+                    api.highlightNeighbors(cy.$(":selected"));
                 });
 
                 $("#removeHighlights").click(function () {
-                    cy.removeHighlights();
-                });
-
-                $("#search").click(function () {
-                    var text = $("#toSearch").val();
-                    cy.elements().search(text).highlightNeighbors();
+                    api.removeHighlights();
                 });
 			});
 		</script>
@@ -113,7 +107,6 @@
 	<body>
 		<h1>cytoscape.js-view-utilities demo</h1>
 
-        <input type="text" id="toSearch"> <b id="search" style="cursor: pointer; color: darkslateblue">Search to </b> <br/>
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b>
 
