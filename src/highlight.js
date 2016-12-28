@@ -12,24 +12,12 @@ module.exports = function (cytoscape, cy, options, ur) {
         .css(options.edge.unhighlighted)
         .update();
 
-    function elesScratchHighlighted(eles, val) {
-        return eles.each(function (i, ele) {
-            if (!ele.scratch("_viewUtilities"))
-                ele.scratch("_viewUtilities", {});
-            ele.scratch("_viewUtilities").highlighted = val;
-        });
-    }
-
     function highlight(eles) {
-        elesScratchHighlighted(eles, true)
-            .removeClass("unhighlighted")
-            .addClass("highlighted");
+        eles.removeClass("unhighlighted").addClass("highlighted");
     }
 
     function unhighlight(eles) {
-        elesScratchHighlighted(eles, false)
-            .removeClass("highlighted")
-            .addClass("unhighlighted");
+        eles.removeClass("highlighted").addClass("unhighlighted");
     }
 
     function getWithNeighbors(eles) {
