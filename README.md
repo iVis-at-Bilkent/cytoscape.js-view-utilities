@@ -63,6 +63,10 @@ Unhides given eles.
             },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
             setDisplayOnHide: true, // whether to set display on hide/show
+            neighbor: function(node){ // return desired neighbors of tapheld node
+                return false;
+            },
+            neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
 ```
 
 
