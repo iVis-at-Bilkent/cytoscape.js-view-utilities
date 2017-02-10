@@ -83,6 +83,10 @@
                 });
 
                 var api = cy.viewUtilities({
+                    neighbor: function(node){
+                        return node.closedNeighborhood();
+                    },
+                    neighborSelectTime: 1000
                 });
 
                 $("#hide").click(function () {

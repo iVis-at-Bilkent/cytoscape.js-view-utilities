@@ -86,6 +86,10 @@
                 });
 
                 cy.viewUtilities({
+                    neighbor: function(node){
+                        return node.closedNeighborhood();
+                    },
+                    neighborSelectTime: 1000
                 });
                 var ur = cy.undoRedo();
 

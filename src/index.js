@@ -24,6 +24,10 @@
       },
       setVisibilityOnHide: false, // whether to set visibility on hide/show
       setDisplayOnHide: true, // whether to set display on hide/show
+      neighbor: function(node){ // return desired neighbors of tapheld node
+        return false;
+      },
+      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
     };
 
 
@@ -56,7 +60,29 @@
           var ur = cy.undoRedo(null, true);
           undoRedo(cy, ur, viewUtilities);
         }
-
+        //Select the desired neighbors after taphold-and-free 
+        cy.on('taphold', 'node', function(event){        
+          var cyTarget = event.cyTarget;
+          var tapheld = false;
+          var neighborhood;
+          var timeout = setTimeout(function(){ 
+              cy.elements().unselect();
+              neighborhood = options.neighbor(cyTarget);
+              neighborhood.select();
+              cyTarget.lock();
+              tapheld = true;   
+          }, options.neighborSelectTime - 500);
+          cy.on('free', cyTarget, function(){
+            if(tapheld === true){
+              tapheld = false;
+              neighborhood.select();
+              cyTarget.unlock();
+            }
+            else{
+                clearTimeout(timeout);
+            }
+         });
+        });
       }
       return viewUtilities;
     });
