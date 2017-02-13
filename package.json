@@ -30,7 +30,7 @@
     "gulp-prompt": "^0.1.2",
     "gulp-replace": "^0.5.4",
     "gulp-shell": "^0.5.0",
-    "gulp-util": "^3.0.6",
+    "gulp-util": "^3.0.8",
     "jshint-stylish": "^2.0.1",
     "node-notifier": "^4.3.1",
     "run-sequence": "^1.1.4",
@@ -40,5 +40,8 @@
   "peerDependencies": {
     "cytoscape": "^2.7.0",
     "jquery": "^1.7.0 || ^2.0.0 || ^3.0.0"
+  },
+  "dependencies": {
+    "gulp-install": "^0.6.0"
   }
 }
