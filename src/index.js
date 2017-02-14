@@ -81,7 +81,12 @@
             else{
                 clearTimeout(timeout);
             }
-         });
+          });
+          cy.on('drag', cyTarget, function(){
+            if(tapheld === false){
+                clearTimeout(timeout);
+            }
+          })
         });
       }
       return viewUtilities;
