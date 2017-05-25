@@ -72,29 +72,29 @@
         }, "keyup");
         //Select the desired neighbors after taphold-and-free 
         cy.on('taphold', 'node', function(event){        
-          var cyTarget = event.cyTarget;
+          var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
           var timeout = setTimeout(function(){ 
             if(shiftKeyDown == true){
               cy.elements().unselect();
-              neighborhood = options.neighbor(cyTarget);
+              neighborhood = options.neighbor(target);
               neighborhood.select();
-              cyTarget.lock();
+              target.lock();
               tapheld = true;   
             }
           }, options.neighborSelectTime - 500);
-          cy.on('free', cyTarget, function(){
+          cy.on('free', target, function(){
             if(tapheld === true){
               tapheld = false;
               neighborhood.select();
-              cyTarget.unlock();
+              target.unlock();
             }
             else{
                 clearTimeout(timeout);
             }
           });
-          cy.on('drag', cyTarget, function(){
+          cy.on('drag', target, function(){
             if(tapheld === false){
                 clearTimeout(timeout);
             }
