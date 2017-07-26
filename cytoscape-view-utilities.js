@@ -1049,6 +1049,8 @@
 (function () {
   'use strict';
 
+  var _OPACITY = 0.3;
+
   // registers the extension on a cytoscape lib ref
   var register = function (cytoscape, $) {
 
@@ -1060,13 +1062,15 @@
       node: {
         highlighted: {}, // styles for when nodes are highlighted.
         unhighlighted: {// styles for when nodes are unhighlighted.
-          'opacity': 0.3
+          'opacity': _OPACITY,
+          'background-image-opacity': _OPACITY
         }
       },
       edge: {
         highlighted: {}, // styles for when edges are highlighted.
         unhighlighted: {// styles for when edges are unhighlighted.
-          'opacity': 0.3
+          'opacity': _OPACITY,
+          'background-image-opacity': _OPACITY
         }
       },
       setVisibilityOnHide: false, // whether to set visibility on hide/show
