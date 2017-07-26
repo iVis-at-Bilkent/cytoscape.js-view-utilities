@@ -1078,14 +1078,14 @@
       neighbor: function(node){ // return desired neighbors of tapheld node
         return false;
       },
-      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
+      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
     };
 
 
     var undoRedo = _dereq_("./undo-redo");
     var viewUtilities = _dereq_("./view-utilities");
     var Mousetrap = _dereq_('mousetrap');
-    
+
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
 
@@ -1104,15 +1104,15 @@
       }
 
       if (!getScratch(cy).initialized) {
-        getScratch(cy).initialized = true;  
+        getScratch(cy).initialized = true;
 
         viewUtilities(cy, options);
-        
+
         if (cy.undoRedo) {
           var ur = cy.undoRedo(null, true);
           undoRedo(cy, ur, viewUtilities);
         }
-        
+
         var mt = new Mousetrap();
         var shiftKeyDown = false;
         mt.bind(["shift"], function () {
@@ -1121,18 +1121,18 @@
         mt.bind(["shift"], function () {
             shiftKeyDown = false;
         }, "keyup");
-        //Select the desired neighbors after taphold-and-free 
-        cy.on('taphold', 'node', function(event){        
+        //Select the desired neighbors after taphold-and-free
+        cy.on('taphold', 'node', function(event){
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
-          var timeout = setTimeout(function(){ 
+          var timeout = setTimeout(function(){
             if(shiftKeyDown == true){
               cy.elements().unselect();
               neighborhood = options.neighbor(target);
               neighborhood.select();
               target.lock();
-              tapheld = true;   
+              tapheld = true;
             }
           }, options.neighborSelectTime - 500);
           cy.on('free', target, function(){
@@ -1276,7 +1276,7 @@ var cy, options;
 var viewUtilities = function (_cy, _options) {
   cy = _cy;
   options = _options;
-  
+
   // Set style for highlighted and unhighligthed eles
   cy
         .style()
