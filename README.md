@@ -5,6 +5,8 @@ cytoscape-view-utilities
 
 A Cytoscape.js extension to provide miscellenaous view utilities such as highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
+[Click for demo](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html)
+
 ## API
 
 `var instance = cy.viewUtilities(options)`
@@ -63,7 +65,7 @@ Unhides given eles.
             },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
             setDisplayOnHide: true, // whether to set display on hide/show
-            neighbor: function(node){ // return desired neighbors of tapheld node
+            neighbor: function(node){ // return desired neighbors of (shift + tapheld) node
                 return false;
             },
             neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
