@@ -84,8 +84,9 @@
               tapheld = true;   
             }
           }, options.neighborSelectTime - 500);
-          cy.on('free', target, function(){
-            if(tapheld === true){
+          cy.on('free', 'node', function(){
+            var targetTapheld = event.target || event.cyTarget;
+            if(target == targetTapheld && tapheld === true){
               tapheld = false;
               neighborhood.select();
               target.unlock();
@@ -94,8 +95,9 @@
                 clearTimeout(timeout);
             }
           });
-          cy.on('drag', target, function(){
-            if(tapheld === false){
+          cy.on('drag', 'node', function(){
+            var targetDragged = event.target || event.cyTarget;  
+            if(target == targetDragged && tapheld === false){
                 clearTimeout(timeout);
             }
           })
