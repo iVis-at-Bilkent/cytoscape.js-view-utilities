@@ -5,7 +5,9 @@ cytoscape-view-utilities
 
 A Cytoscape.js extension to provide miscellenaous view utilities such as highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
-[Click for demo](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html)
+## Demo
+
+Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html) (undoable) for a demo
 
 ## API
 
