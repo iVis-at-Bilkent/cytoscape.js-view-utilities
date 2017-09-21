@@ -12,7 +12,7 @@
 
 		<!-- for testing with local version of cytoscape.js -->
 		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-
+        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
         <script src="lib/cytoscape-undo-redo.js"></script>
 
 
@@ -44,7 +44,7 @@
 
                 var cy = window.cy = cytoscape({
                     container: document.getElementById('cy'),
-                    layout: { name: "cose" },
+                    layout: { name: "cose-bilkent" },
                     style: [
                         {
                             selector: 'node',
@@ -174,10 +174,40 @@
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
                     actions.push({name: "show", param: cy.elements()});
-                    ur.do("batch", actions);
+                    ur.do("batch", actions);                    
                 });
                 
                 $("#showHiddenNeighbors").click(function () {
+                    var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
+                    var actions = [];
+                    var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
+                        .difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
+                    actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
+                    actions.push({name: "show", param: hiddenEles.union(hiddenEles.parent())});
+                    nodesWithHiddenNeighbor = hiddenEles.nodes().edgesWith(cy.nodes(":hidden").difference(hiddenEles.nodes()))
+                        .connectedNodes().intersection(hiddenEles.nodes());
+                    actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor}); 
+                    cy.undoRedo().do("batch", actions);                
+                });
+                
+                var tappedBefore;
+
+                cy.on('tap', 'node', function (event) {
+                  var node = this;
+
+                  var tappedNow = node;
+                  setTimeout(function () {
+                    tappedBefore = null;
+                  }, 300);
+                  if (tappedBefore && tappedBefore.id() === tappedNow.id()) {
+                    tappedNow.trigger('doubleTap');
+                    tappedBefore = null;
+                  } else {
+                    tappedBefore = tappedNow;
+                  }
+                });
+                
+                cy.on('doubleTap', 'node', function (event) {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -224,7 +254,7 @@
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
         <b id="showHiddenNeighbors" style="cursor: pointer; color: darksalmon">Show Hidden Neighbors of Selected</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b> <br/>
-        <b>SHIFT + taphold</b> to select neighbors<br/>
+        <b>SHIFT + taphold</b> to select neighbors<br/>    
 
         <div id="cy"></div>
 
