@@ -46,7 +46,8 @@
                         {
                             selector: 'node',
                             style: {
-                                'content': 'data(name)'
+                                'content': 'data(name)',
+                                'border-color': '#ff0000'
                             }
                         },
 
@@ -67,17 +68,54 @@
 
                     elements: {
                         nodes: [
-                            { data: { id: 'j', name: 'Jerry' } },
-                            { data: { id: 'e', name: 'Elaine' } },
-                            { data: { id: 'k', name: 'Kramer', parent: "e" } },
-                            { data: { id: 'g', name: 'George' , parent: "e" } },
-                            { data: { id: 'w', name: 'Washington' , parent: "e" } }
+                            { data: { id: 'n1', name: 'n1' }, style: {'border-color': '#aabbcc'} },
+                            { data: { id: 'n2', name: 'n2', parent: "n1"} },
+                            { data: { id: 'n3', name: 'n3', parent: "n1" } },
+                            { data: { id: 'n4', name: 'n4', parent: "n1" } },
+                            { data: { id: 'n5', name: 'n5' } },
+                            { data: { id: 'n6', name: 'n6' } },
+                            { data: { id: 'n7', name: 'n7' } },
+                            { data: { id: 'n8', name: 'n8' } },
+                            { data: { id: 'n9', name: 'n9' } },
+                            { data: { id: 'n10', name: 'n10' } },
+                            { data: { id: 'n11', name: 'n11' } },
+                            { data: { id: 'n12', name: 'n12' } },
+                            { data: { id: 'n13', name: 'n13' } },
+                            { data: { id: 'n14', name: 'n14' } },
+                            { data: { id: 'n15', name: 'n15' } },
+                            { data: { id: 'n16', name: 'n16' } },
+                            { data: { id: 'n17', name: 'n17' } },
+                            { data: { id: 'n18', name: 'n18' } },
+                            { data: { id: 'n19', name: 'n19' } }, 
+                            { data: { id: 'n20', name: 'n20' } },
+                            { data: { id: 'n21', name: 'n21' } },                                                         
                         ],
                         edges: [
-                            { data: { source: 'j', target: 'e' } },
-                            { data: { source: 'j', target: 'k' } },
-                            { data: { source: "k", target: "w" } },
-                            { data: { source: "g", target: "w" } }
+                            { data: { source: 'n2', target: 'n3' } },
+                            { data: { source: 'n4', target: 'n3' } },
+                            { data: { source: "n3", target: "n5" } },
+                            { data: { source: "n5", target: "n6" } },
+                            { data: { source: 'n5', target: 'n7' } },
+                            { data: { source: 'n6', target: 'n7' } },
+                            { data: { source: "n7", target: "n8" } },
+                            { data: { source: "n8", target: "n9" } },   
+                            { data: { source: 'n7', target: 'n10' } },
+                            { data: { source: 'n6', target: 'n11' } },
+                            { data: { source: "n7", target: "n11" } },
+                            { data: { source: "n9", target: "n10" } },
+                            { data: { source: 'n10', target: 'n11' } },
+                            { data: { source: 'n10', target: 'n12' } },
+                            { data: { source: "n12", target: "n13" } },
+                            { data: { source: "n12", target: "n14" } },  
+                            { data: { source: "n12", target: "n15" } },
+                            { data: { source: "n13", target: "n15" } },   
+                            { data: { source: 'n15', target: 'n16' } },
+                            { data: { source: 'n15', target: 'n17' } },
+                            { data: { source: "n15", target: "n18" } },
+                            { data: { source: "n17", target: "n19" } },
+                            { data: { source: 'n17', target: 'n20' } },
+                            { data: { source: 'n19', target: 'n20' } },
+                            { data: { source: "n19", target: "n21" } }                           
                         ]
                     }
                 });
@@ -89,12 +127,44 @@
                     neighborSelectTime: 1000
                 });
 
+                // Increase border width to show nodes with hidden neighbors
+                function thickenBorder(eles){
+                  eles.forEach(function( ele ){
+                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
+                    ele.css("border-width", defaultBorderWidth + 2);
+                    //ele.css("border-color", '#DAA520');
+                  });
+                  return eles;
+                }
+                // Decrease border width when hidden neighbors of the nodes become visible
+                function thinBorder(eles){
+                  eles.forEach(function( ele ){
+                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
+                    ele.css("border-width", defaultBorderWidth - 2);
+                  });
+                  return eles;
+                }
+
                 $("#hide").click(function () {
+                    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    thinBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
+                    nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    thickenBorder(nodesWithHiddenNeighbor);
                 });
 
                 $("#showAll").click(function () {
+                    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    thinBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
+                });
+
+                $("#showHiddenNeighbors").click(function () {
+                    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    thinBorder(nodesWithHiddenNeighbor);
+                    api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
+                    nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    thickenBorder(nodesWithHiddenNeighbor);
                 });
 
                 $("#highlightNeighbors").click(function () {
@@ -112,11 +182,11 @@
 		<h1>cytoscape.js-view-utilities demo</h1>
 
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
+        <b id="showHiddenNeighbors" style="cursor: pointer; color: darksalmon">Show Hidden Neighbors of Selected</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b> <br/>
         <b>SHIFT + taphold</b> to select neighbors<br/>
 
-            <div id="cy"></div>
-        </div>
+        <div id="cy"></div>
 
 	</body>
 
