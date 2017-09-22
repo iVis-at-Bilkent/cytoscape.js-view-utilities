@@ -3,7 +3,9 @@ cytoscape-view-utilities
 
 ## Description
 
-A Cytoscape.js extension to provide miscellenaous view utilities such as highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+This Cytoscape.js extension provides miscellenaous view utilities such as hiding and highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+
+![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
 
 ## Demo
 
