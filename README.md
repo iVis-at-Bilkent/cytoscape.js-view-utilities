@@ -54,17 +54,13 @@ Unhides given eles.
             node: {
                 highlighted: {}, // styles for when nodes are highlighted.
                 unhighlighted: { // styles for when nodes are unhighlighted.
-                    'opacity': 0.3,
-                    'text-opacity': 0.3,
-                    'background-opacity': 0.3
+                    'opacity': 0.3
                 }
             },
             edge: {
                 highlighted: {}, // styles for when edges are highlighted.
                 unhighlighted: { // styles for when edges are unhighlighted.
-                    'border-opacity': 0.3,
-                    'text-opacity': 0.3,
-                    'background-opacity': 0.3
+                    'opacity': 0.3
                 }
             },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
