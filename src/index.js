@@ -38,8 +38,9 @@
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
 
+      // If 'get' is given as the param then return the extension instance
       if (opts === 'get') {
-        return viewUtilities;
+        return getScratch(cy).instance;
       }
 
       $.extend(true, options, opts);
@@ -55,13 +56,17 @@
       if (!getScratch(cy).initialized) {
         getScratch(cy).initialized = true;  
 
-        viewUtilities(cy, options);
-        
+        // create a view utilities instance
+        var instance = viewUtilities(cy, options);
+
         if (cy.undoRedo) {
           var ur = cy.undoRedo(null, true);
-          undoRedo(cy, ur, viewUtilities);
+          undoRedo(cy, ur, instance);
         }
-        
+
+        // set the instance on the scratch pad
+        getScratch(cy).instance = instance;
+
         var mt = new Mousetrap();
         var shiftKeyDown = false;
         mt.bind(["shift"], function () {
@@ -103,7 +108,9 @@
           })
         });
       }
-      return viewUtilities;
+
+      // return the instance of extension
+      return getScratch(cy).instance;
     });
 
   };
