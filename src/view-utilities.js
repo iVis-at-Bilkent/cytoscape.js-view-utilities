@@ -1,8 +1,5 @@
-var cy, options;
-var viewUtilities = function (_cy, _options) {
-  cy = _cy;
-  options = _options;
-  
+var viewUtilities = function (cy, options) {
+
   // Set style for highlighted and unhighligthed eles
   cy
         .style()
@@ -15,115 +12,120 @@ var viewUtilities = function (_cy, _options) {
         .selector("edge.unhighlighted")
         .css(options.edge.unhighlighted)
         .update();
-};
 
-// Helper functions for internal usage (not to be exposed)
-function highlight(eles) {
-  eles.removeClass("unhighlighted").addClass("highlighted");
-}
-
-function getWithNeighbors(eles) {
-  return eles.add(eles.descendants()).closedNeighborhood();
-}
-
-// Section hide-show
-
-// hide given eles
-viewUtilities.hide = function (eles) {
-  eles = eles.filter(":visible");
-  eles = eles.union(eles.connectedEdges());
-
-  eles.unselect();
-
-  if (options.setVisibilityOnHide) {
-    eles.css('visibility', 'hidden');
+  // Helper functions for internal usage (not to be exposed)
+  function highlight(eles) {
+    eles.removeClass("unhighlighted").addClass("highlighted");
   }
 
-  if (options.setDisplayOnHide) {
-    eles.css('display', 'none');
+  function getWithNeighbors(eles) {
+    return eles.add(eles.descendants()).closedNeighborhood();
   }
 
-  return eles;
-};
+  // the instance to be returned
+  var instance = {};
 
-// unhide given eles
-viewUtilities.show = function (eles) {
-  eles = eles.not(":visible");
-  eles = eles.union(eles.connectedEdges());
+  // Section hide-show
 
-  eles.unselect();
+  // hide given eles
+  instance.hide = function (eles) {
+    eles = eles.filter(":visible");
+    eles = eles.union(eles.connectedEdges());
 
-  if (options.setVisibilityOnHide) {
-    eles.css('visibility', 'visible');
-  }
+    eles.unselect();
 
-  if (options.setDisplayOnHide) {
-    eles.css('display', 'element');
-  }
+    if (options.setVisibilityOnHide) {
+      eles.css('visibility', 'hidden');
+    }
 
-  return eles;
-};
+    if (options.setDisplayOnHide) {
+      eles.css('display', 'none');
+    }
 
-// Section highlight
+    return eles;
+  };
 
-// Highlights eles & unhighlights others at first use.
-viewUtilities.highlight = function (eles) {
-  var others = cy.elements().difference(eles.union(eles.ancestors()));
+  // unhide given eles
+  instance.show = function (eles) {
+    eles = eles.not(":visible");
+    eles = eles.union(eles.connectedEdges());
 
-  if (cy.$(".highlighted:visible").length == 0)
-    this.unhighlight(others);
+    eles.unselect();
 
-  highlight(eles); // Use the helper here
+    if (options.setVisibilityOnHide) {
+      eles.css('visibility', 'visible');
+    }
 
-  return eles;
-};
+    if (options.setDisplayOnHide) {
+      eles.css('display', 'element');
+    }
 
-// Just unighlights eles.
-viewUtilities.unhighlight = function (eles) {
-  eles.removeClass("highlighted").addClass("unhighlighted");
-};
+    return eles;
+  };
 
-// Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
-viewUtilities.highlightNeighbors = function (eles) {
-  var allEles = getWithNeighbors(eles);
+  // Section highlight
 
-  return this.highlight(allEles);
-};
+  // Highlights eles & unhighlights others at first use.
+  instance.highlight = function (eles) {
+    var others = cy.elements().difference(eles.union(eles.ancestors()));
 
-// Aliases: this.highlightNeighbours()
-viewUtilities.highlightNeighbours = function (eles) {
-  return this.highlightNeighbors(eles);
-};
+    if (cy.$(".highlighted:visible").length == 0)
+      this.unhighlight(others);
 
-// Just unhighlights eles and their neighbors.
-viewUtilities.unhighlightNeighbors = function (eles) {
-  var allEles = getWithNeighbors(eles);
+    highlight(eles); // Use the helper here
 
-  return this.unhighlight(allEles);
-};
+    return eles;
+  };
 
-// Aliases: this.unhighlightNeighbours()
-viewUtilities.unhighlightNeighbours = function (eles) {
-  this.unhighlightNeighbors(eles);
-};
+  // Just unighlights eles.
+  instance.unhighlight = function (eles) {
+    eles.removeClass("highlighted").addClass("unhighlighted");
+  };
 
-// Remove highlights & unhighlights from eles.
-// If eles is not defined considers cy.elements()
-viewUtilities.removeHighlights = function (eles) {
-  if (!eles) {
-    eles = cy.elements();
-  }
+  // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
+  instance.highlightNeighbors = function (eles) {
+    var allEles = getWithNeighbors(eles);
 
-  return eles
-          .removeClass("highlighted")
-          .removeClass("unhighlighted")
-          .removeData("highlighted"); // TODO check if remove data is needed here
-};
+    return this.highlight(allEles);
+  };
 
-// Indicates if the ele is highlighted
-viewUtilities.isHighlighted = function (ele) {
-  return ele.is(".highlighted:visible") ? true : false;
+  // Aliases: this.highlightNeighbours()
+  instance.highlightNeighbours = function (eles) {
+    return this.highlightNeighbors(eles);
+  };
+
+  // Just unhighlights eles and their neighbors.
+  instance.unhighlightNeighbors = function (eles) {
+    var allEles = getWithNeighbors(eles);
+
+    return this.unhighlight(allEles);
+  };
+
+  // Aliases: this.unhighlightNeighbours()
+  instance.unhighlightNeighbours = function (eles) {
+    this.unhighlightNeighbors(eles);
+  };
+
+  // Remove highlights & unhighlights from eles.
+  // If eles is not defined considers cy.elements()
+  instance.removeHighlights = function (eles) {
+    if (!eles) {
+      eles = cy.elements();
+    }
+
+    return eles
+            .removeClass("highlighted")
+            .removeClass("unhighlighted")
+            .removeData("highlighted"); // TODO check if remove data is needed here
+  };
+
+  // Indicates if the ele is highlighted
+  instance.isHighlighted = function (ele) {
+    return ele.is(".highlighted:visible") ? true : false;
+  };
+
+  // return the instance
+  return instance;
 };
 
 module.exports = viewUtilities;
-
