@@ -76,7 +76,7 @@
             shiftKeyDown = false;
         }, "keyup");
         //Select the desired neighbors after taphold-and-free 
-        cy.on('taphold', 'node', function(event){        
+        cy.on('taphold', 'node', function(event){      
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
