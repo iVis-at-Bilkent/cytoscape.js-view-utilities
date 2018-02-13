@@ -14,6 +14,7 @@
 		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
                 <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
 		<script src="cytoscape-view-utilities.js"></script>
+
 		<style>
 			body {
 				font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
@@ -179,26 +180,26 @@
                     }                    
                 });
                 
-                $('#zoom').click( function(){    
-                    var selectedNodes = cy.nodes(":selected");
-                    api.zoom( selectedNodes);
+                $('#zoomToSelected').click( function(){    
+                    var selectedEles = cy.$(":selected");
+                    var zoomSpeed = document.getElementById('ZoomSpeed').value;
+                    api.zoomToSelected( selectedEles, zoomSpeed);
                     if(document.getElementById('layout').checked){
                       layout.run();  
                     }   
                 })
 
                 $('#marqueeZoom').click( function(){
-                    api.marqueeZoom( cy);   
+                    var zoomSpeed = 100 - document.getElementById('ZoomSpeed').value;
+                    api.marqueeZoom(zoomSpeed);   
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
                 })
 
                 var tappedBefore;
-
                 cy.on('tap', 'node', function (event) {
                   var node = this;
-
                   var tappedNow = node;
                   setTimeout(function () {
                     tappedBefore = null;
@@ -240,9 +241,11 @@
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
         <b id="showHiddenNeighbors" style="cursor: pointer; color: darksalmon">Show Hidden Neighbors of Selected</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b> <br/>
-        <b id="zoom" style="cursor: pointer; color: darksalmon">Zoom Selected</b><br/>
-        <b id="marqueeZoom" style="cursor: pointer; color: darksalmon">Marquee Zoom</b><br/>
-        <b id=
+        <b id="zoomToSelected" style="cursor: pointer; color: darksalmon">Zoom to Selected</b><br/>
+        <b id="marqueeZoom" style="cursor: pointer; color: darksalmon">Marquee Zoom</b>
+        <b>SHIFT + drag</b> to specifcy region<br/>
+        <input type="range" min="1" max="99" value="50" class="slider" id="ZoomSpeed">
+        <b>Zoom Speed<b/><br/>
         <b>SHIFT + taphold</b> to select neighbors<br/>
         <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
         <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>

@@ -3,7 +3,7 @@ cytoscape-view-utilities
 
 ## Description
 
-This Cytoscape.js extension provides miscellenaous view utilities such as hiding and highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+This Cytoscape.js extension provides miscellenaous view utilities such as hiding, highlighting and zooming nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
 ![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
 
@@ -48,6 +48,14 @@ Hides given eles.
 `instance.show(eles)`
 
 Unhides given eles.
+
+`instance.zoomToSelected(eles, zoomSpeed)`
+
+Zoom to selected eles with duration specified by zoomSpeed.
+
+`instance.marqueeZoom(zoomSpeed)`
+
+Zoom to specified region with duration specified by zoomSpeed.
 
 ## Default Options
 ```javascript

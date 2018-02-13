@@ -1,16 +1,17 @@
 var viewUtilities = function (cy, options) {
+
   // Set style for highlighted and unhighligthed eles
   cy
-  .style()
-  .selector("node.highlighted")
-  .css(options.node.highlighted)
-  .selector("node.unhighlighted")
-  .css(options.node.unhighlighted)
-  .selector("edge.highlighted")
-  .css(options.edge.highlighted)
-  .selector("edge.unhighlighted")
-  .css(options.edge.unhighlighted)
-  .update();
+        .style()
+        .selector("node.highlighted")
+        .css(options.node.highlighted)
+        .selector("node.unhighlighted")
+        .css(options.node.unhighlighted)
+        .selector("edge.highlighted")
+        .css(options.edge.highlighted)
+        .selector("edge.unhighlighted")
+        .css(options.edge.unhighlighted)
+        .update();
 
   // Helper functions for internal usage (not to be exposed)
   function highlight(eles) {
@@ -112,10 +113,10 @@ var viewUtilities = function (cy, options) {
     }
 
     return eles
-    .removeClass("highlighted")
-    .removeClass("unhighlighted")
+            .removeClass("highlighted")
+            .removeClass("unhighlighted")
             .removeData("highlighted"); // TODO check if remove data is needed here
-          };
+  };
 
   // Indicates if the ele is highlighted
   instance.isHighlighted = function (ele) {
@@ -124,7 +125,7 @@ var viewUtilities = function (cy, options) {
 
 
   //Zoom selected Nodes
-  instance.zoom = function ( eles){
+  instance.zoomToSelected = function (eles, zoomSpeed){
     eles.unselect();
     cy.animate({
       fit: {
@@ -132,12 +133,12 @@ var viewUtilities = function (cy, options) {
         padding: 20
       }
     }, {
-      duration: 1000
+      duration: 30 * zoomSpeed //Default:1500( %50)
     });  
     return eles;
   };
 
-  instance.marqueeZoom = function( canvas){
+  instance.marqueeZoom = function(zoomSpeed){
     //Make the cy unselectable
     cy.autounselectify(true);
     cy.elements().unselect();
@@ -153,29 +154,79 @@ var viewUtilities = function (cy, options) {
       shiftKeyDown = false;
     }, "keyup");
 
-    var p_start_x, p_start_y, p_end_x, p_end_y;
+    var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
 
-    cy.one('tapstart', function( event){ 
+    cy.one('tapstart', function(event){ 
       if( shiftKeyDown == true){
-        p_start_x = event.position.x;
-        p_start_y = event.position.y;
+        rect_start_pos_x = event.position.x;
+        rect_start_pos_y = event.position.y;
+
       }
     });
 
-    cy.one('tapend', function( event){
-      p_end_x = event.position.x;
-      p_end_y = event.position.y;
-      var zoomLevel = Math.min( cy.width()/ ( Math.abs(p_end_x- p_start_x)), cy.height() / Math.abs( p_end_y - p_start_y));
+    cy.one('tapend', function(event){
+      rect_end_pos_x = event.position.x;
+      rect_end_pos_y = event.position.y;
+      //Find top left of rectangle
+      if( rect_start_pos_x > rect_start_pos_x){
+        var temp = rect_start_pos_x;
+        rect_start_pos_x = rect_end_pos_x;
+        rect_end_pos_x = temp;
+      }
+      if( rect_start_pos_y > rect_end_pos_y){
+        var temp = rect_start_pos_y;
+        rect_start_pos_y = rect_end_pos_y;
+        rect_end_pos_y = temp;
+      }
+      //Calculate zoom level
+      var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
+        cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
+
+      //Check whether rectangle intersects with bounding box of the graph
+      //if not abort marquee zoom
+      if((Math.min(rect_start_pos_x, rect_end_pos_x) > cy.elements().boundingBox().x2)
+        ||(Math.max(rect_start_pos_x, rect_end_pos_x) < cy.elements().boundingBox().x1)
+        ||(Math.min(rect_start_pos_y, rect_end_pos_y) > cy.elements().boundingBox().y2)
+        ||(Math.max(rect_start_pos_y, rect_end_pos_y) < cy.elements().boundingBox().y1)){
+        cy.autounselectify(false);
+        cy.elements().unselect();
+        return;        
+      }
+      //if zoom level reaches max abort marquee zoom
+      if(zoomLevel > cy.maxZoom()){
+        cy.autounselectify(false);
+        cy.elements().unselect();
+        return;
+      }
+      //Find left top corner of the selected rectangle
+      //Calculate difference for panning based on graph's bounding box
+      //While extending rectangle, try to include a region in bounding box of graph 
+      if( Math.abs(rect_start_pos_x - rect_end_pos_x) * zoomLevel < 100){
+        if( rect_start_pos_x < cy.elements().boundingBox().x1 ){
+          rect_end_pos_x = rect_start_pos_x + 100 / zoomLevel;
+        }else{
+          rect_start_pos_x = rect_end_pos_x - 100 / zoomLevel;
+        }
+      }
+      if( Math.abs(rect_start_pos_y - rect_end_pos_y) * zoomLevel < 100){
+        if( rect_start_pos_y < cy.elements().boundingBox().y1){
+          rect_end_pos_y = rect_start_pos_y + 100 / zoomLevel;
+        }else{
+          rect_start_pos_y = rect_end_pos_y - 100 / zoomLevel;
+        }
+      }
+      var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - cy.elements().boundingBox().x1) * zoomLevel;
+      var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
       cy.animate({
-        zoom : { 
-          position: {x: (p_start_x + p_end_x)/2, y: ( p_start_y + p_end_y) / 2},
-          level: zoomLevel}, 
-          duration: 2000,
-          complete: function() {
-            cy.autounselectify(false);
-            cy.elements().unselect();
-          }});   
-    })
+        pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
+        zoom : {level: zoomLevel}, 
+        duration: 30 * zoomSpeed, //Default:1500( %50)
+        complete: function(){
+          cy.autounselectify(false);
+          cy.elements().unselect();
+        }
+      });   
+  })
   }
 
   // return the instance
