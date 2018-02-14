@@ -125,7 +125,7 @@ var viewUtilities = function (cy, options) {
 
 
   //Zoom selected Nodes
-  instance.zoomToSelected = function (eles, zoomSpeed){
+  instance.zoomToSelected = function (eles){
     eles.unselect();
     cy.animate({
       fit: {
@@ -133,12 +133,12 @@ var viewUtilities = function (cy, options) {
         padding: 20
       }
     }, {
-      duration: 30 * zoomSpeed //Default:1500( %50)
+      duration: options.zoomAnimationDuration,
     });  
     return eles;
   };
 
-  instance.marqueeZoom = function(zoomSpeed){
+  instance.marqueeZoom = function(){
     //Make the cy unselectable
     cy.autounselectify(true);
     cy.elements().unselect();
@@ -160,67 +160,66 @@ var viewUtilities = function (cy, options) {
       if( shiftKeyDown == true){
         rect_start_pos_x = event.position.x;
         rect_start_pos_y = event.position.y;
-
       }
     });
 
     cy.one('tapend', function(event){
       rect_end_pos_x = event.position.x;
       rect_end_pos_y = event.position.y;
-      //Find top left of rectangle
-      if( rect_start_pos_x > rect_start_pos_x){
+      //check whether corners of rectangle is undefined
+      //abort marquee zoom if one corner is undefined
+      if( rect_start_pos_x == undefined || rect_end_pos_x == undefined){
+        cy.autounselectify(false);
+        cy.elements().unselect();
+        return; 
+      }
+      //Reoder rectangle postions
+      //Top left of the rectangle (rect_start_pos_x, rect_start_pos_y)
+      //right bottom of the rectangle (rect_end_pos_x, rect_end_pos_y)
+      if(rect_start_pos_x > rect_end_pos_x){
         var temp = rect_start_pos_x;
         rect_start_pos_x = rect_end_pos_x;
         rect_end_pos_x = temp;
       }
-      if( rect_start_pos_y > rect_end_pos_y){
+      if(rect_start_pos_y > rect_end_pos_y){
         var temp = rect_start_pos_y;
         rect_start_pos_y = rect_end_pos_y;
         rect_end_pos_y = temp;
       }
-      //Calculate zoom level
-      var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
-        cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
+
+      //Extend sides of selected rectangle to 100px if less than 100px
+      if(rect_end_pos_x - rect_start_pos_x < 100){
+        var extendPx = ( 100 - (rect_end_pos_x - rect_start_pos_y)) / 2;
+        rect_start_pos_x -= extendPx;
+        rect_end_pos_x += extendPx;
+      }
+      if(rect_end_pos_y - rect_start_pos_y < 100){
+        var extendPx = ( 100 - (rect_end_pos_y - rect_start_pos_y)) / 2;
+        rect_start_pos_y -= extendPx;
+        rect_end_pos_y += extendPx;
+      }
 
       //Check whether rectangle intersects with bounding box of the graph
       //if not abort marquee zoom
-      if((Math.min(rect_start_pos_x, rect_end_pos_x) > cy.elements().boundingBox().x2)
-        ||(Math.max(rect_start_pos_x, rect_end_pos_x) < cy.elements().boundingBox().x1)
-        ||(Math.min(rect_start_pos_y, rect_end_pos_y) > cy.elements().boundingBox().y2)
-        ||(Math.max(rect_start_pos_y, rect_end_pos_y) < cy.elements().boundingBox().y1)){
+      if((rect_start_pos_x > cy.elements().boundingBox().x2)
+        ||(rect_end_pos_x < cy.elements().boundingBox().x1)
+        ||(rect_start_pos_y > cy.elements().boundingBox().y2)
+        ||(rect_end_pos_y < cy.elements().boundingBox().y1)){
         cy.autounselectify(false);
         cy.elements().unselect();
         return;        
       }
-      //if zoom level reaches max abort marquee zoom
-      if(zoomLevel > cy.maxZoom()){
-        cy.autounselectify(false);
-        cy.elements().unselect();
-        return;
-      }
-      //Find left top corner of the selected rectangle
-      //Calculate difference for panning based on graph's bounding box
-      //While extending rectangle, try to include a region in bounding box of graph 
-      if( Math.abs(rect_start_pos_x - rect_end_pos_x) * zoomLevel < 100){
-        if( rect_start_pos_x < cy.elements().boundingBox().x1 ){
-          rect_end_pos_x = rect_start_pos_x + 100 / zoomLevel;
-        }else{
-          rect_start_pos_x = rect_end_pos_x - 100 / zoomLevel;
-        }
-      }
-      if( Math.abs(rect_start_pos_y - rect_end_pos_y) * zoomLevel < 100){
-        if( rect_start_pos_y < cy.elements().boundingBox().y1){
-          rect_end_pos_y = rect_start_pos_y + 100 / zoomLevel;
-        }else{
-          rect_start_pos_y = rect_end_pos_y - 100 / zoomLevel;
-        }
-      }
+
+      //Calculate zoom level
+      var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
+        cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
+
       var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - cy.elements().boundingBox().x1) * zoomLevel;
       var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
       cy.animate({
         pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
         zoom : {level: zoomLevel}, 
-        duration: 30 * zoomSpeed, //Default:1500( %50)
+        duration: options.zoomAnimationDuration,
         complete: function(){
           cy.autounselectify(false);
           cy.elements().unselect();

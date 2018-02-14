@@ -182,16 +182,14 @@
                 
                 $('#zoomToSelected').click( function(){    
                     var selectedEles = cy.$(":selected");
-                    var zoomSpeed = document.getElementById('ZoomSpeed').value;
-                    api.zoomToSelected( selectedEles, zoomSpeed);
+                    api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
                       layout.run();  
                     }   
                 })
 
                 $('#marqueeZoom').click( function(){
-                    var zoomSpeed = 100 - document.getElementById('ZoomSpeed').value;
-                    api.marqueeZoom(zoomSpeed);   
+                    api.marqueeZoom();   
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
@@ -244,8 +242,6 @@
         <b id="zoomToSelected" style="cursor: pointer; color: darksalmon">Zoom to Selected</b><br/>
         <b id="marqueeZoom" style="cursor: pointer; color: darksalmon">Marquee Zoom</b>
         <b>SHIFT + drag</b> to specifcy region<br/>
-        <input type="range" min="1" max="99" value="50" class="slider" id="ZoomSpeed">
-        <b>Zoom Speed<b/><br/>
         <b>SHIFT + taphold</b> to select neighbors<br/>
         <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
         <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>

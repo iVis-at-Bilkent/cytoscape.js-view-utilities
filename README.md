@@ -49,13 +49,13 @@ Hides given eles.
 
 Unhides given eles.
 
-`instance.zoomToSelected(eles, zoomSpeed)`
+`instance.zoomToSelected(eles)`
 
-Zoom to selected eles with duration specified by zoomSpeed.
+Zoom to selected eles.
 
-`instance.marqueeZoom(zoomSpeed)`
+`instance.marqueeZoom()`
 
-Zoom to specified region with duration specified by zoomSpeed.
+Zoom to specified region.
 
 ## Default Options
 ```javascript
