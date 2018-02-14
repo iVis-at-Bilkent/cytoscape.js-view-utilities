@@ -173,7 +173,7 @@ var viewUtilities = function (cy, options) {
         cy.elements().unselect();
         return; 
       }
-      //Reoder rectangle postions
+      //Reoder rectangle positions
       //Top left of the rectangle (rect_start_pos_x, rect_start_pos_y)
       //right bottom of the rectangle (rect_end_pos_x, rect_end_pos_y)
       if(rect_start_pos_x > rect_end_pos_x){
@@ -189,7 +189,7 @@ var viewUtilities = function (cy, options) {
 
       //Extend sides of selected rectangle to 100px if less than 100px
       if(rect_end_pos_x - rect_start_pos_x < 100){
-        var extendPx = ( 100 - (rect_end_pos_x - rect_start_pos_y)) / 2;
+        var extendPx = ( 100 - (rect_end_pos_x - rect_start_pos_x)) / 2;
         rect_start_pos_x -= extendPx;
         rect_end_pos_x += extendPx;
       }
