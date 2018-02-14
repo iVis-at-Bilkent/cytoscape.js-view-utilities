@@ -9,7 +9,7 @@ This Cytoscape.js extension provides miscellenaous view utilities such as hiding
 
 ## Demo
 
-Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html) (undoable) for a demo
+Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
 
 ## API
 
