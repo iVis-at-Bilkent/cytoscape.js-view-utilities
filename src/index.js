@@ -24,6 +24,7 @@
       },
       setVisibilityOnHide: false, // whether to set visibility on hide/show
       setDisplayOnHide: true, // whether to set display on hide/show
+      zoomAnimationDuration: 1500, //default duration for zoom animation speed
       neighbor: function(node){ // return desired neighbors of tapheld node
         return false;
       },
@@ -76,7 +77,7 @@
             shiftKeyDown = false;
         }, "keyup");
         //Select the desired neighbors after taphold-and-free 
-        cy.on('taphold', 'node', function(event){        
+        cy.on('taphold', 'node', function(event){      
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
