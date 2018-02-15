@@ -133,7 +133,7 @@ var viewUtilities = function (cy, options) {
         padding: 20
       }
     }, {
-      duration: options.zoomAnimationDuration,
+      duration: options.zoomAnimationDuration
     });  
     return eles;
   };
@@ -218,15 +218,15 @@ var viewUtilities = function (cy, options) {
       var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
       cy.animate({
         pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
-        zoom : {level: zoomLevel}, 
+        zoom : zoomLevel, 
         duration: options.zoomAnimationDuration,
         complete: function(){
           cy.autounselectify(false);
           cy.elements().unselect();
         }
       });   
-  })
-  }
+    });
+  };
 
   // return the instance
   return instance;
