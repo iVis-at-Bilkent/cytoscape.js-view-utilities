@@ -138,7 +138,7 @@ var viewUtilities = function (cy, options) {
     return eles;
   };
 
-  instance.marqueeZoom = function(){
+  instance.marqueeZoom = function(callback){
     //Make the cy unselectable
     cy.autounselectify(true);
     cy.elements().unselect();
@@ -223,6 +223,9 @@ var viewUtilities = function (cy, options) {
         complete: function(){
           cy.autounselectify(false);
           cy.elements().unselect();
+          if(callback){
+            callback();
+          }
         }
       });   
     });
