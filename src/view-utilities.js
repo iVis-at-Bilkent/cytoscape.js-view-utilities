@@ -126,7 +126,6 @@ var viewUtilities = function (cy, options) {
 
   //Zoom selected Nodes
   instance.zoomToSelected = function (eles){
-    eles.unselect();
     cy.animate({
       fit: {
         eles: eles,
@@ -206,10 +205,12 @@ var viewUtilities = function (cy, options) {
 
       //Check whether rectangle intersects with bounding box of the graph
       //if not abort marquee zoom
-      if((rect_start_pos_x > cy.elements().boundingBox().x2)
-        ||(rect_end_pos_x < cy.elements().boundingBox().x1)
-        ||(rect_start_pos_y > cy.elements().boundingBox().y2)
-        ||(rect_end_pos_y < cy.elements().boundingBox().y1)){
+
+      var graph = (cy.$(":visible")).union(cy.$("hidden"));
+      if((rect_start_pos_x > graph.boundingBox().x2)
+        ||(rect_end_pos_x < graph.boundingBox().x1)
+        ||(rect_start_pos_y > graph.boundingBox().y2)
+        ||(rect_end_pos_y < graph.boundingBox().y1)){
         cy.autounselectify(false);
         if(callback){
           callback();
@@ -221,8 +222,8 @@ var viewUtilities = function (cy, options) {
       var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
         cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
 
-      var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - cy.elements().boundingBox().x1) * zoomLevel;
-      var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
+      var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - graph.boundingBox().x1) * zoomLevel;
+      var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - graph.boundingBox().y1) * zoomLevel;
       cy.animate({
         pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
         zoom : zoomLevel, 

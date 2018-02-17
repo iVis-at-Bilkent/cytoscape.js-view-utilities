@@ -55,7 +55,7 @@ Zoom to selected eles.
 
 `instance.marqueeZoom(callback)`
 
-Zoom to specified region. callback function is called at the end of the animation.
+Zoom to specified region. callback function is called at the end of the function.
 
 ## Default Options
 ```javascript
