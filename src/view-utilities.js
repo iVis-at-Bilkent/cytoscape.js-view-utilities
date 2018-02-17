@@ -133,18 +133,23 @@ var viewUtilities = function (cy, options) {
         padding: 20
       }
     }, {
-      duration: options.zoomAnimationDuration,
+      duration: options.zoomAnimationDuration
     });  
     return eles;
   };
 
-  instance.marqueeZoom = function(){
-    //Make the cy unselectable
-    cy.autounselectify(true);
-    cy.elements().unselect();
+  //Marquee Zoom
+  var tabStartHandler;
+  var tabEndHandler;
+
+
+  instance.enableMarqueeZoom = function(callback){
 
     var mt = new Mousetrap();
     var shiftKeyDown = false;
+    var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
+    //Make the cy unselectable
+    cy.autounselectify(true);
 
     mt.bind(["shift"], function() {
       shiftKeyDown = true;
@@ -154,23 +159,23 @@ var viewUtilities = function (cy, options) {
       shiftKeyDown = false;
     }, "keyup");
 
-    var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
-
-    cy.one('tapstart', function(event){ 
+    cy.one('tapstart', tabStartHandler = function(event){
       if( shiftKeyDown == true){
-        rect_start_pos_x = event.position.x;
-        rect_start_pos_y = event.position.y;
-      }
+      rect_start_pos_x = event.position.x;
+      rect_start_pos_y = event.position.y;
+      rect_end_pos_x = undefined;
+    }
     });
-
-    cy.one('tapend', function(event){
+    cy.one('tapend', tabEndHandler = function(event){
       rect_end_pos_x = event.position.x;
       rect_end_pos_y = event.position.y;
       //check whether corners of rectangle is undefined
       //abort marquee zoom if one corner is undefined
       if( rect_start_pos_x == undefined || rect_end_pos_x == undefined){
         cy.autounselectify(false);
-        cy.elements().unselect();
+        if(callback){
+          callback();
+        }
         return; 
       }
       //Reoder rectangle positions
@@ -206,7 +211,9 @@ var viewUtilities = function (cy, options) {
         ||(rect_start_pos_y > cy.elements().boundingBox().y2)
         ||(rect_end_pos_y < cy.elements().boundingBox().y1)){
         cy.autounselectify(false);
-        cy.elements().unselect();
+        if(callback){
+          callback();
+        }
         return;        
       }
 
@@ -218,15 +225,23 @@ var viewUtilities = function (cy, options) {
       var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
       cy.animate({
         pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
-        zoom : {level: zoomLevel}, 
+        zoom : zoomLevel, 
         duration: options.zoomAnimationDuration,
         complete: function(){
+          if (callback) {
+            callback();
+          }
           cy.autounselectify(false);
-          cy.elements().unselect();
         }
-      });   
-  })
-  }
+      });     
+    });
+  };
+
+  instance.disableMarqueeZoom = function(){
+    cy.off('tapstart', tabStartHandler );
+    cy.off('tapend', tabEndHandler);
+    cy.autounselectify(false);
+  };
 
   // return the instance
   return instance;

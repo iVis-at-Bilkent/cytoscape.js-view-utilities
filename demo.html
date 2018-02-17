@@ -150,6 +150,7 @@
                 }
 
                 $("#hide").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
@@ -161,6 +162,7 @@
                 });
 
                 $("#showAll").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
@@ -170,6 +172,7 @@
                 });
 
                 $("#showHiddenNeighbors").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
@@ -180,7 +183,8 @@
                     }                    
                 });
                 
-                $('#zoomToSelected').click( function(){    
+                $('#zoomToSelected').click( function(){ 
+                    api.disableMarqueeZoom();   
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -189,7 +193,7 @@
                 })
 
                 $('#marqueeZoom').click( function(){
-                    api.marqueeZoom();   
+                    api.enableMarqueeZoom();   
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
@@ -222,11 +226,13 @@
                 });
 
                 $("#highlightNeighbors").click(function () {
+                    api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlightNeighbors(cy.$(":selected"));
                 });
 
                 $("#removeHighlights").click(function () {
+                    api.disableMarqueeZoom();
                     api.removeHighlights();
                 });
 			});
