@@ -53,9 +53,9 @@ Unhides given eles.
 
 Zoom to selected eles.
 
-`instance.marqueeZoom()`
+`instance.marqueeZoom(callback)`
 
-Zoom to specified region.
+Zoom to specified region. callback function is called at the end of the animation.
 
 ## Default Options
 ```javascript
