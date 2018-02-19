@@ -126,7 +126,6 @@ var viewUtilities = function (cy, options) {
 
   //Zoom selected Nodes
   instance.zoomToSelected = function (eles){
-    eles.unselect();
     cy.animate({
       fit: {
         eles: eles,
@@ -138,13 +137,18 @@ var viewUtilities = function (cy, options) {
     return eles;
   };
 
-  instance.marqueeZoom = function(callback){
-    //Make the cy unselectable
-    cy.autounselectify(true);
-    cy.elements().unselect();
+  //Marquee Zoom
+  var tabStartHandler;
+  var tabEndHandler;
+
+
+  instance.enableMarqueeZoom = function(callback){
 
     var mt = new Mousetrap();
     var shiftKeyDown = false;
+    var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
+    //Make the cy unselectable
+    cy.autounselectify(true);
 
     mt.bind(["shift"], function() {
       shiftKeyDown = true;
@@ -154,23 +158,23 @@ var viewUtilities = function (cy, options) {
       shiftKeyDown = false;
     }, "keyup");
 
-    var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
-
-    cy.one('tapstart', function(event){ 
+    cy.one('tapstart', tabStartHandler = function(event){
       if( shiftKeyDown == true){
-        rect_start_pos_x = event.position.x;
-        rect_start_pos_y = event.position.y;
-      }
+      rect_start_pos_x = event.position.x;
+      rect_start_pos_y = event.position.y;
+      rect_end_pos_x = undefined;
+    }
     });
-
-    cy.one('tapend', function(event){
+    cy.one('tapend', tabEndHandler = function(event){
       rect_end_pos_x = event.position.x;
       rect_end_pos_y = event.position.y;
       //check whether corners of rectangle is undefined
       //abort marquee zoom if one corner is undefined
       if( rect_start_pos_x == undefined || rect_end_pos_x == undefined){
         cy.autounselectify(false);
-        cy.elements().unselect();
+        if(callback){
+          callback();
+        }
         return; 
       }
       //Reoder rectangle positions
@@ -201,12 +205,16 @@ var viewUtilities = function (cy, options) {
 
       //Check whether rectangle intersects with bounding box of the graph
       //if not abort marquee zoom
-      if((rect_start_pos_x > cy.elements().boundingBox().x2)
-        ||(rect_end_pos_x < cy.elements().boundingBox().x1)
-        ||(rect_start_pos_y > cy.elements().boundingBox().y2)
-        ||(rect_end_pos_y < cy.elements().boundingBox().y1)){
+
+      var graph = (cy.$(":visible")).union(cy.$("hidden"));
+      if((rect_start_pos_x > graph.boundingBox().x2)
+        ||(rect_end_pos_x < graph.boundingBox().x1)
+        ||(rect_start_pos_y > graph.boundingBox().y2)
+        ||(rect_end_pos_y < graph.boundingBox().y1)){
         cy.autounselectify(false);
-        cy.elements().unselect();
+        if(callback){
+          callback();
+        }
         return;        
       }
 
@@ -214,21 +222,27 @@ var viewUtilities = function (cy, options) {
       var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
         cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
 
-      var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - cy.elements().boundingBox().x1) * zoomLevel;
-      var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - cy.elements().boundingBox().y1) * zoomLevel;
+      var diff_x = ((rect_start_pos_x + rect_end_pos_x)/2 - graph.boundingBox().x1) * zoomLevel;
+      var diff_y = ((rect_start_pos_y + rect_end_pos_y)/2 - graph.boundingBox().y1) * zoomLevel;
+      
       cy.animate({
         pan : {x: (cy.width()/2 - diff_x), y: (cy.height()/2 - diff_y)},
         zoom : zoomLevel, 
         duration: options.zoomAnimationDuration,
         complete: function(){
-          cy.autounselectify(false);
-          cy.elements().unselect();
-          if(callback){
+          if (callback) {
             callback();
           }
+          cy.autounselectify(false);
         }
-      });   
+      });     
     });
+  };
+
+  instance.disableMarqueeZoom = function(){
+    cy.off('tapstart', tabStartHandler );
+    cy.off('tapend', tabEndHandler);
+    cy.autounselectify(false);
   };
 
   // return the instance
