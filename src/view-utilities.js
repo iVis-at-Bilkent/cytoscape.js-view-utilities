@@ -123,24 +123,34 @@ var viewUtilities = function (cy, options) {
     return ele.is(".highlighted:visible") ? true : false;
   };
 
-
   //Zoom selected Nodes
   instance.zoomToSelected = function (eles){
+    var boundingBox = eles.boundingBox();
+    var diff_x = Math.abs(boundingBox.x1 - boundingBox.x2);
+    var diff_y = Math.abs(boundingBox.y1 - boundingBox.y2);
+    var padding;
+    if( diff_x >= 200 || diff_y >= 200){
+      padding = 50;
+    }
+    else{
+      padding = (cy.width() < cy.height()) ?
+        ((200 - diff_x)/2 * cy.width() / 200) : ((200 - diff_y)/2 * cy.height() / 200);
+    }
+
     cy.animate({
       fit: {
         eles: eles,
-        padding: 20
+        padding: padding
       }
     }, {
       duration: options.zoomAnimationDuration
-    });  
+    });
     return eles;
   };
 
   //Marquee Zoom
   var tabStartHandler;
   var tabEndHandler;
-
 
   instance.enableMarqueeZoom = function(callback){
 
@@ -175,7 +185,7 @@ var viewUtilities = function (cy, options) {
         if(callback){
           callback();
         }
-        return; 
+        return;
       }
       //Reoder rectangle positions
       //Top left of the rectangle (rect_start_pos_x, rect_start_pos_y)
@@ -191,14 +201,14 @@ var viewUtilities = function (cy, options) {
         rect_end_pos_y = temp;
       }
 
-      //Extend sides of selected rectangle to 100px if less than 100px
-      if(rect_end_pos_x - rect_start_pos_x < 100){
-        var extendPx = ( 100 - (rect_end_pos_x - rect_start_pos_x)) / 2;
+      //Extend sides of selected rectangle to 200px if less than 100px
+      if(rect_end_pos_x - rect_start_pos_x < 200){
+        var extendPx = (200 - (rect_end_pos_x - rect_start_pos_x)) / 2;
         rect_start_pos_x -= extendPx;
         rect_end_pos_x += extendPx;
       }
-      if(rect_end_pos_y - rect_start_pos_y < 100){
-        var extendPx = ( 100 - (rect_end_pos_y - rect_start_pos_y)) / 2;
+      if(rect_end_pos_y - rect_start_pos_y < 200){
+        var extendPx = (200 - (rect_end_pos_y - rect_start_pos_y)) / 2;
         rect_start_pos_y -= extendPx;
         rect_end_pos_y += extendPx;
       }
@@ -213,19 +223,19 @@ var viewUtilities = function (cy, options) {
         if(callback){
           callback();
         }
-        return;        
+        return;
       }
 
       //Calculate zoom level
-      var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)), 
+      var zoomLevel = Math.min( cy.width()/ ( Math.abs(rect_end_pos_x- rect_start_pos_x)),
         cy.height() / Math.abs( rect_end_pos_y - rect_start_pos_y));
 
       var diff_x = cy.width() / 2 - (cy.pan().x + zoomLevel * (rect_start_pos_x + rect_end_pos_x) / 2);
       var diff_y = cy.height() / 2 - (cy.pan().y + zoomLevel * (rect_start_pos_y + rect_end_pos_y) / 2);
-      
+
       cy.animate({
         panBy : {x: diff_x, y: diff_y},
-        zoom : zoomLevel, 
+        zoom : zoomLevel,
         duration: options.zoomAnimationDuration,
         complete: function(){
           if (callback) {
@@ -233,7 +243,7 @@ var viewUtilities = function (cy, options) {
           }
           cy.autounselectify(false);
         }
-      });     
+      });
     });
   };
 
