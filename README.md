@@ -3,7 +3,7 @@ cytoscape-view-utilities
 
 ## Description
 
-This Cytoscape.js extension provides miscellenaous view utilities such as hiding and highlighting nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+This Cytoscape.js extension provides miscellenaous view utilities such as hiding, highlighting and zooming nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
 ![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
 
@@ -13,7 +13,7 @@ U. Dogrusoz , A. Karacelik, I. Safarli, H. Balci, L. Dervishi, and M.C. Siper, "
 
 ## Demo
 
-Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html) (undoable) for a demo
+Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
 
 ## API
 
@@ -53,6 +53,18 @@ Hides given eles.
 
 Unhides given eles.
 
+`instance.zoomToSelected(eles)`
+
+Zoom to selected eles.
+
+`instance.enableMarqueeZoom(callback)`
+
+Enables marquee zoom. callback is called at the end of the function.
+
+`instance.disableMarqueeZoom()`
+
+Disables marquee zoom.
+
 ## Default Options
 ```javascript
             node: {
@@ -69,7 +81,8 @@ Unhides given eles.
             },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
             setDisplayOnHide: true, // whether to set display on hide/show
-            neighbor: function(node){ // return desired neighbors of (shift + tapheld) node
+            zoomAnimationDuration: 1500, //default duration for zoom animation speed
+            neighbor: function(node){ // return desired neighbors of (shift + taphold) node
                 return false;
             },
             neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 

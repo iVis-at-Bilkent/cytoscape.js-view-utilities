@@ -38,7 +38,6 @@
 		<script>
 
 			document.addEventListener("DOMContentLoaded", function(){
-
                 var cy = window.cy = cytoscape({
                     container: document.getElementById('cy'),
                     layout: { name: "cose-bilkent" },
@@ -151,6 +150,7 @@
                 }
 
                 $("#hide").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
@@ -162,6 +162,7 @@
                 });
 
                 $("#showAll").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
@@ -171,6 +172,7 @@
                 });
 
                 $("#showHiddenNeighbors").click(function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     thinBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
@@ -180,12 +182,26 @@
                       layout.run();  
                     }                    
                 });
-                
-                var tappedBefore;
 
+                $('#zoomToSelected').click( function(){ 
+                    api.disableMarqueeZoom();   
+                    var selectedEles = cy.$(":selected");
+                    api.zoomToSelected(selectedEles);
+                    if(document.getElementById('layout').checked){
+                      layout.run();  
+                    }   
+                })
+
+                $('#marqueeZoom').click( function(){
+                    api.enableMarqueeZoom();   
+                    if( document.getElementById('layout').checked){
+                        layout.run();
+                    }
+                })
+
+                var tappedBefore;
                 cy.on('tap', 'node', function (event) {
                   var node = this;
-
                   var tappedNow = node;
                   setTimeout(function () {
                     tappedBefore = null;
@@ -210,11 +226,13 @@
                 });
 
                 $("#highlightNeighbors").click(function () {
+                    api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlightNeighbors(cy.$(":selected"));
                 });
 
                 $("#removeHighlights").click(function () {
+                    api.disableMarqueeZoom();
                     api.removeHighlights();
                 });
 			});
@@ -227,6 +245,9 @@
         <b id="hide" style="cursor: pointer; color: darksalmon">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/>
         <b id="showHiddenNeighbors" style="cursor: pointer; color: darksalmon">Show Hidden Neighbors of Selected</b> <br/>
         <b id="highlightNeighbors" style="cursor: pointer; color: darksalmon">Highlight Neighbors</b> / <b id="removeHighlights" style="cursor: pointer; color: darkmagenta">Remove Highlights</b> <br/>
+        <b id="zoomToSelected" style="cursor: pointer; color: darksalmon">Zoom to Selected</b><br/>
+        <b id="marqueeZoom" style="cursor: pointer; color: darksalmon">Marquee Zoom</b>
+        <b>SHIFT + drag</b> to specify region<br/>
         <b>SHIFT + taphold</b> to select neighbors<br/>
         <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
         <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>
