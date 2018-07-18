@@ -23,7 +23,7 @@ var viewUtilities = function (cy, options) {
   }
   // the instance to be returned
   var instance = {};
-  var Mousetrap = require('mousetrap');
+  
   // Section hide-show
 
   // hide given eles
@@ -154,19 +154,21 @@ var viewUtilities = function (cy, options) {
 
   instance.enableMarqueeZoom = function(callback){
 
-    var mt = new Mousetrap();
     var shiftKeyDown = false;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
     //Make the cy unselectable
     cy.autounselectify(true);
 
-    mt.bind(["shift"], function() {
-      shiftKeyDown = true;
-    }, "keydown");
-
-    mt.bind(["shift"], function(){
-      shiftKeyDown = false;
-    }, "keyup");
+    document.addEventListener('keydown', function(event){
+      if(event.key == "Shift") {
+        shiftKeyDown = true;
+      }
+    });
+    document.addEventListener('keyup', function(event){
+      if(event.key == "Shift") {
+        shiftKeyDown = false;
+      }
+    });
 
     cy.one('tapstart', tabStartHandler = function(event){
       if( shiftKeyDown == true){

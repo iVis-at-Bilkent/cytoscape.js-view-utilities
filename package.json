@@ -40,8 +40,5 @@
   "peerDependencies": {
     "cytoscape": "^2.7.0 || ^3.0.0",
     "jquery": "^1.7.0 || ^2.0.0 || ^3.0.0"
-  },
-  "dependencies": {
-    "mousetrap": "^1.6.0"
   }
 }

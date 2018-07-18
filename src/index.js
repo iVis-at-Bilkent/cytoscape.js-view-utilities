@@ -34,7 +34,6 @@
 
     var undoRedo = require("./undo-redo");
     var viewUtilities = require("./view-utilities");
-    var Mousetrap = require('mousetrap');
     
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
@@ -68,21 +67,24 @@
         // set the instance on the scratch pad
         getScratch(cy).instance = instance;
 
-        var mt = new Mousetrap();
         var shiftKeyDown = false;
-        mt.bind(["shift"], function () {
+        document.addEventListener('keydown', function(event){
+          if(event.key == "Shift") {
             shiftKeyDown = true;
-        }, "keydown");
-        mt.bind(["shift"], function () {
+          }
+        });
+        document.addEventListener('keyup', function(event){
+          if(event.key == "Shift") {
             shiftKeyDown = false;
-        }, "keyup");
+          }
+        });
         //Select the desired neighbors after taphold-and-free 
         cy.on('taphold', 'node', function(event){      
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
           var timeout = setTimeout(function(){ 
-            if(shiftKeyDown == true){
+            if(shiftKeyDown){
               cy.elements().unselect();
               neighborhood = options.neighbor(target);
               neighborhood.select();
@@ -98,13 +100,13 @@
               target.unlock();
             }
             else{
-                clearTimeout(timeout);
+              clearTimeout(timeout);
             }
           });
           cy.on('drag', 'node', function(){
             var targetDragged = event.target || event.cyTarget;  
             if(target == targetDragged && tapheld === false){
-                clearTimeout(timeout);
+              clearTimeout(timeout);
             }
           })
         });
