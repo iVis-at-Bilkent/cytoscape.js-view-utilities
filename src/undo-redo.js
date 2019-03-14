@@ -3,9 +3,9 @@ function highlightUR(cy, ur, viewUtilities) {
   function getStatus(eles) {
     eles = eles ? eles : cy.elements();
     return {
-      highlighteds: eles.filter(".highlighted:visible"),
+      highlighteds: eles.filter(".highlighted:visible, .highlighted2:visible, .highlighted3:visible, .highlighted4:visible"),
       unhighlighteds: eles.filter(".unhighlighted:visible"),
-      notHighlighteds: eles.filter(":visible").not(".highlighted, .unhighlighted")
+      notHighlighteds: eles.filter(":visible").not(".highlighted, .highlighted2, .highlighted3, .highlighted4, .unhighlighted")
     };
   }
 

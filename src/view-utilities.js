@@ -2,20 +2,69 @@ var viewUtilities = function (cy, options) {
 
   // Set style for highlighted and unhighligthed eles
   cy
-        .style()
-        .selector("node.highlighted")
-        .css(options.node.highlighted)
-        .selector("node.unhighlighted")
-        .css(options.node.unhighlighted)
-        .selector("edge.highlighted")
-        .css(options.edge.highlighted)
-        .selector("edge.unhighlighted")
-        .css(options.edge.unhighlighted)
-        .update();
+  .style()
+  .selector("node.highlighted")
+  .css(options.node.highlighted)
+  .selector("node.highlighted:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted2")
+  .css(options.node.highlighted2)
+  .selector("node.highlighted2:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted3")
+  .css(options.node.highlighted3)
+  .selector("node.highlighted3:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted4")
+  .css(options.node.highlighted4)
+  .selector("node.highlighted4:selected")
+  .css(options.node.selected)
+  .selector("node.unhighlighted")
+  .css(options.node.unhighlighted)
+  .selector("edge.highlighted")
+  .css(options.edge.highlighted)
+  .selector("edge.highlighted:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted2")
+  .css(options.edge.highlighted2)
+  .selector("edge.highlighted2:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted3")
+  .css(options.edge.highlighted3)
+  .selector("edge.highlighted3:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted4")
+  .css(options.edge.highlighted4)
+  .selector("edge.highlighted4:selected")
+  .css(options.edge.selected)
+  .selector("edge.unhighlighted")
+  .css(options.edge.unhighlighted)
+  .update();
 
   // Helper functions for internal usage (not to be exposed)
-  function highlight(eles) {
-    eles.removeClass("unhighlighted").addClass("highlighted");
+  function highlight(eles, option) {
+    switch(option){
+      case "highlighted":
+        eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
+        break;
+      case "highlighted2":
+        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted2");
+        eles.unselect();
+        break;
+      case "highlighted3":
+        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted4").addClass("highlighted3");
+        eles.unselect();
+        break;
+      case "highlighted4":
+        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").addClass("highlighted4");
+        eles.unselect();
+        break;
+      default:
+        eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
+        break;
+    }
   }
 
   function getWithNeighbors(eles) {
@@ -23,7 +72,7 @@ var viewUtilities = function (cy, options) {
   }
   // the instance to be returned
   var instance = {};
-  
+
   // Section hide-show
 
   // hide given eles
@@ -38,7 +87,7 @@ var viewUtilities = function (cy, options) {
     }
 
     if (options.setDisplayOnHide) {
-      eles.css('display', 'none');
+      eles.highlightColor2css('display', 'none');
     }
 
     return eles;
@@ -65,27 +114,28 @@ var viewUtilities = function (cy, options) {
   // Section highlight
 
   // Highlights eles & unhighlights others at first use.
-  instance.highlight = function (eles) {
+  instance.highlight = function (eles, option) {
     var others = cy.elements().difference(eles.union(eles.ancestors()));
 
-    if (cy.$(".highlighted:visible").length == 0)
+    if (cy.$(".highlighted:visible").length == 0 && cy.$(".highlighted2:visible").length == 0 && cy.$(".highlighted3:visible").length == 0 && cy.$(".highlighted4:visible").length == 0)
       this.unhighlight(others);
 
-    highlight(eles); // Use the helper here
+    highlight(eles, option); // Use the helper here
 
     return eles;
   };
 
-  // Just unighlights eles.
+  // Just unhighlights eles.
   instance.unhighlight = function (eles) {
-    eles.removeClass("highlighted").addClass("unhighlighted");
+    eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("unhighlighted");
+
   };
 
   // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
-  instance.highlightNeighbors = function (eles) {
+  instance.highlightNeighbors = function (eles, option) {
     var allEles = getWithNeighbors(eles);
 
-    return this.highlight(allEles);
+    return this.highlight(allEles, option);
   };
 
   // Aliases: this.highlightNeighbours()
@@ -111,16 +161,40 @@ var viewUtilities = function (cy, options) {
     if (!eles) {
       eles = cy.elements();
     }
-
-    return eles
-            .removeClass("highlighted")
+    return eles.removeClass("highlighted")
+            .removeClass("highlighted2")
+            .removeClass("highlighted3")
+            .removeClass("highlighted4")
             .removeClass("unhighlighted")
-            .removeData("highlighted"); // TODO check if remove data is needed here
+            .removeData("highlighted")
+            .removeData("highlighted2")
+            .removeData("highlighted3")
+            .removeData("highlighted4")
+            .unselect(); // TODO check if remove data is needed here
   };
 
   // Indicates if the ele is highlighted
   instance.isHighlighted = function (ele) {
-    return ele.is(".highlighted:visible") ? true : false;
+    if (ele.is(".highlighted:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted1:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted2:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted3:visible") == true)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   };
 
   //Zoom selected Nodes

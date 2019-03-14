@@ -11,15 +11,53 @@
 
     var options = {
       node: {
-        highlighted: {}, // styles for when nodes are highlighted.
-        unhighlighted: {// styles for when nodes are unhighlighted.
-          'opacity': 0.3
+        highlighted: {
+          'border-color': 'blue',
+          'border-width': 3
+        },
+
+        highlighted2: {
+          'border-color': 'purple',
+          'border-width': 3
+        },
+        highlighted3: {
+          'border-color': 'green',
+          'border-width': 3
+        },
+        highlighted4: {
+          'border-color': 'red',
+          'border-width': 3
+        },
+        unhighlighted: {
+        },
+        selected: {
+          'border-color': 'black',
+          'border-width': 3
         }
+
       },
       edge: {
-        highlighted: {}, // styles for when edges are highlighted.
-        unhighlighted: {// styles for when edges are unhighlighted.
-          'opacity': 0.3
+        highlighted: {
+          'line-color': 'blue',
+          'width' : 3
+        },
+        highlighted2: {
+          'line-color': 'purple',
+          'width' : 3
+        },
+        highlighted3: {
+          'line-color': 'green',
+          'width' : 3
+        },
+        highlighted4: {
+          'line-color': 'red',
+          'width' : 3
+        },
+        unhighlighted: {
+        },
+        selected: {
+          'line-color': 'black',
+          'width' : 3
         }
       },
       setVisibilityOnHide: false, // whether to set visibility on hide/show
@@ -28,13 +66,13 @@
       neighbor: function(node){ // return desired neighbors of tapheld node
         return false;
       },
-      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
+      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
     };
 
 
     var undoRedo = require("./undo-redo");
     var viewUtilities = require("./view-utilities");
-    
+
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
 
@@ -53,8 +91,9 @@
         return eleOrCy.scratch("_viewUtilities");
       }
 
+
       if (!getScratch(cy).initialized) {
-        getScratch(cy).initialized = true;  
+        getScratch(cy).initialized = true;
 
         // create a view utilities instance
         var instance = viewUtilities(cy, options);
@@ -78,18 +117,18 @@
             shiftKeyDown = false;
           }
         });
-        //Select the desired neighbors after taphold-and-free 
-        cy.on('taphold', 'node', function(event){      
+        //Select the desired neighbors after taphold-and-free
+        cy.on('taphold', 'node', function(event){
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
-          var timeout = setTimeout(function(){ 
+          var timeout = setTimeout(function(){
             if(shiftKeyDown){
               cy.elements().unselect();
               neighborhood = options.neighbor(target);
               neighborhood.select();
               target.lock();
-              tapheld = true;   
+              tapheld = true;
             }
           }, options.neighborSelectTime - 500);
           cy.on('free', 'node', function(){
@@ -104,7 +143,7 @@
             }
           });
           cy.on('drag', 'node', function(){
-            var targetDragged = event.target || event.cyTarget;  
+            var targetDragged = event.target || event.cyTarget;
             if(target == targetDragged && tapheld === false){
               clearTimeout(timeout);
             }
