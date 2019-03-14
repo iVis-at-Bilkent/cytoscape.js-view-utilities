@@ -26,9 +26,13 @@ An instance has a number of functions available:
 `instance.highlight(eles, options)`
 
 Highlights eles based on the given options. The options can have the following four values:
+
 "highlighted" --> Blue border
+
 "highlighted2" --> Purple border
+
 "highlighted3" --> Green border
+
 "highlighted4" --> Pink border
 
 `instance.unhighlight(eles)`
