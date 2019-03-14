@@ -23,18 +23,22 @@ Initializes the extension and sets options. This can be used to override default
 
 An instance has a number of functions available:
 
-`instance.highlight(eles)`
+`instance.highlight(eles, options)`
 
-Highlights eles & unhighlights others at first use.
+Highlights eles based on the given options. The options can have the following four values:
+"highlighted" --> Blue border
+"highlighted2" --> Purple border
+"highlighted3" --> Green border
+"highlighted4" --> Pink border
 
 `instance.unhighlight(eles)`
 
-Just unighlights eles.
+Unhighlights the eles.
 
-`instance.highlightNeighbors(eles)`
-* Aliases: `instance.highlightNeighbours(eles)`
+`instance.highlightNeighbors(eles, option)`
+* Aliases: `instance.highlightNeighbours(eles, option)`
 
-Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
+Highlights eles' neighborhood & unhighlights others' neighborhood (based on the color option) at first use.
 
 `instance.unhighlightNeighbors(eles)`
 * Aliases: `instance.unhighlightNeighbours(eles)`
@@ -68,17 +72,57 @@ Disables marquee zoom.
 ## Default Options
 ```javascript
             node: {
-                highlighted: {}, // styles for when nodes are highlighted.
-                unhighlighted: { // styles for when nodes are unhighlighted.
-                    'opacity': 0.3
-                }
-            },
-            edge: {
-                highlighted: {}, // styles for when edges are highlighted.
-                unhighlighted: { // styles for when edges are unhighlighted.
-                    'opacity': 0.3
-                }
-            },
+                    highlighted: {
+                      'border-color': 'blue',
+                      'border-width': 3
+                    },
+
+                    highlighted2: {
+                      'border-color': 'purple',
+                      'border-width': 3
+                    },
+                    highlighted3: {
+                      'border-color': 'green',
+                      'border-width': 3
+                    },
+                    highlighted4: {
+                      'border-color': '#FF1493',
+                      'border-width': 3
+                    },
+                    unhighlighted: {
+                      'border-color': 'grey',
+                      'border-width': 3
+                    },
+                    selected: {
+                      'border-color': 'black',
+                      'border-width': 3
+                    }
+
+                  },
+                  edge: {
+                    highlighted: {
+                      'line-color': 'blue',
+                      'width' : 3
+                    },
+                    highlighted2: {
+                      'line-color': 'purple',
+                      'width' : 3
+                    },
+                    highlighted3: {
+                      'line-color': 'green',
+                      'width' : 3
+                    },
+                    highlighted4: {
+                      'line-color': '#FF1493',
+                      'width' : 3
+                    },
+                    unhighlighted: {
+                    },
+                    selected: {
+                      'line-color': 'black',
+                      'width' : 3
+                    }
+                  },
             setVisibilityOnHide: false, // whether to set visibility on hide/show
             setDisplayOnHide: true, // whether to set display on hide/show
             zoomAnimationDuration: 1500, //default duration for zoom animation speed
