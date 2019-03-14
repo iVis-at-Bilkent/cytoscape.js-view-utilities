@@ -25,10 +25,12 @@
           'border-width': 3
         },
         highlighted4: {
-          'border-color': 'red',
+          'border-color': '#FF1493',
           'border-width': 3
         },
         unhighlighted: {
+          'border-color': 'grey',
+          'border-width': 3
         },
         selected: {
           'border-color': 'black',
@@ -50,7 +52,7 @@
           'width' : 3
         },
         highlighted4: {
-          'line-color': 'red',
+          'line-color': '#FF1493',
           'width' : 3
         },
         unhighlighted: {

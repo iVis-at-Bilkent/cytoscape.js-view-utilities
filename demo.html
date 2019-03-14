@@ -1,5 +1,4 @@
 <!DOCTYPE>
-
 <html>
 
 	<head>
@@ -115,7 +114,8 @@
                             selector: 'node',
                             style: {
                                 'content': 'data(name)',
-                                'border-color': '#ff0000'
+                                'border-color': 'grey',
+																'border-width': 3
                             }
                         },
                         {
@@ -141,9 +141,7 @@
 												{
 													selector: 'node:parent',
 													style: {
-															'border-color': 'black',
 															'background-color': 'lightgrey'
-
 													}
 												}
                     ],
@@ -217,18 +215,18 @@
                 });
 
                 // Increase border width to show nodes with hidden neighbors
-                function thickenBorder(eles){
+                function changeBorder(eles){
                   eles.forEach(function( ele ){
-                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-                    ele.css("border-width", defaultBorderWidth + 2);
+                    //var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
+                    ele.css("background-color", 'red');
                   });
                   return eles;
                 }
                 // Decrease border width when hidden neighbors of the nodes become visible
-                function thinBorder(eles){
+                function revertBorder(eles){
                   eles.forEach(function( ele ){
-                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-                    ele.css("border-width", defaultBorderWidth - 2);
+										ele.css("background-color", 'grey');
+
                   });
                   return eles;
                 }
@@ -236,10 +234,10 @@
                 $("#hide").click(function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thinBorder(nodesWithHiddenNeighbor);
+                    //thinBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thickenBorder(nodesWithHiddenNeighbor);
+                    changeBorder(nodesWithHiddenNeighbor);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -248,7 +246,7 @@
                 $("#showAll").click(function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thinBorder(nodesWithHiddenNeighbor);
+                    revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
                     if(document.getElementById('layout').checked){
                       layout.run();
@@ -300,10 +298,10 @@
 
                 cy.on('doubleTap', 'node', function (event) {
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thinBorder(nodesWithHiddenNeighbor);
+                    revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thickenBorder(nodesWithHiddenNeighbor);
+                    changeBorder(nodesWithHiddenNeighbor);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -365,7 +363,7 @@
 	<body>
 		<h1>cytoscape.js-view-utilities demo</h1>
 		<div class="topnav">
-				<b id="hide" style="cursor: pointer; color: darkmagenta">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/><br/>
+				<b id="hide" style="cursor: pointer; color: brown">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: brown">Show All</b> <br/><br/>
         <b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
 				<label class="container"  style="color: blue">Blue
 				  <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
@@ -379,17 +377,17 @@
 				  <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
 				  <span class="checkmark"></span>
 				</label> <br/><br/>
-				<label class="container" style="color: red">Red
+				<label class="container" style="color: #FF1493">Pink
 				  <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
 				  <span class="checkmark"></span>
 				</label> <br/><br/>
-				<b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Elements</b> <br/><br/>
-        <b id="highlightNeighbors" style="cursor: pointer; color: darkmagenta">Highlight Neighbors</b><br/><br/>
-				<b id="showHiddenNeighbors" style="cursor: pointer; color: darkmagenta">Show Hidden Neighbors of Selected</b> <br/><br/>
-				<b id="removeSelectedHighlights" style="cursor: pointer; color: darkmagenta">Remove Selected Highlights</b> <br/><br/>
-				<b id="removeAllHighlights" style="cursor: pointer; color: darkmagenta">Remove All Highlights</b> <br/><br/>
-				<b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
-				<b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b><br/><br/>
+				<b id="highlightElements" style="cursor: pointer; color: brown">Highlight Elements</b> <br/><br/>
+        <b id="highlightNeighbors" style="cursor: pointer; color: brown">Highlight Neighbors</b><br/><br/>
+				<b id="showHiddenNeighbors" style="cursor: pointer; color: brown">Show Hidden Neighbors of Selected</b> <br/><br/>
+				<b id="removeSelectedHighlights" style="cursor: pointer; color: brown">Remove Selected Highlights</b> <br/><br/>
+				<b id="removeAllHighlights" style="cursor: pointer; color: brown">Remove All Highlights</b> <br/><br/>
+				<b id="zoomToSelected" style="cursor: pointer; color: brown">Zoom to Selected</b><br/><br/>
+				<b id="marqueeZoom" style="cursor: pointer; color: brown">Marquee Zoom</b><br/><br/>
         <b>Shift + drag</b> to specify region<br/>
         <b>Shift + taphold</b> to select neighbors<br/>
         <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>

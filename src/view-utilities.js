@@ -74,7 +74,6 @@ var viewUtilities = function (cy, options) {
   var instance = {};
 
   // Section hide-show
-
   // hide given eles
   instance.hide = function (eles) {
     eles = eles.filter(":visible");
