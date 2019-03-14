@@ -87,7 +87,7 @@ var viewUtilities = function (cy, options) {
     }
 
     if (options.setDisplayOnHide) {
-      eles.highlightColor2css('display', 'none');
+      eles.css('display', 'none');
     }
 
     return eles;
