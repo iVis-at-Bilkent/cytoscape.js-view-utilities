@@ -62,6 +62,7 @@ var viewUtilities = function (cy, options) {
         eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
         break;
     }
+    
     //add eles.unselect() to remove selection if needed
   }
 
