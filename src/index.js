@@ -12,20 +12,20 @@
     var options = {
       node: {
         highlighted: {
-          'border-color': 'blue',
+          'border-color': '#0B9BCD',  //blue
           'border-width': 3
         },
 
         highlighted2: {
-          'border-color': 'purple',
+          'border-color': '#04F06A',  //green
           'border-width': 3
         },
         highlighted3: {
-          'border-color': 'green',
+          'border-color': '#F5E663',   //yellow
           'border-width': 3
         },
         highlighted4: {
-          'border-color': '#FF1493',
+          'border-color': '#BF0603',    //red
           'border-width': 3
         },
         unhighlighted: {
@@ -34,25 +34,26 @@
         },
         selected: {
           'border-color': 'black',
-          'border-width': 3
+          'border-width': 3,
+          'background-color': 'lightgrey'
         }
 
       },
       edge: {
         highlighted: {
-          'line-color': 'blue',
+          'line-color': '#0B9BCD',    //blue
           'width' : 3
         },
         highlighted2: {
-          'line-color': 'purple',
+          'line-color': '#04F06A',   //green
           'width' : 3
         },
         highlighted3: {
-          'line-color': 'green',
+          'line-color': '#F5E663',    //yellow
           'width' : 3
         },
         highlighted4: {
-          'line-color': '#FF1493',
+          'line-color': '#BF0603',    //red
           'width' : 3
         },
         unhighlighted: {

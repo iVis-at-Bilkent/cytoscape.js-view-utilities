@@ -115,7 +115,8 @@
                             style: {
                                 'content': 'data(name)',
                                 'border-color': 'grey',
-																'border-width': 3
+																'border-width': 3,
+																'background-color': 'lightgrey'
                             }
                         },
                         {
@@ -135,7 +136,7 @@
 													style: {
 															'border-color': 'black',
 															'border-width': '3px',
-															'background-color': 'grey'
+															'background-color': 'lightgrey'
 													}
 												},
 												{
@@ -218,14 +219,14 @@
                 function changeBorder(eles){
                   eles.forEach(function( ele ){
                     //var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-                    ele.css("background-color", 'red');
+                    ele.css("background-color", 'purple');
                   });
                   return eles;
                 }
                 // Decrease border width when hidden neighbors of the nodes become visible
                 function revertBorder(eles){
                   eles.forEach(function( ele ){
-										ele.css("background-color", 'grey');
+										ele.css("background-color", 'lightgrey');
 
                   });
                   return eles;
@@ -365,19 +366,19 @@
 		<div class="topnav">
 				<b id="hide" style="cursor: pointer; color: brown">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: brown">Show All</b> <br/><br/>
         <b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
-				<label class="container"  style="color: blue">Blue
+				<label class="container"  style="color: #0B9BCD">Blue
 				  <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
 				  <span class="checkmark"></span>
 				</label> <br/><br/>
-				<label class="container" style="color: purple">Purple
+				<label class="container" style="color: green">Green
 				  <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
 				  <span class="checkmark"></span>
 				</label>  <br/><br/>
-				<label class="container" style="color: green">Green
+				<label class="container" style="color: #F8C200">Yellow
 				  <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
 				  <span class="checkmark"></span>
 				</label> <br/><br/>
-				<label class="container" style="color: #FF1493">Pink
+				<label class="container" style="color: #BF0603">Red
 				  <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
 				  <span class="checkmark"></span>
 				</label> <br/><br/>
