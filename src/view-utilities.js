@@ -48,22 +48,25 @@ var viewUtilities = function (cy, options) {
     switch(option){
       case "highlighted":
         eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
         break;
       case "highlighted2":
         eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted2");
+        eles.unselect();
         break;
       case "highlighted3":
         eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted4").addClass("highlighted3");
+        eles.unselect();
         break;
       case "highlighted4":
         eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").addClass("highlighted4");
+        eles.unselect();
         break;
       default:
         eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
         break;
     }
-    
-    //add eles.unselect() to remove selection if needed
   }
 
   function getWithNeighbors(eles) {
