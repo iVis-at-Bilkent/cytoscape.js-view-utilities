@@ -116,41 +116,41 @@
                     container: document.getElementById('cy'),
                     layout: { name: "cose-bilkent" },
 										style: [
-												{
-														selector: 'node',
-														style: {
-																'content': 'data(name)',
-																'border-color': '#ff0000'
-														}
-												},
-												{
-														selector: 'edge',
-														style: {
-																'target-arrow-shape': 'triangle'
-														}
-												},
-												{
-													selector: 'edge:selected',
+											{
+													selector: 'node',
 													style: {
-															'line-color': 'black'
-													}
-												},
-												{
-													selector: 'node:selected',
-													style: {
-															'border-color': 'black',
-															'border-width': '3px',
-															'background-color': 'grey'
-													}
-												},
-												{
-													selector: 'node:parent',
-													style: {
-															'border-color': 'black',
+															'content': 'data(name)',
+															'border-color': 'grey',
+															'border-width': 3,
 															'background-color': 'lightgrey'
-
 													}
+											},
+											{
+													selector: 'edge',
+													style: {
+															'target-arrow-shape': 'triangle'
+													}
+											},
+											{
+												selector: 'edge:selected',
+												style: {
+														'line-color': 'black'
 												}
+											},
+											{
+												selector: 'node:selected',
+												style: {
+														'border-color': 'black',
+														'border-width': '3px',
+														'background-color': 'lightgrey'
+												}
+											},
+											{
+												selector: 'node:parent',
+												style: {
+														'background-color': 'lightgrey'
+												}
+											}
 										],
 
                     elements: {
