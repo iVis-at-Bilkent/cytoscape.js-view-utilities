@@ -215,15 +215,12 @@
                   fit: false
                 });
 
-                // Increase border width to show nodes with hidden neighbors
                 function changeBorder(eles){
                   eles.forEach(function( ele ){
-                    //var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
                     ele.css("background-color", 'purple');
                   });
                   return eles;
                 }
-                // Decrease border width when hidden neighbors of the nodes become visible
                 function revertBorder(eles){
                   eles.forEach(function( ele ){
 										ele.css("background-color", 'lightgrey');
@@ -257,10 +254,9 @@
                 $("#showHiddenNeighbors").click(function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thinBorder(nodesWithHiddenNeighbor);
+                    revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    thickenBorder(nodesWithHiddenNeighbor);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -302,7 +298,6 @@
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    changeBorder(nodesWithHiddenNeighbor);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -333,8 +328,13 @@
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
 										{
+											function args(eles, option) {
+										    this.eles = eles;
+										    this.option = option;
+											}
 											var option = chooseHighlightColor();
-                      api.highlightNeighbors(cy.$(":selected"), option);
+											var arg = new args(cy.$(":selected"), option);
+                      api.highlightNeighbors(arg);
 										}
                 });
 
@@ -342,8 +342,13 @@
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
 										{
+											function args(eles, option) {
+										    this.eles = eles;
+										    this.option = option;
+											}
 											var option = chooseHighlightColor();
-                      api.highlight(cy.$(":selected"), option);
+											var arg = new args(cy.$(":selected"), option);
+                      api.highlight(arg);
 										}
                 });
 
@@ -355,7 +360,7 @@
 
                 $("#removeAllHighlights").click(function () {
                     api.disableMarqueeZoom();
-                    api.removeHighlights();
+                    api.removeHighlights(cy.elements());
                 });
 			});
 		</script>

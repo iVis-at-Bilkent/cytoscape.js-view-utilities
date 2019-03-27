@@ -3,22 +3,38 @@ function highlightUR(cy, ur, viewUtilities) {
   function getStatus(eles) {
     eles = eles ? eles : cy.elements();
     return {
-      highlighteds: eles.filter(".highlighted:visible, .highlighted2:visible, .highlighted3:visible, .highlighted4:visible"),
+      highlighteds: eles.filter(".highlighted:visible"),
+      highlighteds2: eles.filter(".highlighted2:visible"),
+      highlighteds3: eles.filter(".highlighted3:visible"),
+      highlighteds4: eles.filter(".highlighted4:visible"),
       unhighlighteds: eles.filter(".unhighlighted:visible"),
       notHighlighteds: eles.filter(":visible").not(".highlighted, .highlighted2, .highlighted3, .highlighted4, .unhighlighted")
     };
   }
 
-  function generalUndo(args) {
+  function createArgs(eles, option) {
+    this.eles = eles;
+    this.option = option;
+  }
 
+  function generalUndo(args) {
     var current = args.current;
-    var highlighteds = viewUtilities.highlight(args.highlighteds);
+    var arg = new createArgs(args.highlighteds, "highlighted");
+    var highlighteds = viewUtilities.highlight(arg);
+    arg = new createArgs(args.highlighteds2, "highlighted2");
+    var highlighteds2 = viewUtilities.highlight(arg);
+    arg = new createArgs(args.highlighteds3, "highlighted3");
+    var highlighteds3 = viewUtilities.highlight(arg);
+    arg = new createArgs(args.highlighteds4, "highlighted4");
+    var highlighteds4 = viewUtilities.highlight(arg);
     var unhighlighteds = viewUtilities.unhighlight(args.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.notHighlighteds);
 
-
     return {
       highlighteds: highlighteds,
+      highlighteds2: highlighteds2,
+      highlighteds3: highlighteds3,
+      highlighteds4: highlighteds4,
       unhighlighteds: unhighlighteds,
       notHighlighteds: notHighlighteds,
       current: current
@@ -26,14 +42,23 @@ function highlightUR(cy, ur, viewUtilities) {
   }
 
   function generalRedo(args) {
-
     var current = args.current;
-    var highlighteds = viewUtilities.highlight(args.current.highlighteds);
+    var arg = new createArgs(args.current.highlighteds, "highlighted");
+    var highlighteds = viewUtilities.highlight(arg);
+    arg = new createArgs(args.current.highlighteds2, "highlighted2");
+    var highlighteds2 = viewUtilities.highlight(arg);
+    arg = new createArgs(args.current.highlighteds3, "highlighted3");
+    var highlighteds3 = viewUtilities.highlight(arg);
+    arg = new createArgs(args.current.highlighteds4, "highlighted4");
+    var highlighteds4 = viewUtilities.highlight(arg);
     var unhighlighteds = viewUtilities.unhighlight(args.current.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.current.notHighlighteds);
 
     return {
       highlighteds: highlighteds,
+      highlighteds2: highlighteds2,
+      highlighteds3: highlighteds3,
+      highlighteds4: highlighteds4,
       unhighlighteds: unhighlighteds,
       notHighlighteds: notHighlighteds,
       current: current
@@ -43,7 +68,6 @@ function highlightUR(cy, ur, viewUtilities) {
   function generateDoFunc(func) {
     return function (eles) {
       var res = getStatus();
-
       if (eles.firstTime)
         viewUtilities[func](eles);
       else
@@ -59,7 +83,7 @@ function highlightUR(cy, ur, viewUtilities) {
     var res = getStatus();
 
     if (args.firstTime)
-      viewUtilities.removeHighlights();
+      viewUtilities.removeHighlights(eles);
     else
       generalRedo(args);
 
@@ -74,7 +98,7 @@ function highlightUR(cy, ur, viewUtilities) {
   ur.action("unhighlight", generateDoFunc("unhighlight"), generalUndo);
   ur.action("unhighlightNeighbors", generateDoFunc("unhighlightNeighbors"), generalUndo);
   ur.action("unhighlightNeighbours", generateDoFunc("unhighlightNeighbours"), generalUndo);
-  ur.action("removeHighlights", urRemoveHighlights, generalUndo);
+  ur.action("removeHighlights", generateDoFunc("removeHighlights"), generalUndo);
 }
 
 // Registers ur actions related to hide/show

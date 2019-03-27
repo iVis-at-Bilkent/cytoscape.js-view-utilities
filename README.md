@@ -23,24 +23,28 @@ Initializes the extension and sets options. This can be used to override default
 
 An instance has a number of functions available:
 
-`instance.highlight(eles, options)`
+`instance.highlight(args)`
 
-Highlights eles based on the given options. The options can have the following four values:
+Highlights eles based on the given arguments. The arguments have 2 components:
+
+args.eles contains the elements to be highlighted.
+
+args.option contains the highlighting color option. It can have the following four values:
 
 "highlighted" --> Blue border
 
-"highlighted2" --> Purple border
+"highlighted2" --> Green border
 
-"highlighted3" --> Green border
+"highlighted3" --> Yellow border
 
-"highlighted4" --> Pink border
+"highlighted4" --> Red border
 
 `instance.unhighlight(eles)`
 
 Unhighlights the eles.
 
-`instance.highlightNeighbors(eles, option)`
-* Aliases: `instance.highlightNeighbours(eles, option)`
+`instance.highlightNeighbors(args)`
+* Aliases: `instance.highlightNeighbours(args)`
 
 Highlights eles' neighborhood & unhighlights others' neighborhood (based on the color option) at first use.
 
@@ -51,7 +55,7 @@ Just unhighlights eles and their neighbors.
 
 `instance.removeHighlights(eles)`
 
-Remove highlights & unhighlights from eles. If eles parameter is not specified sets it to 'cy.elements()'.
+Remove highlights & unhighlights from eles.
 
 `instance.hide(eles)`
 
@@ -75,65 +79,62 @@ Disables marquee zoom.
 
 ## Default Options
 ```javascript
-            node: {
-                    highlighted: {
-                      'border-color': 'blue',
-                      'border-width': 3
-                    },
-
-                    highlighted2: {
-                      'border-color': 'purple',
-                      'border-width': 3
-                    },
-                    highlighted3: {
-                      'border-color': 'green',
-                      'border-width': 3
-                    },
-                    highlighted4: {
-                      'border-color': '#FF1493',
-                      'border-width': 3
-                    },
-                    unhighlighted: {
-                      'border-color': 'grey',
-                      'border-width': 3
-                    },
-                    selected: {
-                      'border-color': 'black',
-                      'border-width': 3
-                    }
-
-                  },
-                  edge: {
-                    highlighted: {
-                      'line-color': 'blue',
-                      'width' : 3
-                    },
-                    highlighted2: {
-                      'line-color': 'purple',
-                      'width' : 3
-                    },
-                    highlighted3: {
-                      'line-color': 'green',
-                      'width' : 3
-                    },
-                    highlighted4: {
-                      'line-color': '#FF1493',
-                      'width' : 3
-                    },
-                    unhighlighted: {
-                    },
-                    selected: {
-                      'line-color': 'black',
-                      'width' : 3
-                    }
-                  },
-            setVisibilityOnHide: false, // whether to set visibility on hide/show
-            setDisplayOnHide: true, // whether to set display on hide/show
-            zoomAnimationDuration: 1500, //default duration for zoom animation speed
-            neighbor: function(node){ // return desired neighbors of (shift + taphold) node
-                return false;
+          node: {
+            highlighted: {
+              'border-color': '#0B9BCD',  //blue
+              'border-width': 3
             },
-            neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
+
+            highlighted2: {
+              'border-color': '#04F06A',  //green
+              'border-width': 3
+            },
+            highlighted3: {
+              'border-color': '#F5E663',   //yellow
+              'border-width': 3
+            },
+            highlighted4: {
+              'border-color': '#BF0603',    //red
+              'border-width': 3
+            },
+            unhighlighted: {
+              'border-color': 'grey',
+              'border-width': 3
+            },
+            selected: {
+              'border-color': 'black',
+              'border-width': 3,
+              'background-color': 'lightgrey'
+            }
+
+          },
+          edge: {
+            highlighted: {
+              'line-color': '#0B9BCD',    //blue
+              'width' : 3
+            },
+            highlighted2: {
+              'line-color': '#04F06A',   //green
+              'width' : 3
+            },
+              'line-color': '#BF0603',    //red
+              'width' : 3
+            },
+            unhighlighted: {
+            },
+            selected: {
+              'line-color': 'black',
+              'width' : 3
+            }
+          },
+          setVisibilityOnHide: false, // whether to set visibility on hide/show
+          setDisplayOnHide: true, // whether to set display on hide/show
+          zoomAnimationDuration: 1500, //default duration for zoom animation speed
+          neighbor: function(node){ // return desired neighbors of tapheld node
+            return false;
+          },
+          neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+
 ```
 
 
@@ -147,7 +148,7 @@ Disables marquee zoom.
 
 `ur.do("unhighlight", eles)`
 
-`ur.do("unhighlightNeighbors", eles)` 
+`ur.do("unhighlightNeighbors", eles)`
 `ur.do("unhighlightNeighbours", eles)`
 
 `ur.do("removeHighlights")`

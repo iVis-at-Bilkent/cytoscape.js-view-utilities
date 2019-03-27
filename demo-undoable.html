@@ -216,11 +216,9 @@
 
                 var ur = cy.undoRedo();
 
-                // Increase border width to show nodes with hidden neighbors
-                function thickenBorder(eles){
+								function thickenBorder(eles){
                   eles.forEach(function( ele ){
-                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-                    ele.css("border-width", defaultBorderWidth + 2);
+                    ele.css("background-color", 'purple');
                   });
                   eles.data("thickBorder", true);
                   return eles;
@@ -228,19 +226,15 @@
                 // Decrease border width when hidden neighbors of the nodes become visible
                 function thinBorder(eles){
                   eles.forEach(function( ele ){
-                    var defaultBorderWidth = Number(ele.css("border-width").substring(0,ele.css("border-width").length-2));
-                    ele.css("border-width", defaultBorderWidth - 2);
+                    ele.css("background-color", 'lightgrey');
                   });
                   eles.removeData("thickBorder");
                   return eles;
                 }
-
                 ur.action("thickenBorder", thickenBorder, thinBorder);
                 ur.action("thinBorder", thinBorder, thickenBorder);
-
                 //In below functions, finding the nodes to hide/show are sample specific.
                 //If the sample graph changes, those calculations may also need a change.
-
                 $("#hide").click(function (){
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
@@ -252,7 +246,6 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
                     cy.undoRedo().do("batch", actions);
                 });
-
                 $("#showAll").click(function () {
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
@@ -260,7 +253,6 @@
                     actions.push({name: "show", param: cy.elements()});
                     ur.do("batch", actions);
                 });
-
                 $("#showHiddenNeighbors").click(function () {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
@@ -274,11 +266,25 @@
                     cy.undoRedo().do("batch", actions);
                 });
 
-                var tappedBefore;
+								$('#zoomToSelected').click( function(){
+                    api.disableMarqueeZoom();
+                    var selectedEles = cy.$(":selected");
+                    api.zoomToSelected(selectedEles);
+                    if(document.getElementById('layout').checked){
+                      layout.run();
+                    }
+                })
 
+                $('#marqueeZoom').click( function(){
+                    api.enableMarqueeZoom();
+                    if( document.getElementById('layout').checked){
+                        layout.run();
+                    }
+                })
+
+                var tappedBefore;
                 cy.on('tap', 'node', function (event) {
                   var node = this;
-
                   var tappedNow = node;
                   setTimeout(function () {
                     tappedBefore = null;
@@ -290,7 +296,6 @@
                     tappedBefore = tappedNow;
                   }
                 });
-
                 cy.on('doubleTap', 'node', function (event) {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
@@ -328,16 +333,26 @@
                 $("#highlightNeighbors").click(function () {
 										if(cy.$(":selected").length > 0)
 										{
+											function args(eles, option) {
+										    this.eles = eles;
+										    this.option = option;
+											}
 											var option = chooseHighlightColor();
-											ur.do("highlightNeighbors", cy.$(":selected"), option);
+											var arg = new args(cy.$(":selected"), option);
+											ur.do("highlightNeighbors", arg);
 										}
                 });
 
 								$("#highlightElements").click(function () {
                     if(cy.$(":selected").length > 0)
 										{
+											function args(eles, option) {
+										    this.eles = eles;
+										    this.option = option;
+											}
 											var option = chooseHighlightColor();
-                      ur.do("highlight", cy.$(":selected"), option);
+											var arg = new args(cy.$(":selected"), option);
+                      ur.do("highlight", arg);
 										}
                 });
 
@@ -347,7 +362,7 @@
                 });
 
                 $("#removeAllHighlights").click(function () {
-                    ur.do("removeHighlights");
+                    ur.do("removeHighlights", cy.elements());
                 });
 
                 $("#search").click(function () {
