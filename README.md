@@ -47,7 +47,7 @@ The second way is to just send the elements to be highlighted.
 
 `args = cy.$(":selected")`
 
-In this case, the default highlight color is blue is used.
+In this case, the default highlight color of blue is used.
 
 `instance.unhighlight(eles)`
 
