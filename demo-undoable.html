@@ -332,28 +332,12 @@
 
                 $("#highlightNeighbors").click(function () {
 										if(cy.$(":selected").length > 0)
-										{
-											function args(eles, option) {
-										    this.eles = eles;
-										    this.option = option;
-											}
-											var option = chooseHighlightColor();
-											var arg = new args(cy.$(":selected"), option);
-											ur.do("highlightNeighbors", arg);
-										}
+											ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
 								$("#highlightElements").click(function () {
                     if(cy.$(":selected").length > 0)
-										{
-											function args(eles, option) {
-										    this.eles = eles;
-										    this.option = option;
-											}
-											var option = chooseHighlightColor();
-											var arg = new args(cy.$(":selected"), option);
-                      ur.do("highlight", arg);
-										}
+                      ur.do("highlight", {eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
 								$("#removeSelectedHighlights").click(function () {

@@ -116,8 +116,16 @@ var viewUtilities = function (cy, options) {
 
   // Highlights eles & unhighlights others at first use.
   instance.highlight = function (args) {
-    var eles = args.eles;
-    var option = args.option;
+    if (args.option == null)
+    {
+      var eles = args;
+      var option = "";
+    }
+    else
+    {
+      var eles = args.eles;
+      var option = args.option;
+    }
 
     var others = cy.elements().difference(eles.union(eles.ancestors()));
 
@@ -136,8 +144,17 @@ var viewUtilities = function (cy, options) {
 
   // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
   instance.highlightNeighbors = function (args) {
-    args.eles = getWithNeighbors(args.eles);
-    return this.highlight(args);
+    if (args.option == null)
+    {
+      var eles = args;
+      var option = "";
+    }
+    else
+    {
+      var eles = args.eles;
+      var option = args.option;
+    }
+    return this.highlight({eles: getWithNeighbors(eles), option: option});
   };
 
   // Aliases: this.highlightNeighbours()

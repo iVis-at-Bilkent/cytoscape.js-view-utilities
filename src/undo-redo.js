@@ -19,14 +19,10 @@ function highlightUR(cy, ur, viewUtilities) {
 
   function generalUndo(args) {
     var current = args.current;
-    var arg = new createArgs(args.highlighteds, "highlighted");
-    var highlighteds = viewUtilities.highlight(arg);
-    arg = new createArgs(args.highlighteds2, "highlighted2");
-    var highlighteds2 = viewUtilities.highlight(arg);
-    arg = new createArgs(args.highlighteds3, "highlighted3");
-    var highlighteds3 = viewUtilities.highlight(arg);
-    arg = new createArgs(args.highlighteds4, "highlighted4");
-    var highlighteds4 = viewUtilities.highlight(arg);
+    var highlighteds = viewUtilities.highlight({eles: args.highlighteds, option: "highlighted"});
+    var highlighteds2 = viewUtilities.highlight({eles: args.highlighteds2, option: "highlighted2"});
+    var highlighteds3 = viewUtilities.highlight({eles: args.highlighteds3, option: "highlighted3"});
+    var highlighteds4 = viewUtilities.highlight({eles: args.highlighteds4, option: "highlighted4"});
     var unhighlighteds = viewUtilities.unhighlight(args.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.notHighlighteds);
 
@@ -43,14 +39,10 @@ function highlightUR(cy, ur, viewUtilities) {
 
   function generalRedo(args) {
     var current = args.current;
-    var arg = new createArgs(args.current.highlighteds, "highlighted");
-    var highlighteds = viewUtilities.highlight(arg);
-    arg = new createArgs(args.current.highlighteds2, "highlighted2");
-    var highlighteds2 = viewUtilities.highlight(arg);
-    arg = new createArgs(args.current.highlighteds3, "highlighted3");
-    var highlighteds3 = viewUtilities.highlight(arg);
-    arg = new createArgs(args.current.highlighteds4, "highlighted4");
-    var highlighteds4 = viewUtilities.highlight(arg);
+    var highlighteds = viewUtilities.highlight({eles: args.current.highlighteds, option: "highlighted"});
+    var highlighteds2 = viewUtilities.highlight({eles: args.current.highlighteds2, option: "highlighted2"});
+    var highlighteds3 = viewUtilities.highlight({eles: args.current.highlighteds3, option: "highlighted3"});
+    var highlighteds4 = viewUtilities.highlight({eles: args.current.highlighteds4, option: "highlighted4"});
     var unhighlighteds = viewUtilities.unhighlight(args.current.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.current.notHighlighteds);
 

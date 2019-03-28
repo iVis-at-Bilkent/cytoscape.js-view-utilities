@@ -327,29 +327,13 @@
                 $("#highlightNeighbors").click(function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
-										{
-											function args(eles, option) {
-										    this.eles = eles;
-										    this.option = option;
-											}
-											var option = chooseHighlightColor();
-											var arg = new args(cy.$(":selected"), option);
-                      api.highlightNeighbors(arg);
-										}
+                      api.highlightNeighbors({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
 								$("#highlightElements").click(function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
-										{
-											function args(eles, option) {
-										    this.eles = eles;
-										    this.option = option;
-											}
-											var option = chooseHighlightColor();
-											var arg = new args(cy.$(":selected"), option);
-                      api.highlight(arg);
-										}
+                      api.highlight({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
 								$("#removeSelectedHighlights").click(function () {

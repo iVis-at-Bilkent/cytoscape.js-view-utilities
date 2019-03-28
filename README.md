@@ -25,7 +25,11 @@ An instance has a number of functions available:
 
 `instance.highlight(args)`
 
-Highlights eles based on the given arguments. The arguments have 2 components:
+Highlights eles based on the given arguments. The arguments can be sent in two different ways.
+
+One way is that the arguments have 2 components: eles and the highlighting option:
+
+`args = {eles: eles, option: "highlighted"};`
 
 args.eles contains the elements to be highlighted.
 
@@ -39,6 +43,12 @@ args.option contains the highlighting color option. It can have the following fo
 
 "highlighted4" --> Red border
 
+The second way is to just send the elements to be highlighted.
+
+`args = cy.$(":selected")`
+
+In this case, the default highlight color is blue is used.
+
 `instance.unhighlight(eles)`
 
 Unhighlights the eles.
@@ -46,7 +56,7 @@ Unhighlights the eles.
 `instance.highlightNeighbors(args)`
 * Aliases: `instance.highlightNeighbours(args)`
 
-Highlights eles' neighborhood & unhighlights others' neighborhood (based on the color option) at first use.
+Highlights eles' neighborhood & unhighlights others' neighborhood (based on the color option) at first use. Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
 `instance.unhighlightNeighbors(eles)`
 * Aliases: `instance.unhighlightNeighbours(eles)`
@@ -141,10 +151,10 @@ Disables marquee zoom.
 ## Default Undo-Redo Actions
 
 
-`ur.do("highlight", eles)`
+`ur.do("highlight", args)`
 
-`ur.do("highlightNeighbors", eles)`
-`ur.do("highlightNeighbours", eles)`
+`ur.do("highlightNeighbors", args)`
+`ur.do("highlightNeighbours", args)`
 
 `ur.do("unhighlight", eles)`
 
