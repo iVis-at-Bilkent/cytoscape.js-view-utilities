@@ -177,6 +177,8 @@ var viewUtilities = function (cy, options) {
   // Remove highlights & unhighlights from eles.
   // If eles is not defined considers cy.elements()
   instance.removeHighlights = function (eles) {
+      if (eles == null || eles.length == null)
+        eles = cy.elements();
       return eles.removeClass("highlighted")
             .removeClass("highlighted2")
             .removeClass("highlighted3")

@@ -127,6 +127,11 @@ Disables marquee zoom.
               'line-color': '#04F06A',   //green
               'width' : 3
             },
+            highlighted3: {
+              'line-color': '#F5E663',    //yellow
+              'width' : 3
+            },
+            highlighted4: {
               'line-color': '#BF0603',    //red
               'width' : 3
             },
