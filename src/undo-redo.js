@@ -7,8 +7,7 @@ function highlightUR(cy, ur, viewUtilities) {
       highlighteds2: eles.filter(".highlighted2:visible"),
       highlighteds3: eles.filter(".highlighted3:visible"),
       highlighteds4: eles.filter(".highlighted4:visible"),
-      unhighlighteds: eles.filter(".unhighlighted:visible"),
-      notHighlighteds: eles.filter(":visible").not(".highlighted, .highlighted2, .highlighted3, .highlighted4, .unhighlighted")
+      notHighlighteds: eles.filter(":visible").not(".highlighted, .highlighted2, .highlighted3, .highlighted4")
     };
   }
 
@@ -23,7 +22,6 @@ function highlightUR(cy, ur, viewUtilities) {
     var highlighteds2 = viewUtilities.highlight({eles: args.highlighteds2, option: "highlighted2"});
     var highlighteds3 = viewUtilities.highlight({eles: args.highlighteds3, option: "highlighted3"});
     var highlighteds4 = viewUtilities.highlight({eles: args.highlighteds4, option: "highlighted4"});
-    var unhighlighteds = viewUtilities.unhighlight(args.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.notHighlighteds);
 
     return {
@@ -31,7 +29,6 @@ function highlightUR(cy, ur, viewUtilities) {
       highlighteds2: highlighteds2,
       highlighteds3: highlighteds3,
       highlighteds4: highlighteds4,
-      unhighlighteds: unhighlighteds,
       notHighlighteds: notHighlighteds,
       current: current
     };
@@ -43,7 +40,6 @@ function highlightUR(cy, ur, viewUtilities) {
     var highlighteds2 = viewUtilities.highlight({eles: args.current.highlighteds2, option: "highlighted2"});
     var highlighteds3 = viewUtilities.highlight({eles: args.current.highlighteds3, option: "highlighted3"});
     var highlighteds4 = viewUtilities.highlight({eles: args.current.highlighteds4, option: "highlighted4"});
-    var unhighlighteds = viewUtilities.unhighlight(args.current.unhighlighteds);
     var notHighlighteds = viewUtilities.removeHighlights(args.current.notHighlighteds);
 
     return {
@@ -51,7 +47,6 @@ function highlightUR(cy, ur, viewUtilities) {
       highlighteds2: highlighteds2,
       highlighteds3: highlighteds3,
       highlighteds4: highlighteds4,
-      unhighlighteds: unhighlighteds,
       notHighlighteds: notHighlighteds,
       current: current
     };

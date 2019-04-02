@@ -19,10 +19,6 @@ var viewUtilities = function (cy, options) {
   .css(options.node.highlighted4)
   .selector("node.highlighted4:selected")
   .css(options.node.selected)
-  .selector("node.unhighlighted")
-  .css(options.node.unhighlighted)
-  .selector("node.unhighlighted:selected")
-  .css(options.node.selected)
   .selector("edge.highlighted")
   .css(options.edge.highlighted)
   .selector("edge.highlighted:selected")
@@ -39,31 +35,29 @@ var viewUtilities = function (cy, options) {
   .css(options.edge.highlighted4)
   .selector("edge.highlighted4:selected")
   .css(options.edge.selected)
-  .selector("edge.unhighlighted")
-  .css(options.edge.unhighlighted)
   .update();
 
   // Helper functions for internal usage (not to be exposed)
   function highlight(eles, option) {
     switch(option){
       case "highlighted":
-        eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
         eles.unselect();
         break;
       case "highlighted2":
-        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted2");
+        eles.removeClass("highlighted").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted2");
         eles.unselect();
         break;
       case "highlighted3":
-        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted4").addClass("highlighted3");
+        eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted4").addClass("highlighted3");
         eles.unselect();
         break;
       case "highlighted4":
-        eles.removeClass("unhighlighted").removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").addClass("highlighted4");
+        eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").addClass("highlighted4");
         eles.unselect();
         break;
       default:
-        eles.removeClass("unhighlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
         eles.unselect();
         break;
     }
@@ -139,7 +133,7 @@ var viewUtilities = function (cy, options) {
 
   // Just unhighlights eles.
   instance.unhighlight = function (eles) {
-    eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("unhighlighted");
+    eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4");
   };
 
   // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
@@ -183,7 +177,6 @@ var viewUtilities = function (cy, options) {
             .removeClass("highlighted2")
             .removeClass("highlighted3")
             .removeClass("highlighted4")
-            .removeClass("unhighlighted")
             .removeData("highlighted")
             .removeData("highlighted2")
             .removeData("highlighted3")

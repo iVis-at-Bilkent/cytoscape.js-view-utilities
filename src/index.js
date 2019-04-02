@@ -28,10 +28,6 @@
           'border-color': '#BF0603',    //red
           'border-width': 3
         },
-        unhighlighted: {
-          'border-color': 'grey',
-          'border-width': 3
-        },
         selected: {
           'border-color': 'black',
           'border-width': 3,
@@ -55,8 +51,6 @@
         highlighted4: {
           'line-color': '#BF0603',    //red
           'width' : 3
-        },
-        unhighlighted: {
         },
         selected: {
           'line-color': 'black',
