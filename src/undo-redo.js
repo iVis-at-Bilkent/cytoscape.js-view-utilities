@@ -82,9 +82,6 @@ function highlightUR(cy, ur, viewUtilities) {
   ur.action("highlightNeighbors", generateDoFunc("highlightNeighbors"), generalUndo);
   ur.action("highlightNeighbours", generateDoFunc("highlightNeighbours"), generalUndo);
   ur.action("highlight", generateDoFunc("highlight"), generalUndo);
-  ur.action("unhighlight", generateDoFunc("unhighlight"), generalUndo);
-  ur.action("unhighlightNeighbors", generateDoFunc("unhighlightNeighbors"), generalUndo);
-  ur.action("unhighlightNeighbours", generateDoFunc("unhighlightNeighbours"), generalUndo);
   ur.action("removeHighlights", generateDoFunc("removeHighlights"), generalUndo);
 }
 

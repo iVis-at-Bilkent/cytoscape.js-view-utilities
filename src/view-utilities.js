@@ -108,7 +108,7 @@ var viewUtilities = function (cy, options) {
 
   // Section highlight
 
-  // Highlights eles & unhighlights others at first use.
+  // Highlights eles
   instance.highlight = function (args) {
     if (args.option == null)
     {
@@ -120,23 +120,12 @@ var viewUtilities = function (cy, options) {
       var eles = args.eles;
       var option = args.option;
     }
-
-    var others = cy.elements().difference(eles.union(eles.ancestors()));
-
-    if (cy.$(".highlighted:visible").length == 0 && cy.$(".highlighted2:visible").length == 0 && cy.$(".highlighted3:visible").length == 0 && cy.$(".highlighted4:visible").length == 0)
-      this.unhighlight(others);
-
     highlight(eles, option); // Use the helper here
 
     return eles;
   };
 
-  // Just unhighlights eles.
-  instance.unhighlight = function (eles) {
-    eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4");
-  };
-
-  // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
+  // Highlights eles' neighborhood
   instance.highlightNeighbors = function (args) {
     if (args.option == null)
     {
@@ -156,23 +145,12 @@ var viewUtilities = function (cy, options) {
     return this.highlightNeighbors(args);
   };
 
-  // Just unhighlights eles and their neighbors.
-  instance.unhighlightNeighbors = function (eles) {
-    var allEles = getWithNeighbors(eles);
-
-    return this.unhighlight(allEles);
-  };
-
-  // Aliases: this.unhighlightNeighbours()
-  instance.unhighlightNeighbours = function (eles) {
-    this.unhighlightNeighbors(eles);
-  };
-
-  // Remove highlights & unhighlights from eles.
+  // Remove highlights from eles.
   // If eles is not defined considers cy.elements()
   instance.removeHighlights = function (eles) {
       if (eles == null || eles.length == null)
         eles = cy.elements();
+
       return eles.removeClass("highlighted")
             .removeClass("highlighted2")
             .removeClass("highlighted3")
