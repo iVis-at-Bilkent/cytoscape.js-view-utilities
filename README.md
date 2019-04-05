@@ -49,23 +49,14 @@ The second way is to just send the elements to be highlighted.
 
 In this case, the default highlight color of blue is used.
 
-`instance.unhighlight(eles)`
-
-Unhighlights the eles.
-
 `instance.highlightNeighbors(args)`
 * Aliases: `instance.highlightNeighbours(args)`
 
-Highlights eles' neighborhood & unhighlights others' neighborhood (based on the color option) at first use. Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
-
-`instance.unhighlightNeighbors(eles)`
-* Aliases: `instance.unhighlightNeighbours(eles)`
-
-Just unhighlights eles and their neighbors.
+Highlights eles' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
 `instance.removeHighlights(eles)`
 
-Remove highlights & unhighlights from eles.
+Remove highlights from eles.
 
 `instance.hide(eles)`
 
@@ -153,11 +144,6 @@ Disables marquee zoom.
 
 `ur.do("highlightNeighbors", args)`
 `ur.do("highlightNeighbours", args)`
-
-`ur.do("unhighlight", eles)`
-
-`ur.do("unhighlightNeighbors", eles)`
-`ur.do("unhighlightNeighbours", eles)`
 
 `ur.do("removeHighlights")`
 
