@@ -94,7 +94,6 @@ Disables marquee zoom.
               'border-color': '#0B9BCD',  //blue
               'border-width': 3
             },
-
             highlighted2: {
               'border-color': '#04F06A',  //green
               'border-width': 3

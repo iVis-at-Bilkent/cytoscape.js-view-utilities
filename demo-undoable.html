@@ -2,156 +2,155 @@
 
 <html>
 
-	<head>
-		<title>cytoscape-view-utilities.js demo</title>
+    <head>
+        <title>cytoscape-view-utilities.js demo</title>
 
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-		<script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+        <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
-		<!-- for testing with local version of cytoscape.js -->
-		<!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-    <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
-    <script src="lib/cytoscape-undo-redo.js"></script>
+        <!-- for testing with local version of cytoscape.js -->
+        <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
+        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
+        <script src="lib/cytoscape-undo-redo.js"></script>
 
+        <script src="cytoscape-view-utilities.js"></script>
 
-		<script src="cytoscape-view-utilities.js"></script>
+        <style>
+            body {
+                font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+                font-size: 14px;
+            }
+            #cy {
+                width: 80%;
+                height: 100%;
+                left: 21%;
+                top: 0%;
+                float: left;
+                overflow: hidden;
+                position: fixed;
+            }
+            .topnav {
+                width: 20%;
+                background-color: #e9e9e9;
+                font-weight: bold;
+                border-color: black;
+                border-style: solid;
+                font-size: 16;
+                padding: 10;
+            }
+            .topnav b:hover
+            {
+                background-color:white;
+            }
+            /* Customize the label (the container) */
+            .topnav .container {
+                position: relative;
+                padding: 14px;
+                cursor: pointer;
+                font-size: 15px;
+                left: 5px;
+                -webkit-user-select: none;
+                -moz-user-select: none;          'border-color': 'purple'
+                -ms-user-select: none;
+                user-select: none;
+            }
+            /* Hide the browser's default radio button */
+            .topnav .container input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+            /* Create a custom radio button */
+            .topnav .checkmark {
+                position: absolute;
+                top: 17px;
+                left: 0;
+                right: 0px;
+                height: 12px;
+                width: 12px;
+                margin-right: 20px;
+                background-color: #000000;
+                border-radius: 50%;
+            }
+            /* On mouse-over, add a grey background color */
+            .container:hover input ~ .checkmark {
+                background-color: #000000;
+            }
+            /* When the radio button is checked, add a blue background */
+            .container input:checked ~ .checkmark {
+                background-color: #000          
+                'border-color': 'purple'000;
+            }
+            /* Create the indicator (the dot/circle - hidden when not checked) */
+            .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+            /* Show the indicator (dot/circle) when checked */
+            .container input:checked ~ .checkmark:after {
+                display: block;
+            }
+            /* Style the indicator (dot/circle) */
+            .container .checkmark:after {
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: white;
+            }
+        </style>
 
-		<style>
-			body {
-				font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
-				font-size: 14px;
-			}
+        <script>
 
-			#cy {
-				width: 80%;
-				height: 100%;
-				left: 21%;
-				top: 0%;
-				float: left;
-				overflow: hidden;
-				position: fixed;
-			}
-			.topnav {
-				width: 20%;
-				background-color: #e9e9e9;
-				font-weight: bold;
-				border-color: black;
-				border-style: solid;
-				font-size: 16;
-			}
-			.topnav b:hover
-			{
-				 background-color:white;
-			}
-			/* Customize the label (the container) */
-			.topnav .container {
-
-				position: relative;
-				padding: 14px;
-				cursor: pointer;
-				font-size: 15px;
-				left: 5px;
-				-webkit-user-select: none;
-				-moz-user-select: none;          'border-color': 'purple'
-				-ms-user-select: none;
-				user-select: none;
-			}
-			/* Hide the browser's default radio button */
-			.topnav .container input {
-				position: absolute;
-				opacity: 0;
-				cursor: pointer;
-				height: 0;
-				width: 0;
-			}
-			/* Create a custom radio button */
-			.topnav .checkmark {
-				position: absolute;
-				top: 17px;
-				left: 0;
-				right: 0px;
-				height: 12px;
-				width: 12px;
-				margin-right: 20px;
-				background-color: #000000;
-				border-radius: 50%;
-			}
-			/* On mouse-over, add a grey background color */
-			.container:hover input ~ .checkmark {
-				background-color: #000000;
-			}
-			/* When the radio button is checked, add a blue background */
-			.container input:checked ~ .checkmark {
-				background-color: #000          'border-color': 'purple'000;
-			}
-			/* Create the indicator (the dot/circle - hidden when not checked) */
-			.checkmark:after {
-				content: "";
-				position: absolute;
-				display: none;
-			}
-			/* Show the indicator (dot/circle) when checked */
-			.container input:checked ~ .checkmark:after {
-				display: block;
-			}
-			/* Style the indicator (dot/circle) */
-			.container .checkmark:after {
-				position: absolute;
-				top: 3px;
-				left: 3px;
-				width: 6px;
-				height: 6px;
-				border-radius: 50%;
-				background: white;
-			}
-		</style>
-
-		<script>
-
-			document.addEventListener("DOMContentLoaded", function(){
+            document.addEventListener("DOMContentLoaded", function(){
 
                 var cy = window.cy = cytoscape({
                     container: document.getElementById('cy'),
                     layout: { name: "cose-bilkent" },
-										style: [
-											{
-													selector: 'node',
-													style: {
-															'content': 'data(name)',
-															'border-color': 'grey',
-															'border-width': 3,
-															'background-color': 'lightgrey'
-													}
-											},
-											{
-													selector: 'edge',
-													style: {
-															'target-arrow-shape': 'triangle'
-													}
-											},
-											{
-												selector: 'edge:selected',
-												style: {
-														'line-color': 'black'
-												}
-											},
-											{
-												selector: 'node:selected',
-												style: {
-														'border-color': 'black',
-														'border-width': '3px',
-														'background-color': 'lightgrey'
-												}
-											},
-											{
-												selector: 'node:parent',
-												style: {
-														'background-color': 'lightgrey'
-												}
-											}
-										],
+                    style: [
+                        {
+                            selector: 'node',
+                            style: {
+                                'content': 'data(name)',
+                                'border-color': 'grey',
+                                'border-width': 3,
+                                'background-color': 'lightgrey'
+                            }
+                        },
+                        {
+                            selector: 'edge',
+                            style: {
+                                'target-arrow-shape': 'triangle'
+                            }
+                        },
+                        {
+                            selector: 'edge:selected',
+                            style: {
+                                'line-color': 'black'
+                            }
+                        },
+                        {
+                            selector: 'node:selected',
+                            style: {
+                                'border-color': 'black',
+                                'border-width': '3px',
+                                'background-color': 'lightgrey'
+                            }
+                        },
+                        {
+                            selector: 'node:parent',
+                            style: {
+                                'background-color': 'lightgrey'
+                            }
+                        }
+                    ],
 
                     elements: {
                         nodes: [
@@ -216,20 +215,20 @@
 
                 var ur = cy.undoRedo();
 
-								function thickenBorder(eles){
-                  eles.forEach(function( ele ){
-                    ele.css("background-color", 'purple');
-                  });
-                  eles.data("thickBorder", true);
-                  return eles;
+                function thickenBorder(eles){
+                    eles.forEach(function( ele ){
+                        ele.css("background-color", 'purple');
+                    });
+                    eles.data("thickBorder", true);
+                    return eles;
                 }
                 // Decrease border width when hidden neighbors of the nodes become visible
                 function thinBorder(eles){
-                  eles.forEach(function( ele ){
-                    ele.css("background-color", 'lightgrey');
-                  });
-                  eles.removeData("thickBorder");
-                  return eles;
+                    eles.forEach(function( ele ){
+                        ele.css("background-color", 'lightgrey');
+                    });
+                    eles.removeData("thickBorder");
+                    return eles;
                 }
                 ur.action("thickenBorder", thickenBorder, thinBorder);
                 ur.action("thinBorder", thinBorder, thickenBorder);
@@ -265,8 +264,7 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
                     cy.undoRedo().do("batch", actions);
                 });
-
-								$('#zoomToSelected').click( function(){
+                $('#zoomToSelected').click( function(){
                     api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
@@ -274,7 +272,6 @@
                       layout.run();
                     }
                 })
-
                 $('#marqueeZoom').click( function(){
                     api.enableMarqueeZoom();
                     if( document.getElementById('layout').checked){
@@ -284,17 +281,17 @@
 
                 var tappedBefore;
                 cy.on('tap', 'node', function (event) {
-                  var node = this;
-                  var tappedNow = node;
-                  setTimeout(function () {
-                    tappedBefore = null;
-                  }, 300);
-                  if (tappedBefore && tappedBefore.id() === tappedNow.id()) {
-                    tappedNow.trigger('doubleTap');
-                    tappedBefore = null;
-                  } else {
-                    tappedBefore = tappedNow;
-                  }
+                    var node = this;
+                    var tappedNow = node;
+                    setTimeout(function () {
+                        tappedBefore = null;
+                    }, 300);
+                    if (tappedBefore && tappedBefore.id() === tappedNow.id()) {
+                        tappedNow.trigger('doubleTap');
+                        tappedBefore = null;
+                    } else {
+                        tappedBefore = tappedNow;
+                    }
                 });
                 cy.on('doubleTap', 'node', function (event) {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
@@ -309,39 +306,39 @@
                     cy.undoRedo().do("batch", actions);
                 });
 
-								function chooseHighlightColor(){
-									var option = "";
-									if(document.getElementById('highlight1').checked)
-									{
-										option = "highlighted";
-									}
-									else if(document.getElementById('highlight2').checked)
-									{
-										option = "highlighted2";
-									}
-									else if(document.getElementById('highlight3').checked)
-									{
-										option = "highlighted3";
-									}
-									else if(document.getElementById('highlight4').checked)
-									{
-										option = "highlighted4";
-									}
-                  return option;
+                function chooseHighlightColor(){
+                    var option = "";
+                    if(document.getElementById('highlight1').checked)
+                    {
+                            option = "highlighted";
+                    }
+                    else if(document.getElementById('highlight2').checked)
+                    {
+                            option = "highlighted2";
+                    }
+                    else if(document.getElementById('highlight3').checked)
+                    {
+                            option = "highlighted3";
+                    }
+                    else if(document.getElementById('highlight4').checked)
+                    {
+                            option = "highlighted4";
+                    }
+                    return option;
                 }
 
                 $("#highlightNeighbors").click(function () {
-										if(cy.$(":selected").length > 0)
-											ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: chooseHighlightColor()});
-                });
-
-								$("#highlightElements").click(function () {
                     if(cy.$(":selected").length > 0)
-                      ur.do("highlight", {eles: cy.$(":selected"), option: chooseHighlightColor()});
+                        ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-								$("#removeSelectedHighlights").click(function () {
-										if(cy.$(":selected").length > 0)
+                $("#highlightElements").click(function () {
+                    if(cy.$(":selected").length > 0)
+                        ur.do("highlight", {eles: cy.$(":selected"), option: chooseHighlightColor()});
+                });
+
+                $("#removeSelectedHighlights").click(function () {
+                    if(cy.$(":selected").length > 0)
                     	ur.do("removeHighlights", cy.$(":selected"));
                 });
 
@@ -362,49 +359,48 @@
                             ur.redo();
                     }
                 });
-			});
-		</script>
-	</head>
+            });
+        </script>
+    </head>
 
-	<body>
-		<h1>cytoscape.js-view-utilities demo</h1>
+    <body>
+        <h1>cytoscape.js-view-utilities demo</h1>
 
-
-				<div class="topnav">
-						<b id="hide" style="cursor: pointer; color: darkmagenta">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/><br/>
-						<b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
-						<label class="container"  style="color: #0B9BCD">Blue
-						  <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
-						  <span class="checkmark"></span>
-						</label> <br/><br/>
-						<label class="container" style="color: green">Green
-						  <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
-						  <span class="checkmark"></span>
-						</label>  <br/><br/>
-						<label class="container" style="color: #F8C200">Yellow
-						  <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
-						  <span class="checkmark"></span>
-						</label> <br/><br/>
-						<label class="container" style="color: #BF0603">Red
-						  <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
-						  <span class="checkmark"></span>
-						</label> <br/><br/>
-						<b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Elements</b> <br/><br/>
-						<b id="highlightNeighbors" style="cursor: pointer; color: darkmagenta">Highlight Neighbors</b><br/><br/>
-						<b id="showHiddenNeighbors" style="cursor: pointer; color: darkmagenta">Show Hidden Neighbors of Selected</b> <br/><br/>
-						<b id="removeSelectedHighlights" style="cursor: pointer; color: darkmagenta">Remove Selected Highlights</b> <br/><br/>
-						<b id="removeAllHighlights" style="cursor: pointer; color: darkmagenta">Remove All Highlights</b> <br/><br/>
-						<b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
-						<b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b><br/><br/>
-						<b>Shift + drag</b> to specify region<br/>
-						<b>Shift + taphold</b> to select neighbors<br/>
-						<b>CTRL+Z</b> to undo, <b>CTRL+Y</b> to redo<br/>
-						<label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
-						<input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>
-				</div>
+        <div class="topnav">
+            <b id="hide" style="cursor: pointer; color: darkmagenta">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/><br/>
+            <b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
+            <label class="container"  style="color: #0B9BCD">Blue
+              <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
+              <span class="checkmark"></span>
+            </label> <br/><br/>
+            <label class="container" style="color: green">Green
+              <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
+              <span class="checkmark"></span>
+            </label>  <br/><br/>
+            <label class="container" style="color: #F8C200">Yellow
+              <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
+              <span class="checkmark"></span>
+            </label> <br/><br/>
+            <label class="container" style="color: #BF0603">Red
+              <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
+              <span class="checkmark"></span>
+            </label> <br/><br/>
+            <b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Elements</b> <br/><br/>
+            <b id="highlightNeighbors" style="cursor: pointer; color: darkmagenta">Highlight Neighbors</b><br/><br/>
+            <b id="showHiddenNeighbors" style="cursor: pointer; color: darkmagenta">Show Hidden Neighbors of Selected</b> <br/><br/>
+            <b id="removeSelectedHighlights" style="cursor: pointer; color: darkmagenta">Remove Selected Highlights</b> <br/><br/>
+            <b id="removeAllHighlights" style="cursor: pointer; color: darkmagenta">Remove All Highlights</b> <br/><br/>
+            <b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
+            <b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b>
+            <b>Shift + drag</b> to specify region<br/><br/>
+            <b>Shift + taphold</b> to select neighbors<br/><br/>
+            <b>CTRL+Z</b> to undo, <b>CTRL+Y</b> to redo<br/><br/>
+            <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
+            <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>
+        </div>
 
         <div id="cy"></div>
 
-	</body>
+    </body>
 
 </html>
