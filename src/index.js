@@ -123,7 +123,8 @@
             if(shiftKeyDown){
               cy.elements().unselect();
               neighborhood = options.neighbor(target);
-              neighborhood.select();
+              if(neighborhood)
+                neighborhood.select();
               target.lock();
               tapheld = true;
             }
@@ -132,7 +133,8 @@
             var targetTapheld = event.target || event.cyTarget;
             if(target == targetTapheld && tapheld === true){
               tapheld = false;
-              neighborhood.select();
+              if(neighborhood)
+                neighborhood.select();
               target.unlock();
             }
             else{
