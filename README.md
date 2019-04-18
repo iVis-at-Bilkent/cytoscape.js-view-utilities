@@ -13,7 +13,7 @@ U. Dogrusoz , A. Karacelik, I. Safarli, H. Balci, L. Dervishi, and M.C. Siper, "
 
 ## Demo
 
-Click [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://rawgit.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
+Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
 
 ## API
 
@@ -23,27 +23,40 @@ Initializes the extension and sets options. This can be used to override default
 
 An instance has a number of functions available:
 
-`instance.highlight(eles)`
+`instance.highlight(args)`
 
-Highlights eles & unhighlights others at first use.
+Highlights eles based on the given arguments. The arguments can be sent in two different ways.
 
-`instance.unhighlight(eles)`
+One way is that the arguments have 2 components: eles and the highlighting option:
 
-Just unighlights eles.
+`args = {eles: eles, option: "highlighted"};`
 
-`instance.highlightNeighbors(eles)`
-* Aliases: `instance.highlightNeighbours(eles)`
+args.eles contains the elements to be highlighted.
 
-Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
+args.option contains the highlighting color option. It can have the following four values:
 
-`instance.unhighlightNeighbors(eles)`
-* Aliases: `instance.unhighlightNeighbours(eles)`
+"highlighted" --> Blue border
 
-Just unhighlights eles and their neighbors.
+"highlighted2" --> Green border
+
+"highlighted3" --> Yellow border
+
+"highlighted4" --> Red border
+
+The second way is to just send the elements to be highlighted.
+
+`args = cy.$(":selected")`
+
+In this case, the default highlight color of blue is used.
+
+`instance.highlightNeighbors(args)`
+* Aliases: `instance.highlightNeighbours(args)`
+
+Highlights eles' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
 `instance.removeHighlights(eles)`
 
-Remove highlights & unhighlights from eles. If eles parameter is not specified sets it to 'cy.elements()'.
+Remove highlights from eles.
 
 `instance.hide(eles)`
 
@@ -67,40 +80,70 @@ Disables marquee zoom.
 
 ## Default Options
 ```javascript
-            node: {
-                highlighted: {}, // styles for when nodes are highlighted.
-                unhighlighted: { // styles for when nodes are unhighlighted.
-                    'opacity': 0.3
-                }
+          node: {
+            highlighted: {
+              'border-color': '#0B9BCD',  //blue
+              'border-width': 3
             },
-            edge: {
-                highlighted: {}, // styles for when edges are highlighted.
-                unhighlighted: { // styles for when edges are unhighlighted.
-                    'opacity': 0.3
-                }
+            highlighted2: {
+              'border-color': '#04F06A',  //green
+              'border-width': 3
             },
-            setVisibilityOnHide: false, // whether to set visibility on hide/show
-            setDisplayOnHide: true, // whether to set display on hide/show
-            zoomAnimationDuration: 1500, //default duration for zoom animation speed
-            neighbor: function(node){ // return desired neighbors of (shift + taphold) node
-                return false;
+            highlighted3: {
+              'border-color': '#F5E663',   //yellow
+              'border-width': 3
             },
-            neighborSelectTime: 500 //ms, time to taphold to select desired neighbors 
+            highlighted4: {
+              'border-color': '#BF0603',    //red
+              'border-width': 3
+            },
+            selected: {
+              'border-color': 'black',
+              'border-width': 3,
+              'background-color': 'lightgrey'
+            }
+
+          },
+          edge: {
+            highlighted: {
+              'line-color': '#0B9BCD',    //blue
+              'width' : 3
+            },
+            highlighted2: {
+              'line-color': '#04F06A',   //green
+              'width' : 3
+            },
+            highlighted3: {
+              'line-color': '#F5E663',    //yellow
+              'width' : 3
+            },
+            highlighted4: {
+              'line-color': '#BF0603',    //red
+              'width' : 3
+            },
+            selected: {
+              'line-color': 'black',
+              'width' : 3
+            }
+          },
+          setVisibilityOnHide: false, // whether to set visibility on hide/show
+          setDisplayOnHide: true, // whether to set display on hide/show
+          zoomAnimationDuration: 1500, //default duration for zoom animation speed
+          neighbor: function(node){ // return desired neighbors of tapheld node
+            return false;
+          },
+          neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+
 ```
 
 
 ## Default Undo-Redo Actions
 
 
-`ur.do("highlight", eles)`
+`ur.do("highlight", args)`
 
-`ur.do("highlightNeighbors", eles)`
-`ur.do("highlightNeighbours", eles)`
-
-`ur.do("unhighlight", eles)`
-
-`ur.do("unhighlightNeighbors", eles)` 
-`ur.do("unhighlightNeighbours", eles)`
+`ur.do("highlightNeighbors", args)`
+`ur.do("highlightNeighbours", args)`
 
 `ur.do("removeHighlights")`
 
@@ -152,8 +195,8 @@ This project is set up to automatically be published to npm and bower.  To publi
 1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git`
 
 ## Team
-  * [Hasan Balci](https://github.com/hasanbalci), [Leonard Dervishi](https://github.com/leonarddrv), [Metin Can Siper](https://github.com/metincansiper), [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  * [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 
-  * [Selim Firat Yilmaz](https://github.com/mrsfy)
+  * [Selim Firat Yilmaz](https://github.com/mrsfy), [Leonard Dervishi](https://github.com/leonarddrv), [Kaan Sancak](https://github.com/kaansancak)

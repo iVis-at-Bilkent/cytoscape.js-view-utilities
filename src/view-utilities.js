@@ -2,20 +2,65 @@ var viewUtilities = function (cy, options) {
 
   // Set style for highlighted and unhighligthed eles
   cy
-        .style()
-        .selector("node.highlighted")
-        .css(options.node.highlighted)
-        .selector("node.unhighlighted")
-        .css(options.node.unhighlighted)
-        .selector("edge.highlighted")
-        .css(options.edge.highlighted)
-        .selector("edge.unhighlighted")
-        .css(options.edge.unhighlighted)
-        .update();
+  .style()
+  .selector("node.highlighted")
+  .css(options.node.highlighted)
+  .selector("node.highlighted:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted2")
+  .css(options.node.highlighted2)
+  .selector("node.highlighted2:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted3")
+  .css(options.node.highlighted3)
+  .selector("node.highlighted3:selected")
+  .css(options.node.selected)
+  .selector("node.highlighted4")
+  .css(options.node.highlighted4)
+  .selector("node.highlighted4:selected")
+  .css(options.node.selected)
+  .selector("edge.highlighted")
+  .css(options.edge.highlighted)
+  .selector("edge.highlighted:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted2")
+  .css(options.edge.highlighted2)
+  .selector("edge.highlighted2:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted3")
+  .css(options.edge.highlighted3)
+  .selector("edge.highlighted3:selected")
+  .css(options.edge.selected)
+  .selector("edge.highlighted4")
+  .css(options.edge.highlighted4)
+  .selector("edge.highlighted4:selected")
+  .css(options.edge.selected)
+  .update();
 
   // Helper functions for internal usage (not to be exposed)
-  function highlight(eles) {
-    eles.removeClass("unhighlighted").addClass("highlighted");
+  function highlight(eles, option) {
+    switch(option){
+      case "highlighted":
+        eles.removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
+        break;
+      case "highlighted2":
+        eles.removeClass("highlighted").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted2");
+        eles.unselect();
+        break;
+      case "highlighted3":
+        eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted4").addClass("highlighted3");
+        eles.unselect();
+        break;
+      case "highlighted4":
+        eles.removeClass("highlighted").removeClass("highlighted2").removeClass("highlighted3").addClass("highlighted4");
+        eles.unselect();
+        break;
+      default:
+        eles.removeClass("highlighted2").removeClass("highlighted3").removeClass("highlighted4").addClass("highlighted");
+        eles.unselect();
+        break;
+    }
   }
 
   function getWithNeighbors(eles) {
@@ -23,9 +68,8 @@ var viewUtilities = function (cy, options) {
   }
   // the instance to be returned
   var instance = {};
-  var Mousetrap = require('mousetrap');
-  // Section hide-show
 
+  // Section hide-show
   // hide given eles
   instance.hide = function (eles) {
     eles = eles.filter(":visible");
@@ -64,63 +108,82 @@ var viewUtilities = function (cy, options) {
 
   // Section highlight
 
-  // Highlights eles & unhighlights others at first use.
-  instance.highlight = function (eles) {
-    var others = cy.elements().difference(eles.union(eles.ancestors()));
-
-    if (cy.$(".highlighted:visible").length == 0)
-      this.unhighlight(others);
-
-    highlight(eles); // Use the helper here
+  // Highlights eles
+  instance.highlight = function (args) {
+    if (args.option == null)
+    {
+      var eles = args;
+      var option = "";
+    }
+    else
+    {
+      var eles = args.eles;
+      var option = args.option;
+    }
+    highlight(eles, option); // Use the helper here
 
     return eles;
   };
 
-  // Just unighlights eles.
-  instance.unhighlight = function (eles) {
-    eles.removeClass("highlighted").addClass("unhighlighted");
-  };
-
-  // Highlights eles' neighborhood & unhighlights others' neighborhood at first use.
-  instance.highlightNeighbors = function (eles) {
-    var allEles = getWithNeighbors(eles);
-
-    return this.highlight(allEles);
+  // Highlights eles' neighborhood
+  instance.highlightNeighbors = function (args) {
+    if (args.option == null)
+    {
+      var eles = args;
+      var option = "";
+    }
+    else
+    {
+      var eles = args.eles;
+      var option = args.option;
+    }
+    return this.highlight({eles: getWithNeighbors(eles), option: option});
   };
 
   // Aliases: this.highlightNeighbours()
-  instance.highlightNeighbours = function (eles) {
-    return this.highlightNeighbors(eles);
+  instance.highlightNeighbours = function (args) {
+    return this.highlightNeighbors(args);
   };
 
-  // Just unhighlights eles and their neighbors.
-  instance.unhighlightNeighbors = function (eles) {
-    var allEles = getWithNeighbors(eles);
-
-    return this.unhighlight(allEles);
-  };
-
-  // Aliases: this.unhighlightNeighbours()
-  instance.unhighlightNeighbours = function (eles) {
-    this.unhighlightNeighbors(eles);
-  };
-
-  // Remove highlights & unhighlights from eles.
+  // Remove highlights from eles.
   // If eles is not defined considers cy.elements()
   instance.removeHighlights = function (eles) {
-    if (!eles) {
-      eles = cy.elements();
-    }
+      if (eles == null || eles.length == null)
+        eles = cy.elements();
 
-    return eles
-            .removeClass("highlighted")
-            .removeClass("unhighlighted")
-            .removeData("highlighted"); // TODO check if remove data is needed here
+      return eles.removeClass("highlighted")
+            .removeClass("highlighted2")
+            .removeClass("highlighted3")
+            .removeClass("highlighted4")
+            .removeData("highlighted")
+            .removeData("highlighted2")
+            .removeData("highlighted3")
+            .removeData("highlighted4")
+            .unselect(); // TODO check if remove data is needed here
   };
 
   // Indicates if the ele is highlighted
   instance.isHighlighted = function (ele) {
-    return ele.is(".highlighted:visible") ? true : false;
+    if (ele.is(".highlighted:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted1:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted2:visible") == true)
+    {
+      return true;
+    }
+    else if (ele.is(".highlighted3:visible") == true)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   };
 
   //Zoom selected Nodes
@@ -154,19 +217,21 @@ var viewUtilities = function (cy, options) {
 
   instance.enableMarqueeZoom = function(callback){
 
-    var mt = new Mousetrap();
     var shiftKeyDown = false;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
     //Make the cy unselectable
     cy.autounselectify(true);
 
-    mt.bind(["shift"], function() {
-      shiftKeyDown = true;
-    }, "keydown");
-
-    mt.bind(["shift"], function(){
-      shiftKeyDown = false;
-    }, "keyup");
+    document.addEventListener('keydown', function(event){
+      if(event.key == "Shift") {
+        shiftKeyDown = true;
+      }
+    });
+    document.addEventListener('keyup', function(event){
+      if(event.key == "Shift") {
+        shiftKeyDown = false;
+      }
+    });
 
     cy.one('tapstart', tabStartHandler = function(event){
       if( shiftKeyDown == true){

@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iVis-at-Bilkent/view-utilities.git"
+    "url": "https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities.git"
   },
   "keywords": [
     "cytoscape",
@@ -19,9 +19,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iVis-at-Bilkent/view-utilities/issues"
+    "url": "https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/issues"
   },
-  "homepage": "https://github.com/iVis-at-Bilkent/view-utilities",
+  "homepage": "https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities",
   "devDependencies": {
     "browserify": "^11.2.0",
     "gulp": "^3.9.1",
@@ -40,8 +40,5 @@
   "peerDependencies": {
     "cytoscape": "^2.7.0 || ^3.0.0",
     "jquery": "^1.7.0 || ^2.0.0 || ^3.0.0"
-  },
-  "dependencies": {
-    "mousetrap": "^1.6.0"
   }
 }
