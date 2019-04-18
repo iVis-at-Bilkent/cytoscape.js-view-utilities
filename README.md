@@ -13,7 +13,7 @@ U. Dogrusoz , A. Karacelik, I. Safarli, H. Balci, L. Dervishi, and M.C. Siper, "
 
 ## Demo
 
-Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
+Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo.html) (no undo) or [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/master/demo-undoable.html) (undoable) for a demo
 
 ## API
 
