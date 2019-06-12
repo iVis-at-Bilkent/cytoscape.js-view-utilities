@@ -78,8 +78,6 @@
         return getScratch(cy).instance;
       }
 
-      $.extend(true, options, opts);
-
       function getScratch(eleOrCy) {
         if (!eleOrCy.scratch("_viewUtilities")) {
           eleOrCy.scratch("_viewUtilities", {});
@@ -88,20 +86,21 @@
         return eleOrCy.scratch("_viewUtilities");
       }
 
+      $.extend(true, options, opts);
+
+      // create a view utilities instance
+      var instance = viewUtilities(cy, options);
+
+      if (cy.undoRedo) {
+        var ur = cy.undoRedo(null, true);
+        undoRedo(cy, ur, instance);
+      }
+
+      // set the instance on the scratch pad
+      getScratch(cy).instance = instance;
 
       if (!getScratch(cy).initialized) {
         getScratch(cy).initialized = true;
-
-        // create a view utilities instance
-        var instance = viewUtilities(cy, options);
-
-        if (cy.undoRedo) {
-          var ur = cy.undoRedo(null, true);
-          undoRedo(cy, ur, instance);
-        }
-
-        // set the instance on the scratch pad
-        getScratch(cy).instance = instance;
 
         var shiftKeyDown = false;
         document.addEventListener('keydown', function(event){
