@@ -154,7 +154,6 @@ Disables marquee zoom.
 ## Dependencies
 
  * Cytoscape.js ^2.7.0
- * jQuery ^1.7.0 || ^2.0.0 || ^3.0.0
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 
@@ -170,10 +169,9 @@ Download the library:
 CommonJS:
 ```js
 var cytoscape = require('cytoscape');
-var jquery = require('jquery');
 var viewUtilities = require('cytoscape-view-utilities');
 
-viewUtilities( cytoscape, jquery ); // register extension
+viewUtilities( cytoscape ); // register extension
 ```
 
 AMD:
