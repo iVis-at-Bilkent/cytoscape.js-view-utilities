@@ -6,7 +6,6 @@
 
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
         <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
         <!-- for testing with local version of cytoscape.js -->
@@ -50,7 +49,7 @@
               font-size: 15px;
               left: 5px;
               -webkit-user-select: none;
-              -moz-user-select: none;          'border-color': 'purple'
+              -moz-user-select: none;     
               -ms-user-select: none;
               user-select: none;
             }
@@ -80,7 +79,7 @@
             }
             /* When the radio button is checked, add a blue background */
             .container input:checked ~ .checkmark {
-                    background-color: #000          'border-color': 'purple'000;
+                    background-color: #000   
             }
             /* Create the indicator (the dot/circle - hidden when not checked) */
             .checkmark:after {
@@ -228,7 +227,7 @@
                   return eles;
                 }
 
-                $("#hide").click(function () {
+                document.getElementById("hide").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     //thinBorder(nodesWithHiddenNeighbor);
@@ -239,8 +238,8 @@
                       layout.run();
                     }
                 });
-
-                $("#showAll").click(function () {
+                
+                document.getElementById("showAll").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -250,7 +249,7 @@
                     }
                 });
 
-                $("#showHiddenNeighbors").click(function () {
+                document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -261,21 +260,21 @@
                     }
                 });
 
-                $('#zoomToSelected').click( function(){
+                document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
-                })
+                });
 
-                $('#marqueeZoom').click( function(){
+                document.getElementById("marqueeZoom").addEventListener("click", function () {
                     api.enableMarqueeZoom();
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
-                })
+                });
 
                 var tappedBefore;
                 cy.on('tap', 'node', function (event) {
@@ -323,25 +322,25 @@
                     return option;
                 }
 
-                $("#highlightNeighbors").click(function () {
+                document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlightNeighbors({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-								$("#highlightElements").click(function () {
+                document.getElementById("highlightElements").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlight({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-								$("#removeSelectedHighlights").click(function () {
+                document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
 										if(cy.$(":selected").length > 0)
                     	api.removeHighlights(cy.$(":selected"));
                 });
 
-                $("#removeAllHighlights").click(function () {
+                document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.removeHighlights();
                 });

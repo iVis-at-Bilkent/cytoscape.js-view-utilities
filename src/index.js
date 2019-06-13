@@ -3,9 +3,9 @@
   'use strict';
 
   // registers the extension on a cytoscape lib ref
-  var register = function (cytoscape, $) {
+  var register = function (cytoscape) {
 
-    if (!cytoscape || !$) {
+    if (!cytoscape) {
       return;
     } // can't register if cytoscape unspecified
 
@@ -73,11 +73,6 @@
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
 
-      // If 'get' is given as the param then return the extension instance
-      if (opts === 'get') {
-        return getScratch(cy).instance;
-      }
-
       function getScratch(eleOrCy) {
         if (!eleOrCy.scratch("_viewUtilities")) {
           eleOrCy.scratch("_viewUtilities", {});
@@ -85,8 +80,44 @@
 
         return eleOrCy.scratch("_viewUtilities");
       }
+      
+      // If 'get' is given as the param then return the extension instance
+      if (opts === 'get') {
+        return getScratch(cy).instance;
+      }
+      
+      /**
+      * Deep copy or merge objects - replacement for jQuery deep extend
+      * Taken from http://youmightnotneedjquery.com/#deep_extend
+      * and bug related to deep copy of Arrays is fixed.
+      * Usage:Object.extend({}, objA, objB)
+      */
+      function extendOptions(out) {
+        out = out || {};
 
-      $.extend(true, options, opts);
+        for (var i = 1; i < arguments.length; i++) {
+          var obj = arguments[i];
+
+          if (!obj)
+            continue;
+
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              if (Array.isArray(obj[key])) {
+                out[key] = obj[key].slice();
+              } else if (typeof obj[key] === 'object') {
+                out[key] = extendOptions(out[key], obj[key]);
+              } else {
+                out[key] = obj[key];
+              }
+            }
+          }
+        }
+
+        return out;
+      };
+
+      options = extendOptions({}, options, opts);
 
       // create a view utilities instance
       var instance = viewUtilities(cy, options);
@@ -165,8 +196,8 @@
     });
   }
 
-  if (typeof cytoscape !== 'undefined' && typeof $ !== "undefined") { // expose to global cytoscape (i.e. window.cytoscape)
-    register(cytoscape, $);
+  if (typeof cytoscape !== 'undefined') { // expose to global cytoscape (i.e. window.cytoscape)
+    register(cytoscape);
   }
 
 })();

@@ -7,7 +7,6 @@
 
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
         <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
         <!-- for testing with local version of cytoscape.js -->
@@ -52,7 +51,7 @@
                 font-size: 15px;
                 left: 5px;
                 -webkit-user-select: none;
-                -moz-user-select: none;          'border-color': 'purple'
+                -moz-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
             }
@@ -82,8 +81,7 @@
             }
             /* When the radio button is checked, add a blue background */
             .container input:checked ~ .checkmark {
-                background-color: #000          
-                'border-color': 'purple'000;
+                background-color: #000;
             }
             /* Create the indicator (the dot/circle - hidden when not checked) */
             .checkmark:after {
@@ -232,9 +230,10 @@
                 }
                 ur.action("thickenBorder", thickenBorder, thinBorder);
                 ur.action("thinBorder", thinBorder, thickenBorder);
+                
                 //In below functions, finding the nodes to hide/show are sample specific.
                 //If the sample graph changes, those calculations may also need a change.
-                $("#hide").click(function (){
+                document.getElementById("hide").addEventListener("click", function () {
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -245,14 +244,16 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
                     cy.undoRedo().do("batch", actions);
                 });
-                $("#showAll").click(function () {
+                
+                document.getElementById("showAll").addEventListener("click", function () {
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
                     actions.push({name: "show", param: cy.elements()});
                     ur.do("batch", actions);
                 });
-                $("#showHiddenNeighbors").click(function () {
+                
+                document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -264,20 +265,22 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
                     cy.undoRedo().do("batch", actions);
                 });
-                $('#zoomToSelected').click( function(){
+                
+                document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
-                })
-                $('#marqueeZoom').click( function(){
+                });
+                
+                document.getElementById("marqueeZoom").addEventListener("click", function () {
                     api.enableMarqueeZoom();
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
-                })
+                });
 
                 var tappedBefore;
                 cy.on('tap', 'node', function (event) {
@@ -293,6 +296,7 @@
                         tappedBefore = tappedNow;
                     }
                 });
+                
                 cy.on('doubleTap', 'node', function (event) {
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
@@ -327,28 +331,23 @@
                     return option;
                 }
 
-                $("#highlightNeighbors").click(function () {
+                document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
                         ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-                $("#highlightElements").click(function () {
+                document.getElementById("highlightElements").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
                         ur.do("highlight", {eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-                $("#removeSelectedHighlights").click(function () {
+                document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
                     	ur.do("removeHighlights", cy.$(":selected"));
                 });
 
-                $("#removeAllHighlights").click(function () {
+                document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     ur.do("removeHighlights");
-                });
-
-                $("#search").click(function () {
-                    var text = $("#toSearch").val();
-                    cy.elements().search(text).highlightNeighbors();
                 });
 
                 document.addEventListener("keydown", function (e) {
