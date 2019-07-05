@@ -304,6 +304,7 @@
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+		    changeBorder(nodesWithHiddenNeighbor);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
