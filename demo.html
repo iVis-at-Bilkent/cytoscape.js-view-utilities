@@ -121,27 +121,30 @@
                         {
                             selector: 'edge',
                             style: {
+                                'curve-style' : 'straight',
                                 'target-arrow-shape': 'triangle'
                             }
                         },
                         {
                             selector: 'edge:selected',
                             style: {
-                                            'line-color': 'black'
+                                'line-color': 'black',
+                                'source-arrow-color': 'black',
+                                'target-arrow-color': 'black', 
                             }
                         },
                         {
                             selector: 'node:selected',
                             style: {
-                                            'border-color': 'black',
-                                            'border-width': '3px',
-                                            'background-color': 'lightgrey'
+                                'border-color': 'black',
+                                'border-width': '3px',
+                                'background-color': 'lightgrey'
                             }
                         },
                         {
                             selector: 'node:parent',
                             style: {
-                                            'background-color': 'lightgrey'
+                                'background-color': 'lightgrey'
                             }
                         }
                     ],
@@ -203,50 +206,59 @@
 
                 var api = cy.viewUtilities({
                     node: {
-                      highlighted: {
+                        highlighted: {
                         'border-color': '#0B9BCD',  //blue
                         'border-width': 3
-                      },
-                      highlighted2: {
+                        },
+                        highlighted2: {
                         'border-color': '#04F06A',  //green
                         'border-width': 3
-                      },
-                      highlighted3: {
+                        },
+                        highlighted3: {
                         'border-color': '#F5E663',   //yellow
                         'border-width': 3
-                      },
-                      highlighted4: {
+                        },
+                        highlighted4: {
                         'border-color': '#BF0603',    //red
                         'border-width': 3
-                      },
-                      selected: {
+                        },
+                        selected: {
                         'border-color': 'black',
                         'border-width': 3,
                         'background-color': 'lightgrey'
-                      }
-
+                        }
                     },
                     edge: {
-                      highlighted: {
-                        'line-color': '#0B9BCD',    //blue
-                        'width' : 3
-                      },
-                      highlighted2: {
-                        'line-color': '#04F06A',   //green
-                        'width' : 3
-                      },
-                      highlighted3: {
-                        'line-color': '#F5E663',    //yellow
-                        'width' : 3
-                      },
-                      highlighted4: {
-                        'line-color': '#BF0603',    //red
-                        'width' : 3
-                      },
-                      selected: {
-                        'line-color': 'black',
-                        'width' : 3
-                      }
+                        highlighted: {
+                          'line-color': '#0B9BCD',    //blue
+                          'source-arrow-color': '#0B9BCD',
+                          'target-arrow-color': '#0B9BCD',
+                          'width' : 3
+                        },
+                        highlighted2: {
+                          'line-color': '#04F06A',   //green
+                          'source-arrow-color': '#04F06A',
+                          'target-arrow-color': '#04F06A',          
+                          'width' : 3
+                        },
+                        highlighted3: {
+                          'line-color': '#F5E663',    //yellow
+                          'source-arrow-color': '#F5E663',
+                          'target-arrow-color': '#F5E663',             
+                          'width' : 3
+                        },
+                        highlighted4: {
+                          'line-color': '#BF0603',    //red
+                          'source-arrow-color': '#BF0603',
+                          'target-arrow-color': '#BF0603',           
+                          'width' : 3
+                        },
+                        selected: {
+                          'line-color': 'black',
+                          'source-arrow-color': 'black',
+                          'target-arrow-color': 'black', 
+                          'width' : 3
+                        }
                     },
                     setVisibilityOnHide: false, // whether to set visibility on hide/show
                     setDisplayOnHide: true, // whether to set display on hide/show

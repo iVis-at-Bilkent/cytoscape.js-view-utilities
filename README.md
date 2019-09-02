@@ -107,23 +107,28 @@ Disables marquee zoom.
           edge: {
             highlighted: {
               'line-color': '#0B9BCD',    //blue
-              'width' : 3
+              'source-arrow-color': '#0B9BCD',
+              'target-arrow-color': '#0B9BCD'
             },
             highlighted2: {
               'line-color': '#04F06A',   //green
-              'width' : 3
+              'source-arrow-color': '#04F06A',
+              'target-arrow-color': '#04F06A'
             },
             highlighted3: {
               'line-color': '#F5E663',    //yellow
-              'width' : 3
+              'source-arrow-color': '#F5E663',
+              'target-arrow-color': '#F5E663'
             },
             highlighted4: {
               'line-color': '#BF0603',    //red
-              'width' : 3
+              'source-arrow-color': '#BF0603',
+              'target-arrow-color': '#BF0603'
             },
             selected: {
               'line-color': 'black',
-              'width' : 3
+              'source-arrow-color': 'black',
+              'target-arrow-color': 'black'
             }
           },
           setVisibilityOnHide: false, // whether to set visibility on hide/show
