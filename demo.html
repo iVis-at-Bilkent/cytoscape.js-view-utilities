@@ -10,7 +10,7 @@
 
         <!-- for testing with local version of cytoscape.js -->
         <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
+        <script src="https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/master/cytoscape-cose-bilkent.js"></script>
         <script src="cytoscape-view-utilities.js"></script>
 
         <style>
@@ -312,11 +312,12 @@
 
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
-                    api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
+                    api.showHiddenNeighbors(selectedNodes); 
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-		    changeBorder(nodesWithHiddenNeighbor);
+		            changeBorder(nodesWithHiddenNeighbor); 
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -332,6 +333,7 @@
                 });
 
                 document.getElementById("marqueeZoom").addEventListener("click", function () {
+                    //document.getElementById("cy").style.cursor ="crosshair";
                     api.enableMarqueeZoom();
                     if( document.getElementById('layout').checked){
                         layout.run();
@@ -439,10 +441,16 @@
             <b id="removeAllHighlights" style="cursor: pointer; color: brown">Remove All Highlights</b> <br/><br/>
             <b id="zoomToSelected" style="cursor: pointer; color: brown">Zoom to Selected</b><br/><br/>
             <b id="marqueeZoom" style="cursor: pointer; color: brown">Marquee Zoom</b>
-            <b>Shift + drag</b> to specify region<br/><br/>
-            <b>Shift + taphold</b> to select neighbors<br/><br/>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
+            <br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
-            <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>
+            <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
+            <br/><br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + taphold to select neighbors</span>
+
+          
+           
         </div>
         <div id="cy"></div>
 

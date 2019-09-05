@@ -66,6 +66,9 @@ Hides given eles.
 
 Unhides given eles.
 
+`instance.showHiddenNeighbors(eles)`
+Unhides the neigbors of the given eles.
+
 `instance.zoomToSelected(eles)`
 
 Zoom to selected eles.
@@ -158,7 +161,7 @@ Disables marquee zoom.
 
 ## Dependencies
 
- * Cytoscape.js ^2.7.0
+ * Cytoscape.js ^3.2.0
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 
