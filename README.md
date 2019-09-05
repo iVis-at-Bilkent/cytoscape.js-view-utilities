@@ -67,7 +67,8 @@ Hides given eles.
 Unhides given eles.
 
 `instance.showHiddenNeighbors(eles)`
-Unhides the neigbors of the given eles.
+
+Unhides hidden neigbors of given eles.
 
 `instance.zoomToSelected(eles)`
 
@@ -201,7 +202,7 @@ This project is set up to automatically be published to npm and bower.  To publi
 1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git`
 
 ## Team
-  * [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  * [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), [Hasan Balci](https://github.com/hasanbalci), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 
