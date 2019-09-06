@@ -95,8 +95,13 @@ function hideShowUR(cy, ur, viewUtilities) {
     return viewUtilities.hide(eles);
   }
 
+  function urShowHiddenNeighbors(eles) {
+    return viewUtilities.showHiddenNeighbors(eles);
+  }
+
   ur.action("show", urShow, urHide);
   ur.action("hide", urHide, urShow);
+  ur.action("showHiddenNeighbors",urShowHiddenNeighbors, urHide);
 }
 
 module.exports = function (cy, ur, viewUtilities) {

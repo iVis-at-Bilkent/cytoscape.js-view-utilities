@@ -152,10 +152,11 @@
 
                     elements: {
                         nodes: [
+                            
                             { data: { id: 'n1', name: 'n1' } },
-                            { data: { id: 'n2', name: 'n2', parent: "n1"} },
-                            { data: { id: 'n3', name: 'n3', parent: "n1" } },
-                            { data: { id: 'n4', name: 'n4', parent: "n1" } },
+                            { data: { id: 'n2', name: 'n2' } },
+                            { data: { id: 'n3', name: 'n3' } },
+                            { data: { id: 'n4', name: 'n4' } },
                             { data: { id: 'n5', name: 'n5' } },
                             { data: { id: 'n6', name: 'n6' } },
                             { data: { id: 'n7', name: 'n7' } },
@@ -169,37 +170,31 @@
                             { data: { id: 'n15', name: 'n15' } },
                             { data: { id: 'n16', name: 'n16' } },
                             { data: { id: 'n17', name: 'n17' } },
-                            { data: { id: 'n18', name: 'n18' } },
-                            { data: { id: 'n19', name: 'n19' } },
-                            { data: { id: 'n20', name: 'n20' } },
-                            { data: { id: 'n21', name: 'n21' } },
                         ],
                         edges: [
+                            
+                            { data: { source: "n1", target: "n2" } },
+                            { data: { source: 'n1', target: 'n3' } },
                             { data: { source: 'n2', target: 'n3' } },
-                            { data: { source: 'n4', target: 'n3' } },
-                            { data: { source: "n3", target: "n5" } },
+                            { data: { source: "n3", target: "n4" } },
+                            { data: { source: "n4", target: "n5" } },
+                            { data: { source: 'n3', target: 'n6' } },
+                            { data: { source: 'n2', target: 'n7' } },
+                            { data: { source: "n3", target: "n7" } },
                             { data: { source: "n5", target: "n6" } },
-                            { data: { source: 'n5', target: 'n7' } },
                             { data: { source: 'n6', target: 'n7' } },
-                            { data: { source: "n7", target: "n8" } },
+                            { data: { source: 'n6', target: 'n8' } },
                             { data: { source: "n8", target: "n9" } },
-                            { data: { source: 'n7', target: 'n10' } },
-                            { data: { source: 'n6', target: 'n11' } },
-                            { data: { source: "n7", target: "n11" } },
-                            { data: { source: "n9", target: "n10" } },
-                            { data: { source: 'n10', target: 'n11' } },
-                            { data: { source: 'n10', target: 'n12' } },
-                            { data: { source: "n12", target: "n13" } },
-                            { data: { source: "n12", target: "n14" } },
-                            { data: { source: "n12", target: "n15" } },
+                            { data: { source: "n8", target: "n10" } },
+                            { data: { source: "n8", target: "n11" } },
+                            { data: { source: "n9", target: "n11" } },
+                            { data: { source: 'n11', target: 'n12' } },
+                            { data: { source: 'n11', target: 'n13' } },
+                            { data: { source: "n11", target: "n14" } },
                             { data: { source: "n13", target: "n15" } },
+                            { data: { source: 'n13', target: 'n16' } },
                             { data: { source: 'n15', target: 'n16' } },
-                            { data: { source: 'n15', target: 'n17' } },
-                            { data: { source: "n15", target: "n18" } },
-                            { data: { source: "n17", target: "n19" } },
-                            { data: { source: 'n17', target: 'n20' } },
-                            { data: { source: 'n19', target: 'n20' } },
-                            { data: { source: "n19", target: "n21" } }
+                            { data: { source: "n15", target: "n17" } }
                         ]
                     }
                 });
@@ -357,11 +352,20 @@
                 });
 
                 cy.on('doubleTap', 'node', function (event) {
+                    /*
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     changeBorder(nodesWithHiddenNeighbor);
+                    */
+                    api.disableMarqueeZoom();
+                    var selectedNodes = cy.nodes(":selected");
+                    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    revertBorder(nodesWithHiddenNeighbor);
+                    api.showHiddenNeighbors(selectedNodes); 
+                    nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+		            changeBorder(nodesWithHiddenNeighbor); 
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
