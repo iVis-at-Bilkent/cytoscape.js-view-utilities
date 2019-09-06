@@ -68,7 +68,7 @@ Unhides given eles.
 
 `instance.showHiddenNeighbors(eles)`
 
-Unhides hidden neigbors of given eles.
+Unhides hidden neigbors of given eles. Note that compound nodes are not respected as expected.
 
 `instance.zoomToSelected(eles)`
 
