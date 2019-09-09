@@ -11,7 +11,9 @@
 
         <!-- for testing with local version of cytoscape.js -->
         <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-        <script src="https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/master/cytoscape-cose-bilkent.js"></script>
+        <script src="https://unpkg.com/layout-base/layout-base.js"></script>
+        <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+        <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
         <script src="lib/cytoscape-undo-redo.js"></script>
 
         <script src="cytoscape-view-utilities.js"></script>
@@ -125,6 +127,7 @@
                         {
                             selector: 'edge',
                             style: {
+                                'curve-style' : 'straight',
                                 'target-arrow-shape': 'triangle'
                             }
                         },
@@ -257,6 +260,12 @@
                 });
 
                 var ur = cy.undoRedo();
+                
+                var layout = cy.layout({
+                    name: 'cose-bilkent',
+                    randomize: false,
+                    fit: false
+                });                
 
                 function thickenBorder(eles){
                     eles.forEach(function( ele ){
@@ -289,6 +298,9 @@
                         .nodes().difference(nodesToHide).difference(cy.nodes("[thickBorder]"));
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
                     cy.undoRedo().do("batch", actions);
+                    if(document.getElementById('layout').checked){
+                      layout.run();
+                    }
                 });
                 
                 document.getElementById("showAll").addEventListener("click", function () {
@@ -298,6 +310,9 @@
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
                     actions.push({name: "show", param: cy.elements()});
                     ur.do("batch", actions);
+                    if(document.getElementById('layout').checked){
+                      layout.run();
+                    }                    
                 });
                 
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
@@ -329,6 +344,9 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});
 
                     cy.undoRedo().do("batch", actions);
+                    if(document.getElementById('layout').checked){
+                      layout.run();
+                    }
                 });
                 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {

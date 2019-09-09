@@ -10,7 +10,9 @@
 
         <!-- for testing with local version of cytoscape.js -->
         <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-        <script src="https://raw.githack.com/cytoscape/cytoscape.js-cose-bilkent/master/cytoscape-cose-bilkent.js"></script>
+        <script src="https://unpkg.com/layout-base/layout-base.js"></script>
+        <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+        <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
         <script src="cytoscape-view-utilities.js"></script>
 
         <style>
@@ -313,7 +315,7 @@
                     revertBorder(nodesWithHiddenNeighbor);
                     api.showHiddenNeighbors(selectedNodes); 
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-		            changeBorder(nodesWithHiddenNeighbor); 
+                    changeBorder(nodesWithHiddenNeighbor); 
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
