@@ -72,6 +72,7 @@ var viewUtilities = function (cy, options) {
   // Section hide-show
   // hide given eles
   instance.hide = function (eles) {
+    //eles = eles.filter("node")
     eles = eles.filter(":visible");
     eles = eles.union(eles.connectedEdges());
 
@@ -89,9 +90,21 @@ var viewUtilities = function (cy, options) {
   };
 
   // unhide given eles
-  instance.show = function (eles) {
+  instance.show = function (eles) {   
     eles = eles.not(":visible");
-    eles = eles.union(eles.connectedEdges());
+
+
+   
+    var connectedEdges = eles.connectedEdges(function(edge){
+     
+       if( (edge.source().visible() || eles.contains(edge.source())) && (edge.target().visible() || eles.contains(edge.target())) ){
+         return true;
+       }else{
+         return false;
+       }
+     
+    });    
+    eles = eles.union(connectedEdges); 
 
     eles.unselect();
 
@@ -107,7 +120,10 @@ var viewUtilities = function (cy, options) {
   };
 
   // Section highlight
-
+  instance.showHiddenNeighbors = function (eles) {  
+    
+    return this.show(getWithNeighbors(eles));
+  };
   // Highlights eles
   instance.highlight = function (args) {
     if (args.option == null)

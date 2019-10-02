@@ -3,9 +3,9 @@
   'use strict';
 
   // registers the extension on a cytoscape lib ref
-  var register = function (cytoscape, $) {
+  var register = function (cytoscape) {
 
-    if (!cytoscape || !$) {
+    if (!cytoscape) {
       return;
     } // can't register if cytoscape unspecified
 
@@ -38,23 +38,28 @@
       edge: {
         highlighted: {
           'line-color': '#0B9BCD',    //blue
-          'width' : 3
+          'source-arrow-color': '#0B9BCD',
+          'target-arrow-color': '#0B9BCD'
         },
         highlighted2: {
           'line-color': '#04F06A',   //green
-          'width' : 3
+          'source-arrow-color': '#04F06A',
+          'target-arrow-color': '#04F06A'          
         },
         highlighted3: {
           'line-color': '#F5E663',    //yellow
-          'width' : 3
+          'source-arrow-color': '#F5E663',
+          'target-arrow-color': '#F5E663'            
         },
         highlighted4: {
           'line-color': '#BF0603',    //red
-          'width' : 3
+          'source-arrow-color': '#BF0603',
+          'target-arrow-color': '#BF0603'          
         },
         selected: {
           'line-color': 'black',
-          'width' : 3
+          'source-arrow-color': 'black',
+          'target-arrow-color': 'black' 
         }
       },
       setVisibilityOnHide: false, // whether to set visibility on hide/show
@@ -73,13 +78,6 @@
     cytoscape('core', 'viewUtilities', function (opts) {
       var cy = this;
 
-      // If 'get' is given as the param then return the extension instance
-      if (opts === 'get') {
-        return getScratch(cy).instance;
-      }
-
-      $.extend(true, options, opts);
-
       function getScratch(eleOrCy) {
         if (!eleOrCy.scratch("_viewUtilities")) {
           eleOrCy.scratch("_viewUtilities", {});
@@ -87,21 +85,58 @@
 
         return eleOrCy.scratch("_viewUtilities");
       }
+      
+      // If 'get' is given as the param then return the extension instance
+      if (opts === 'get') {
+        return getScratch(cy).instance;
+      }
+      
+      /**
+      * Deep copy or merge objects - replacement for jQuery deep extend
+      * Taken from http://youmightnotneedjquery.com/#deep_extend
+      * and bug related to deep copy of Arrays is fixed.
+      * Usage:Object.extend({}, objA, objB)
+      */
+      function extendOptions(out) {
+        out = out || {};
 
+        for (var i = 1; i < arguments.length; i++) {
+          var obj = arguments[i];
+
+          if (!obj)
+            continue;
+
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              if (Array.isArray(obj[key])) {
+                out[key] = obj[key].slice();
+              } else if (typeof obj[key] === 'object') {
+                out[key] = extendOptions(out[key], obj[key]);
+              } else {
+                out[key] = obj[key];
+              }
+            }
+          }
+        }
+
+        return out;
+      };
+
+      options = extendOptions({}, options, opts);
+
+      // create a view utilities instance
+      var instance = viewUtilities(cy, options);
+
+      if (cy.undoRedo) {
+        var ur = cy.undoRedo(null, true);
+        undoRedo(cy, ur, instance);
+      }
+
+      // set the instance on the scratch pad
+      getScratch(cy).instance = instance;
 
       if (!getScratch(cy).initialized) {
         getScratch(cy).initialized = true;
-
-        // create a view utilities instance
-        var instance = viewUtilities(cy, options);
-
-        if (cy.undoRedo) {
-          var ur = cy.undoRedo(null, true);
-          undoRedo(cy, ur, instance);
-        }
-
-        // set the instance on the scratch pad
-        getScratch(cy).instance = instance;
 
         var shiftKeyDown = false;
         document.addEventListener('keydown', function(event){
@@ -166,8 +201,8 @@
     });
   }
 
-  if (typeof cytoscape !== 'undefined' && typeof $ !== "undefined") { // expose to global cytoscape (i.e. window.cytoscape)
-    register(cytoscape, $);
+  if (typeof cytoscape !== 'undefined') { // expose to global cytoscape (i.e. window.cytoscape)
+    register(cytoscape);
   }
 
 })();

@@ -66,6 +66,10 @@ Hides given eles.
 
 Unhides given eles.
 
+`instance.showHiddenNeighbors(eles)`
+
+Unhides hidden neigbors of given eles. Note that compound nodes are not respected as expected.
+
 `instance.zoomToSelected(eles)`
 
 Zoom to selected eles.
@@ -107,23 +111,28 @@ Disables marquee zoom.
           edge: {
             highlighted: {
               'line-color': '#0B9BCD',    //blue
-              'width' : 3
+              'source-arrow-color': '#0B9BCD',
+              'target-arrow-color': '#0B9BCD'
             },
             highlighted2: {
               'line-color': '#04F06A',   //green
-              'width' : 3
+              'source-arrow-color': '#04F06A',
+              'target-arrow-color': '#04F06A'
             },
             highlighted3: {
               'line-color': '#F5E663',    //yellow
-              'width' : 3
+              'source-arrow-color': '#F5E663',
+              'target-arrow-color': '#F5E663'
             },
             highlighted4: {
               'line-color': '#BF0603',    //red
-              'width' : 3
+              'source-arrow-color': '#BF0603',
+              'target-arrow-color': '#BF0603'
             },
             selected: {
               'line-color': 'black',
-              'width' : 3
+              'source-arrow-color': 'black',
+              'target-arrow-color': 'black'
             }
           },
           setVisibilityOnHide: false, // whether to set visibility on hide/show
@@ -153,8 +162,7 @@ Disables marquee zoom.
 
 ## Dependencies
 
- * Cytoscape.js ^2.7.0
- * jQuery ^1.7.0 || ^2.0.0 || ^3.0.0
+ * Cytoscape.js ^3.2.0
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 
@@ -170,10 +178,9 @@ Download the library:
 CommonJS:
 ```js
 var cytoscape = require('cytoscape');
-var jquery = require('jquery');
 var viewUtilities = require('cytoscape-view-utilities');
 
-viewUtilities( cytoscape, jquery ); // register extension
+viewUtilities( cytoscape ); // register extension
 ```
 
 AMD:
@@ -195,7 +202,7 @@ This project is set up to automatically be published to npm and bower.  To publi
 1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git`
 
 ## Team
-  * [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  * [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), [Hasan Balci](https://github.com/hasanbalci), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 

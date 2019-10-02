@@ -6,12 +6,13 @@
 
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 
-        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
         <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
         <!-- for testing with local version of cytoscape.js -->
         <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
-        <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/2.0.4/cytoscape-cose-bilkent.js"></script>
+        <script src="https://unpkg.com/layout-base/layout-base.js"></script>
+        <script src="https://unpkg.com/cose-base/cose-base.js"></script>
+        <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
         <script src="cytoscape-view-utilities.js"></script>
 
         <style>
@@ -50,7 +51,7 @@
               font-size: 15px;
               left: 5px;
               -webkit-user-select: none;
-              -moz-user-select: none;          'border-color': 'purple'
+              -moz-user-select: none;     
               -ms-user-select: none;
               user-select: none;
             }
@@ -80,7 +81,7 @@
             }
             /* When the radio button is checked, add a blue background */
             .container input:checked ~ .checkmark {
-                    background-color: #000          'border-color': 'purple'000;
+                    background-color: #000   
             }
             /* Create the indicator (the dot/circle - hidden when not checked) */
             .checkmark:after {
@@ -122,37 +123,42 @@
                         {
                             selector: 'edge',
                             style: {
+                                'curve-style' : 'straight',
                                 'target-arrow-shape': 'triangle'
                             }
                         },
                         {
                             selector: 'edge:selected',
                             style: {
-                                            'line-color': 'black'
+                                'line-color': 'black',
+                                'source-arrow-color': 'black',
+                                'target-arrow-color': 'black', 
                             }
                         },
                         {
                             selector: 'node:selected',
                             style: {
-                                            'border-color': 'black',
-                                            'border-width': '3px',
-                                            'background-color': 'lightgrey'
+                                'border-color': 'black',
+                                'border-width': '3px',
+                                'background-color': 'lightgrey'
                             }
                         },
                         {
                             selector: 'node:parent',
                             style: {
-                                            'background-color': 'lightgrey'
+                                'background-color': 'lightgrey'
                             }
                         }
                     ],
+                    wheelSensitivity: 0.2,
 
                     elements: {
                         nodes: [
+                            
                             { data: { id: 'n1', name: 'n1' } },
-                            { data: { id: 'n2', name: 'n2', parent: "n1"} },
-                            { data: { id: 'n3', name: 'n3', parent: "n1" } },
-                            { data: { id: 'n4', name: 'n4', parent: "n1" } },
+                            { data: { id: 'n2', name: 'n2' } },
+                            { data: { id: 'n3', name: 'n3' } },
+                            { data: { id: 'n4', name: 'n4' } },
                             { data: { id: 'n5', name: 'n5' } },
                             { data: { id: 'n6', name: 'n6' } },
                             { data: { id: 'n7', name: 'n7' } },
@@ -166,43 +172,95 @@
                             { data: { id: 'n15', name: 'n15' } },
                             { data: { id: 'n16', name: 'n16' } },
                             { data: { id: 'n17', name: 'n17' } },
-                            { data: { id: 'n18', name: 'n18' } },
-                            { data: { id: 'n19', name: 'n19' } },
-                            { data: { id: 'n20', name: 'n20' } },
-                            { data: { id: 'n21', name: 'n21' } },
                         ],
                         edges: [
+                            
+                            { data: { source: "n1", target: "n2" } },
+                            { data: { source: 'n1', target: 'n3' } },
                             { data: { source: 'n2', target: 'n3' } },
-                            { data: { source: 'n4', target: 'n3' } },
-                            { data: { source: "n3", target: "n5" } },
+                            { data: { source: "n3", target: "n4" } },
+                            { data: { source: "n4", target: "n5" } },
+                            { data: { source: 'n3', target: 'n6' } },
+                            { data: { source: 'n2', target: 'n7' } },
+                            { data: { source: "n3", target: "n7" } },
                             { data: { source: "n5", target: "n6" } },
-                            { data: { source: 'n5', target: 'n7' } },
                             { data: { source: 'n6', target: 'n7' } },
-                            { data: { source: "n7", target: "n8" } },
+                            { data: { source: 'n6', target: 'n8' } },
                             { data: { source: "n8", target: "n9" } },
-                            { data: { source: 'n7', target: 'n10' } },
-                            { data: { source: 'n6', target: 'n11' } },
-                            { data: { source: "n7", target: "n11" } },
-                            { data: { source: "n9", target: "n10" } },
-                            { data: { source: 'n10', target: 'n11' } },
-                            { data: { source: 'n10', target: 'n12' } },
-                            { data: { source: "n12", target: "n13" } },
-                            { data: { source: "n12", target: "n14" } },
-                            { data: { source: "n12", target: "n15" } },
+                            { data: { source: "n8", target: "n10" } },
+                            { data: { source: "n8", target: "n11" } },
+                            { data: { source: "n9", target: "n11" } },
+                            { data: { source: 'n11', target: 'n12' } },
+                            { data: { source: 'n11', target: 'n13' } },
+                            { data: { source: "n11", target: "n14" } },
                             { data: { source: "n13", target: "n15" } },
+                            { data: { source: 'n13', target: 'n16' } },
                             { data: { source: 'n15', target: 'n16' } },
-                            { data: { source: 'n15', target: 'n17' } },
-                            { data: { source: "n15", target: "n18" } },
-                            { data: { source: "n17", target: "n19" } },
-                            { data: { source: 'n17', target: 'n20' } },
-                            { data: { source: 'n19', target: 'n20' } },
-                            { data: { source: "n19", target: "n21" } }
+                            { data: { source: "n15", target: "n17" } }
                         ]
                     }
                 });
 
 
                 var api = cy.viewUtilities({
+                    node: {
+                        highlighted: {
+                        'border-color': '#0B9BCD',  //blue
+                        'border-width': 3
+                        },
+                        highlighted2: {
+                        'border-color': '#04F06A',  //green
+                        'border-width': 3
+                        },
+                        highlighted3: {
+                        'border-color': '#F5E663',   //yellow
+                        'border-width': 3
+                        },
+                        highlighted4: {
+                        'border-color': '#BF0603',    //red
+                        'border-width': 3
+                        },
+                        selected: {
+                        'border-color': 'black',
+                        'border-width': 3,
+                        'background-color': 'lightgrey'
+                        }
+                    },
+                    edge: {
+                        highlighted: {
+                          'line-color': '#0B9BCD',    //blue
+                          'source-arrow-color': '#0B9BCD',
+                          'target-arrow-color': '#0B9BCD',
+                          'width' : 3
+                        },
+                        highlighted2: {
+                          'line-color': '#04F06A',   //green
+                          'source-arrow-color': '#04F06A',
+                          'target-arrow-color': '#04F06A',          
+                          'width' : 3
+                        },
+                        highlighted3: {
+                          'line-color': '#F5E663',    //yellow
+                          'source-arrow-color': '#F5E663',
+                          'target-arrow-color': '#F5E663',             
+                          'width' : 3
+                        },
+                        highlighted4: {
+                          'line-color': '#BF0603',    //red
+                          'source-arrow-color': '#BF0603',
+                          'target-arrow-color': '#BF0603',           
+                          'width' : 3
+                        },
+                        selected: {
+                          'line-color': 'black',
+                          'source-arrow-color': 'black',
+                          'target-arrow-color': 'black', 
+                          'width' : 3
+                        }
+                    },
+                    setVisibilityOnHide: false, // whether to set visibility on hide/show
+                    setDisplayOnHide: true, // whether to set display on hide/show
+                    zoomAnimationDuration: 1500, //default duration for zoom animation speed
                     neighbor: function(node){
                         return node.closedNeighborhood();
                     },
@@ -228,10 +286,10 @@
                   return eles;
                 }
 
-                $("#hide").click(function () {
+                document.getElementById("hide").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
-                    //thinBorder(nodesWithHiddenNeighbor);
+                    revertBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     changeBorder(nodesWithHiddenNeighbor);
@@ -239,8 +297,8 @@
                       layout.run();
                     }
                 });
-
-                $("#showAll").click(function () {
+                
+                document.getElementById("showAll").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -250,32 +308,35 @@
                     }
                 });
 
-                $("#showHiddenNeighbors").click(function () {
+                document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
-                    api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
+                    api.showHiddenNeighbors(selectedNodes); 
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    changeBorder(nodesWithHiddenNeighbor); 
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
                 });
 
-                $('#zoomToSelected').click( function(){
+                document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
-                })
+                });
 
-                $('#marqueeZoom').click( function(){
+                document.getElementById("marqueeZoom").addEventListener("click", function () {
+                    //document.getElementById("cy").style.cursor ="crosshair";
                     api.enableMarqueeZoom();
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
-                })
+                });
 
                 var tappedBefore;
                 cy.on('tap', 'node', function (event) {
@@ -293,10 +354,20 @@
                 });
 
                 cy.on('doubleTap', 'node', function (event) {
+                    /*
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.nodes(":selected").neighborhood().union(cy.nodes(":selected").neighborhood().parent()));
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    changeBorder(nodesWithHiddenNeighbor);
+                    */
+                    api.disableMarqueeZoom();
+                    var selectedNodes = cy.nodes(":selected");
+                    var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+                    revertBorder(nodesWithHiddenNeighbor);
+                    api.showHiddenNeighbors(selectedNodes); 
+                    nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
+		            changeBorder(nodesWithHiddenNeighbor); 
                     if(document.getElementById('layout').checked){
                       layout.run();
                     }
@@ -323,25 +394,25 @@
                     return option;
                 }
 
-                $("#highlightNeighbors").click(function () {
+                document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlightNeighbors({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-								$("#highlightElements").click(function () {
+                document.getElementById("highlightElements").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
                       api.highlight({eles: cy.$(":selected"), option: chooseHighlightColor()});
                 });
 
-								$("#removeSelectedHighlights").click(function () {
+                document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
 										if(cy.$(":selected").length > 0)
                     	api.removeHighlights(cy.$(":selected"));
                 });
 
-                $("#removeAllHighlights").click(function () {
+                document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.removeHighlights();
                 });
@@ -377,10 +448,16 @@
             <b id="removeAllHighlights" style="cursor: pointer; color: brown">Remove All Highlights</b> <br/><br/>
             <b id="zoomToSelected" style="cursor: pointer; color: brown">Zoom to Selected</b><br/><br/>
             <b id="marqueeZoom" style="cursor: pointer; color: brown">Marquee Zoom</b>
-            <b>Shift + drag</b> to specify region<br/><br/>
-            <b>Shift + taphold</b> to select neighbors<br/><br/>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
+            <br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
-            <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked"><br>
+            <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
+            <br/><br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + taphold to select neighbors</span>
+
+          
+           
         </div>
         <div id="cy"></div>
 
