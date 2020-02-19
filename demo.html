@@ -46,14 +46,14 @@
             .topnav .container {
 
               position: relative;
-              padding: 14px;
+              padding: 10px;
               cursor: pointer;
-              font-size: 15px;
               left: 5px;
               -webkit-user-select: none;
               -moz-user-select: none;     
               -ms-user-select: none;
               user-select: none;
+              display: flex;
             }
             /* Hide the browser's default radio button */
             .topnav .container input {
@@ -103,7 +103,61 @@
                     border-radius: 50%;
                     background: white;
             }
-        </style>
+
+            /*/* creating color boxes of highlighting colors*/
+            /*.topnav input[type="color"] {
+              float: left;
+              width: 50px;
+              height: 30px;
+              margin: 5px;
+              border: 2px solid white;
+              border-style: solid;
+              cursor: pointer;
+            }
+*/
+            ./*topnav input[type="color"]:hover
+            {
+               border: 2px solid black;
+            }*/
+
+            .topnav button {
+                display: inline-block;
+                  background-color: #7b38d8;
+                  border-radius: 10px;
+                  border: 4px double #cccccc;
+                  color: #eeeeee;
+                  text-align: center;
+                  font-size: 28px;
+                  padding: 20px;
+                  width: 200px;
+                  transition: all 0.5s;
+                  cursor: pointer;
+                  margin-left: 10px;
+            }
+
+            .topnav c {
+              float: left;
+              width: 30px;
+              height: 20px;
+              border: 2px solid white;
+              margin-left: 10px;
+              margin-right: 40px;
+            }
+/*
+            .color1 {
+              background: #0B9BCD;
+            }
+            .color2 {
+              background: #04F06A;
+            }
+            .color3 {
+              background: #F5E663;
+            }
+            .color4 {
+              background: #BF0603;
+            }*/
+
+            </style>
         <script>
 
             document.addEventListener("DOMContentLoaded", function(){
@@ -394,6 +448,91 @@
                     return option;
                 }
 
+                function changeHighlightColor(option, color) {
+                    switch(option) {
+                        case 1:
+                            cy.viewUtilities({
+                                node: {
+                                    highlighted: {
+                                    'border-color': color
+                                } },
+                                edge: {
+                                    highlighted: {
+                                      'line-color': color,  
+                                      'source-arrow-color': color,
+                                      'target-arrow-color': color,
+                                      'width' : 3
+                                    }
+                                } } );
+                            break;
+                    case 2:
+                        cy.viewUtilities({
+                            node: {
+                                highlighted2: {
+                                'border-color': color
+                            } },
+                                edge: {
+                                    highlighted2: {
+                                      'line-color': color,  
+                                      'source-arrow-color': color,
+                                      'target-arrow-color': color,
+                                      'width' : 3
+                                    }
+                                }  } );
+                        break;
+                    case 3:
+                        cy.viewUtilities({
+                            node: {
+                                highlighted3: {
+                                'border-color': color
+                            } },
+                                edge: {
+                                    highlighted3: {
+                                      'line-color': color,  
+                                      'source-arrow-color': color,
+                                      'target-arrow-color': color,
+                                      'width' : 3
+                                    }
+                                }  } );
+                        break;
+                    case 4:
+                        cy.viewUtilities({
+                            node: {
+                                highlighted4: {
+                                'border-color': color
+                            } },
+                                edge: {
+                                    highlighted4: {
+                                      'line-color': color,  
+                                      'source-arrow-color': color,
+                                      'target-arrow-color': color,
+                                      'width' : 3
+                                    }
+                                }  } );
+                        break;
+
+                    }
+                }
+
+                function rgb2hex(rgb) {
+                    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+                    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                    function hex(x) {
+                        return ("0" + parseInt(x).toString(16)).slice(-2);
+                    }
+                    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+                }
+
+                function hex2rgb(hex) {
+                  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                  return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                  } : null;
+                }
+
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if(cy.$(":selected").length > 0)
@@ -416,6 +555,56 @@
                     api.disableMarqueeZoom();
                     api.removeHighlights();
                 });
+
+                document.getElementById("color1").onchange = function () {
+                    var value = hex2rgb(document.getElementById("color1").value);
+                    document.getElementById("color1Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
+                    changeHighlightColor(1, document.getElementById("color1").value);
+
+                };
+
+                document.getElementById("color2").onchange = function () {
+                    var value = hex2rgb(document.getElementById("color2").value);
+                     document.getElementById("color2Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
+                     changeHighlightColor(2, document.getElementById("color2").value);
+                };
+
+                document.getElementById("color3").onchange = function () {
+                    var value = hex2rgb(document.getElementById("color3").value);
+                     document.getElementById("color3Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
+                     changeHighlightColor(3, document.getElementById("color3").value);
+                };
+
+                document.getElementById("color4").onchange = function () {
+                    var value = hex2rgb(document.getElementById("color4").value);
+                     document.getElementById("color4Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
+                     changeHighlightColor(4, document.getElementById("color4").value);
+                };
+
+                document.getElementById("changeColor1").addEventListener("click", function () {
+                     document.getElementById("color1").focus();
+                      document.getElementById("color1").value = rgb2hex(document.getElementById("color1Box").style.background);
+                      document.getElementById("color1").click();
+                      
+                });
+
+                document.getElementById("changeColor2").addEventListener("click", function () {
+                     document.getElementById("color2").focus();
+                      document.getElementById("color2").value = rgb2hex(document.getElementById("color2Box").style.background);
+                      document.getElementById("color2").click();
+                });
+
+                document.getElementById("changeColor3").addEventListener("click", function () {
+                     document.getElementById("color3").focus();
+                      document.getElementById("color3").value = rgb2hex(document.getElementById("color3Box").style.background);
+                      document.getElementById("color3").click();
+                });
+
+                document.getElementById("changeColor4").addEventListener("click", function () {
+                     document.getElementById("color4").focus();
+                      document.getElementById("color4").value = rgb2hex(document.getElementById("color4Box").style.background);
+                      document.getElementById("color4").click();
+                });
             });
         </script>
     </head>
@@ -424,23 +613,40 @@
         <h1>cytoscape.js-view-utilities demo</h1>
         <div class="topnav">
             <b id="hide" style="cursor: pointer; color: brown">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: brown">Show All</b> <br/><br/>
-            <b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
-            <label class="container"  style="color: #0B9BCD">Blue
-              <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
+            <b id="highlightColor">Highlight Color:</b>
+
+            <label class="container">
+                <input type="radio" name="radiobutton" id="highlight1" value="highlight1" checked="checked">      
+                <c id = "color1Box" style = "background: #0B9BCD"></c>
+                <input type="color" id="color1" tabindex=-1 class="hidden">
+                <button type="button" name="changeColorButton1" id ="changeColor1" >Change color</button>         
               <span class="checkmark"></span>
-            </label> <br/><br/>
-            <label class="container" style="color: green">Green
+            </label>
+
+            <label class="container">
               <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
+              <c id = "color2Box" style = "background: #04F06A"></c>
+              <input type="color" id="color2" tabindex=-1 class="hidden">
+              <button type="button" name="changeColorButton2" id ="changeColor2" >Change color</button>  
               <span class="checkmark"></span>
-            </label>  <br/><br/>
-            <label class="container" style="color: #F8C200">Yellow
+            </label>
+
+            <label class="container">
               <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
+              <c id = "color3Box" style = "background: #F5E663"></c>
+              <input type="color" id="color3" tabindex=-1 class="hidden">
+              <button type="button" name="changeColorButton3" id ="changeColor3" >Change color</button>  
               <span class="checkmark"></span>
-            </label> <br/><br/>
-            <label class="container" style="color: #BF0603">Red
+            </label>
+
+            <label class="container">
               <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
+              <c id = "color4Box" style = "background: #BF0603"></c>
+              <input type="color" id="color4" tabindex=-1 class="hidden">
+              <button type="button" name="changeColorButton4" id ="changeColor4" >Change color</button>  
               <span class="checkmark"></span>
-            </label> <br/><br/>
+            </label>
+
             <b id="highlightElements" style="cursor: pointer; color: brown">Highlight Elements</b> <br/><br/>
             <b id="highlightNeighbors" style="cursor: pointer; color: brown">Highlight Neighbors</b><br/><br/>
             <b id="showHiddenNeighbors" style="cursor: pointer; color: brown">Show Hidden Neighbors of Selected</b> <br/><br/>
