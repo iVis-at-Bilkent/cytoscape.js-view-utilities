@@ -449,69 +449,18 @@
                 }
 
                 function changeHighlightColor(option, color) {
-                    switch(option) {
-                        case 1:
-                            cy.viewUtilities({
-                                node: {
-                                    highlighted: {
-                                    'border-color': color
-                                } },
-                                edge: {
-                                    highlighted: {
-                                      'line-color': color,  
-                                      'source-arrow-color': color,
-                                      'target-arrow-color': color,
-                                      'width' : 3
-                                    }
-                                } } );
-                            break;
-                    case 2:
-                        cy.viewUtilities({
-                            node: {
-                                highlighted2: {
-                                'border-color': color
-                            } },
-                                edge: {
-                                    highlighted2: {
-                                      'line-color': color,  
-                                      'source-arrow-color': color,
-                                      'target-arrow-color': color,
-                                      'width' : 3
-                                    }
-                                }  } );
-                        break;
-                    case 3:
-                        cy.viewUtilities({
-                            node: {
-                                highlighted3: {
-                                'border-color': color
-                            } },
-                                edge: {
-                                    highlighted3: {
-                                      'line-color': color,  
-                                      'source-arrow-color': color,
-                                      'target-arrow-color': color,
-                                      'width' : 3
-                                    }
-                                }  } );
-                        break;
-                    case 4:
-                        cy.viewUtilities({
-                            node: {
-                                highlighted4: {
-                                'border-color': color
-                            } },
-                                edge: {
-                                    highlighted4: {
-                                      'line-color': color,  
-                                      'source-arrow-color': color,
-                                      'target-arrow-color': color,
-                                      'width' : 3
-                                    }
-                                }  } );
-                        break;
-
-                    }
+                  if (option == 1) {
+                    option = '';
+                  }
+                  var c = 'highlighted' + option;
+                  var node = {};
+                  node[c] = { 'border-color': color };
+                  var edge = {};
+                  edge[c] = { 'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width': 3 };
+                  cy.viewUtilities({
+                    node: node,
+                    edge: edge
+                  });
                 }
 
                 function rgb2hex(rgb) {
