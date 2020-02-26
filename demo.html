@@ -143,23 +143,14 @@
               margin-left: 10px;
               margin-right: 40px;
             }
-/*
-            .color1 {
-              background: #0B9BCD;
-            }
-            .color2 {
-              background: #04F06A;
-            }
-            .color3 {
-              background: #F5E663;
-            }
-            .color4 {
-              background: #BF0603;
-            }*/
 
-            </style>
+            .m-1{
+              margin: 1px;
+              padding: 2px;
+            }
+
+        </style>
         <script>
-
             document.addEventListener("DOMContentLoaded", function(){
                 var cy = window.cy = cytoscape({
                     container: document.getElementById('cy'),
@@ -255,7 +246,6 @@
                     }
                 });
 
-
                 var api = cy.viewUtilities({
                     node: {
                         highlighted: {
@@ -333,6 +323,7 @@
                     });
                     return eles;
                 }
+                
                 function revertBorder(eles){
                     eles.forEach(function( ele ){
                         ele.css("background-color", 'lightgrey');
@@ -428,39 +419,12 @@
                 });
 
                 function chooseHighlightColor(){
-                    var option = "";
-                    if(document.getElementById('highlight1').checked)
-                    {
-                            option = "highlighted";
-                    }
-                    else if(document.getElementById('highlight2').checked)
-                    {
-                            option = "highlighted2";
-                    }
-                    else if(document.getElementById('highlight3').checked)
-                    {
-                            option = "highlighted3";
-                    }
-                    else if(document.getElementById('highlight4').checked)
-                    {
-                            option = "highlighted4";
-                    }
-                    return option;
-                }
-
-                function changeHighlightColor(option, color) {
-                  if (option == 1) {
-                    option = '';
+                  var idx = document.getElementById('highlightColors').selectedIndex;
+                  var option = 'highlighted';
+                  if (idx > 0) {
+                    option = option + (idx + 1);
                   }
-                  var c = 'highlighted' + option;
-                  var node = {};
-                  node[c] = { 'border-color': color };
-                  var edge = {};
-                  edge[c] = { 'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width': 3 };
-                  cy.viewUtilities({
-                    node: node,
-                    edge: edge
-                  });
+                  return option;
                 }
 
                 function rgb2hex(rgb) {
@@ -505,56 +469,53 @@
                     api.removeHighlights();
                 });
 
-                document.getElementById("color1").onchange = function () {
-                    var value = hex2rgb(document.getElementById("color1").value);
-                    document.getElementById("color1Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
-                    changeHighlightColor(1, document.getElementById("color1").value);
-
-                };
-
-                document.getElementById("color2").onchange = function () {
-                    var value = hex2rgb(document.getElementById("color2").value);
-                     document.getElementById("color2Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
-                     changeHighlightColor(2, document.getElementById("color2").value);
-                };
-
-                document.getElementById("color3").onchange = function () {
-                    var value = hex2rgb(document.getElementById("color3").value);
-                     document.getElementById("color3Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
-                     changeHighlightColor(3, document.getElementById("color3").value);
-                };
-
-                document.getElementById("color4").onchange = function () {
-                    var value = hex2rgb(document.getElementById("color4").value);
-                     document.getElementById("color4Box").style.background = "rgb("+ value.r + ", " + value.g + ", " + value.b + ")";
-                     changeHighlightColor(4, document.getElementById("color4").value);
-                };
-
-                document.getElementById("changeColor1").addEventListener("click", function () {
-                     document.getElementById("color1").focus();
-                      document.getElementById("color1").value = rgb2hex(document.getElementById("color1Box").style.background);
-                      document.getElementById("color1").click();
-                      
+                document.getElementById('highlightColors').addEventListener('change', function(e) {
+                  document.getElementById('colorShower').style.background = e.target.value;
                 });
 
-                document.getElementById("changeColor2").addEventListener("click", function () {
-                     document.getElementById("color2").focus();
-                      document.getElementById("color2").value = rgb2hex(document.getElementById("color2Box").style.background);
-                      document.getElementById("color2").click();
+                document.getElementById('colorCountInp').addEventListener('change', function(e) {
+                  api.changeNumColor(e.target.value);
+                  addHighlightColorOptions();
                 });
 
-                document.getElementById("changeColor3").addEventListener("click", function () {
-                     document.getElementById("color3").focus();
-                      document.getElementById("color3").value = rgb2hex(document.getElementById("color3Box").style.background);
-                      document.getElementById("color3").click();
+                document.getElementById('colorChangerBtn').addEventListener('click', function () {
+                  document.getElementById('colorInp').focus();
+                  document.getElementById('colorInp').value = rgb2hex(document.getElementById("colorShower").style.background);
+                  document.getElementById('colorInp').click();
                 });
 
-                document.getElementById("changeColor4").addEventListener("click", function () {
-                     document.getElementById("color4").focus();
-                      document.getElementById("color4").value = rgb2hex(document.getElementById("color4Box").style.background);
-                      document.getElementById("color4").click();
+                document.getElementById('colorInp').addEventListener('change', function (e) {
+                  var color = e.target.value;
+                  var idx = document.getElementById('highlightColors').selectedIndex;
+                  api.changeHighlightColor(idx, color);
+                  document.getElementById('colorShower').style.background = color;
+
+                  var opt = document.getElementById('highlightColors').options[idx];
+                  opt.value =  color;
+                  opt.text = color;
                 });
+
+                addHighlightColorOptions(); // thanks to hoisting
+                function addHighlightColorOptions() {
+                  var colors = api.getHighlightColors();
+                  
+                  document.getElementById('highlightColors').innerHTML = '';
+
+                  for (var i = 0; i < colors.length; i++) {
+                    var o = document.createElement('option');
+                    o.text = colors[i];
+                    o.value = colors[i];
+                    if (i == 0) {
+                      document.getElementById('colorShower').style.background = colors[i];
+                      o.selected = 'selected';
+                    }
+                    document.getElementById('highlightColors').appendChild(o);
+                  }
+                }
+                
             });
+
+            
         </script>
     </head>
 
@@ -562,39 +523,20 @@
         <h1>cytoscape.js-view-utilities demo</h1>
         <div class="topnav">
             <b id="hide" style="cursor: pointer; color: brown">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: brown">Show All</b> <br/><br/>
+
+            <b id="highlightColor">Highlight Color Count:</b>
+            <div class="m-1">
+              <input type="number" min="4" max="32" id="colorCountInp" value="4">
+          </div>
+
             <b id="highlightColor">Highlight Color:</b>
 
-            <label class="container">
-                <input type="radio" name="radiobutton" id="highlight1" value="highlight1" checked="checked">      
-                <c id = "color1Box" style = "background: #0B9BCD"></c>
-                <input type="color" id="color1" tabindex=-1 class="hidden">
-                <button type="button" name="changeColorButton1" id ="changeColor1" >Change color</button>         
-              <span class="checkmark"></span>
-            </label>
-
-            <label class="container">
-              <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
-              <c id = "color2Box" style = "background: #04F06A"></c>
-              <input type="color" id="color2" tabindex=-1 class="hidden">
-              <button type="button" name="changeColorButton2" id ="changeColor2" >Change color</button>  
-              <span class="checkmark"></span>
-            </label>
-
-            <label class="container">
-              <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
-              <c id = "color3Box" style = "background: #F5E663"></c>
-              <input type="color" id="color3" tabindex=-1 class="hidden">
-              <button type="button" name="changeColorButton3" id ="changeColor3" >Change color</button>  
-              <span class="checkmark"></span>
-            </label>
-
-            <label class="container">
-              <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
-              <c id = "color4Box" style = "background: #BF0603"></c>
-              <input type="color" id="color4" tabindex=-1 class="hidden">
-              <button type="button" name="changeColorButton4" id ="changeColor4" >Change color</button>  
-              <span class="checkmark"></span>
-            </label>
+            <div class="m-1" id="colorShower">
+                <select id="highlightColors">
+                </select>
+                <input type="color" id="colorInp" style="display: none;">
+                <button id="colorChangerBtn">Change Color</button>
+            </div>
 
             <b id="highlightElements" style="cursor: pointer; color: brown">Highlight Elements</b> <br/><br/>
             <b id="highlightNeighbors" style="cursor: pointer; color: brown">Highlight Neighbors</b><br/><br/>
@@ -610,8 +552,6 @@
             <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
             <br/><br/>
             <span style="font-weight: normal !important; font-size: 14px !important;">Shift + taphold to select neighbors</span>
-
-          
            
         </div>
         <div id="cy"></div>
