@@ -72,7 +72,7 @@ var viewUtilities = function (cy, options) {
     for (var i = 0; i < highlightClasses.length; i++) {
       eles.removeClass(highlightClasses[i]);
     }
-    eles.addClass(option);
+    eles.addClass(highlightClasses[option]);
     eles.unselect();
   }
 
@@ -105,8 +105,6 @@ var viewUtilities = function (cy, options) {
   // unhide given eles
   instance.show = function (eles) {
     eles = eles.not(":visible");
-
-
 
     var connectedEdges = eles.connectedEdges(function (edge) {
 
@@ -144,7 +142,7 @@ var viewUtilities = function (cy, options) {
     var option = args.option;
     if (args.option == null) {
       eles = args;
-      option = "";
+      option = 0;
     }
     highlight(eles, option); // Use the helper here
 
@@ -161,7 +159,7 @@ var viewUtilities = function (cy, options) {
     var option = args.option;
     if (args.option == null) {
       eles = args;
-      option = "";
+      option = 0;
     }
 
     return this.highlight({ eles: getWithNeighbors(eles), option: option });

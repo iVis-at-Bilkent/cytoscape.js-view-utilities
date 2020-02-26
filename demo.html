@@ -418,15 +418,6 @@
                     }
                 });
 
-                function chooseHighlightColor(){
-                  var idx = document.getElementById('highlightColors').selectedIndex;
-                  var option = 'highlighted';
-                  if (idx > 0) {
-                    option = option + (idx + 1);
-                  }
-                  return option;
-                }
-
                 function rgb2hex(rgb) {
                     if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
 
@@ -448,14 +439,18 @@
 
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
-                    if(cy.$(":selected").length > 0)
-                      api.highlightNeighbors({eles: cy.$(":selected"), option: chooseHighlightColor()});
+                    if (cy.$(":selected").length > 0) {
+                      var idx = document.getElementById('highlightColors').selectedIndex;
+                      api.highlightNeighbors({ eles: cy.$(":selected"), option: idx });
+                    }
                 });
 
                 document.getElementById("highlightElements").addEventListener("click", function () {
                     api.disableMarqueeZoom();
-                    if(cy.$(":selected").length > 0)
-                      api.highlight({eles: cy.$(":selected"), option: chooseHighlightColor()});
+                    if (cy.$(":selected").length > 0) {
+                      var idx = document.getElementById('highlightColors').selectedIndex;
+                      api.highlight({ eles: cy.$(":selected"), option: idx });
+                    }
                 });
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
