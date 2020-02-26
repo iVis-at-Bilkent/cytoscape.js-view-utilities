@@ -72,7 +72,11 @@ var viewUtilities = function (cy, options) {
     for (var i = 0; i < highlightClasses.length; i++) {
       eles.removeClass(highlightClasses[i]);
     }
-    eles.addClass(highlightClasses[option]);
+    if (typeof option === 'string') {
+      eles.addClass(option);
+    } else {
+      eles.addClass(highlightClasses[option]);
+    }
     eles.unselect();
   }
 
