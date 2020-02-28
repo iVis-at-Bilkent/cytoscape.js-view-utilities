@@ -105,6 +105,11 @@
                 border-radius: 50%;
                 background: white;
             }
+
+            .m-1{
+              margin: 1px;
+              padding: 2px;
+            }
         </style>
 
         <script>
@@ -412,35 +417,14 @@
                     cy.undoRedo().do("batch", actions); */
                 });
 
-                function chooseHighlightColor(){
-                    var option = "";
-                    if(document.getElementById('highlight1').checked)
-                    {
-                            option = "highlighted";
-                    }
-                    else if(document.getElementById('highlight2').checked)
-                    {
-                            option = "highlighted2";
-                    }
-                    else if(document.getElementById('highlight3').checked)
-                    {
-                            option = "highlighted3";
-                    }
-                    else if(document.getElementById('highlight4').checked)
-                    {
-                            option = "highlighted4";
-                    }
-                    return option;
-                }
-
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
-                        ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: chooseHighlightColor()});
+                        ur.do("highlightNeighbors", {eles: cy.$(":selected"), option: document.getElementById('highlightColors').selectedIndex });
                 });
 
                 document.getElementById("highlightElements").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
-                        ur.do("highlight", {eles: cy.$(":selected"), option: chooseHighlightColor()});
+                        ur.do("highlight", {eles: cy.$(":selected"), option: document.getElementById('highlightColors').selectedIndex });
                 });
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
@@ -451,6 +435,61 @@
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     ur.do("removeHighlights");
                 });
+                
+                document.getElementById('highlightColors').addEventListener('change', function(e) {
+                  document.getElementById('colorShower').style.background = e.target.value;
+                });
+
+                document.getElementById('colorCountInp').addEventListener('change', function(e) {
+                  api.changeNumColor(e.target.value);
+                  addHighlightColorOptions();
+                });
+
+                function rgb2hex(rgb) {
+                    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
+
+                    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+                    function hex(x) {
+                        return ("0" + parseInt(x).toString(16)).slice(-2);
+                    }
+                    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+                }
+
+                document.getElementById('colorChangerBtn').addEventListener('click', function () {
+                  document.getElementById('colorInp').focus();
+                  document.getElementById('colorInp').value = rgb2hex(document.getElementById("colorShower").style.background);
+                  document.getElementById('colorInp').click();
+                });
+
+                document.getElementById('colorInp').addEventListener('change', function (e) {
+                  var color = e.target.value;
+                  var idx = document.getElementById('highlightColors').selectedIndex;
+                  api.changeHighlightColor(idx, color);
+                  document.getElementById('colorShower').style.background = color;
+
+                  var opt = document.getElementById('highlightColors').options[idx];
+                  opt.value =  color;
+                  opt.text = color;
+                });
+
+                addHighlightColorOptions(); // thanks to hoisting
+                function addHighlightColorOptions() {
+                  var colors = api.getHighlightColors();
+                  
+                  document.getElementById('highlightColors').innerHTML = '';
+
+                  for (var i = 0; i < colors.length; i++) {
+                    var o = document.createElement('option');
+                    o.text = colors[i];
+                    o.value = colors[i];
+                    if (i == 0) {
+                      document.getElementById('colorShower').style.background = colors[i];
+                      o.selected = 'selected';
+                    }
+                    document.getElementById('highlightColors').appendChild(o);
+                  }
+                  document.getElementById('colorCountInp').value = colors.length;
+                }
 
                 document.addEventListener("keydown", function (e) {
                     if (e.ctrlKey){
@@ -469,23 +508,20 @@
 
         <div class="topnav">
             <b id="hide" style="cursor: pointer; color: darkmagenta">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: darkmagenta">Show All</b> <br/><br/>
-            <b id="highlightColor">Choose Highlight Color:</b> <br/><br/>
-            <label class="container"  style="color: #0B9BCD">Blue
-              <input type="radio" name="radiobutton" id="highlight1" value="highlight1">
-              <span class="checkmark"></span>
-            </label> <br/><br/>
-            <label class="container" style="color: green">Green
-              <input type="radio" name="radiobutton" id="highlight2" value="highlight2">
-              <span class="checkmark"></span>
-            </label>  <br/><br/>
-            <label class="container" style="color: #F8C200">Yellow
-              <input type="radio" name="radiobutton" id="highlight3" value="highlight3">
-              <span class="checkmark"></span>
-            </label> <br/><br/>
-            <label class="container" style="color: #BF0603">Red
-              <input type="radio" name="radiobutton" id="highlight4" value="highlight4">
-              <span class="checkmark"></span>
-            </label> <br/><br/>
+            <b>Highlight Color Count:</b>
+            <div class="m-1">
+              <input type="number" min="4" max="32" id="colorCountInp" value="4">
+            </div>
+
+            <b>Highlight Color:</b>
+            <div class="m-1" id="colorShower">
+                <select id="highlightColors">
+                </select>
+                <input type="color" id="colorInp" style="display: none;">
+                <button id="colorChangerBtn">Change Color</button>
+            </div>
+            <br/>
+
             <b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Elements</b> <br/><br/>
             <b id="highlightNeighbors" style="cursor: pointer; color: darkmagenta">Highlight Neighbors</b><br/><br/>
             <b id="showHiddenNeighbors" style="cursor: pointer; color: darkmagenta">Show Hidden Neighbors of Selected</b> <br/><br/>

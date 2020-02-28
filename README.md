@@ -17,70 +17,59 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 
 ## API
 
-`var instance = cy.viewUtilities(options)`
-
+`var instance = cy.viewUtilities(options)`<br />
+@param options — If not provided, default options will be used. See the below section for default options.
 Initializes the extension and sets options. This can be used to override default options.
 
-An instance has a number of functions available:
+`instance.highlight(args)`<br />
+Highlights eles based on the given arguments.<br />
+@param args — `args = {eles: eles, option: 'highlighted'};` <br />
+`args.eles` is [a cytoscape.js collection](https://js.cytoscape.org/#cy.collection) (collection of elements) to be highlighted. <br />
+`args.option` contains the highlighting color option. It can be the index of the highlight color. Values like 0, 1, 2, ... It can be also be class name for [a cytoscape.js selector](https://js.cytoscape.org/#selectors/group-class-amp-id). Values like 'highlighted', 'highlighted2', 'highlighted3', ... This argument is optional. If you don't specify it, default hightlight color will be used.
 
-`instance.highlight(args)`
-
-Highlights eles based on the given arguments. The arguments can be sent in two different ways.
-
-One way is that the arguments have 2 components: eles and the highlighting option:
-
-`args = {eles: eles, option: "highlighted"};`
-
-args.eles contains the elements to be highlighted.
-
-args.option contains the highlighting color option. It can have the following four values:
-
-"highlighted" --> Blue border
-
-"highlighted2" --> Green border
-
-"highlighted3" --> Yellow border
-
-"highlighted4" --> Red border
-
-The second way is to just send the elements to be highlighted.
-
-`args = cy.$(":selected")`
-
-In this case, the default highlight color of blue is used.
-
-`instance.highlightNeighbors(args)`
-* Aliases: `instance.highlightNeighbours(args)`
-
+`instance.highlightNeighbors(args)`<br />
+@param args — `args = {eles: eles, option: 'highlighted'};` <br />
 Highlights eles' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
-`instance.removeHighlights(eles)`
-
+`instance.removeHighlights(eles)`<br />
+@param eles — elements to remove highlights <br />
 Remove highlights from eles.
 
-`instance.hide(eles)`
-
+`instance.hide(eles)`<br />
+@param eles — elements to hide <br />
 Hides given eles.
 
-`instance.show(eles)`
-
+`instance.show(eles)`<br />
+@param eles — elements to show <br />
 Unhides given eles.
 
-`instance.showHiddenNeighbors(eles)`
-
+`instance.showHiddenNeighbors(eles)`<br />
+@param eles — elements to show hidden neighbors <br />
 Unhides hidden neigbors of given eles. Note that compound nodes are not respected as expected.
 
-`instance.zoomToSelected(eles)`
-
+`instance.zoomToSelected(eles)`<br />
+@param eles — elements to zoom <br />
 Zoom to selected eles.
 
-`instance.enableMarqueeZoom(callback)`
+`instance.enableMarqueeZoom(callback)` <br />
+@param callback — is called at the end of the function <br />
+Enables marquee zoom.
 
-Enables marquee zoom. callback is called at the end of the function.
-
-`instance.disableMarqueeZoom()`
-
+`instance.disableMarqueeZoom()` <br />
 Disables marquee zoom.
+
+`instance.getHighlightColors()` <br />
+Returns an string array. An array of currently used colors during highlight. like `['#23f021', '#12e432']`
+
+`instance.changeHighlightColor(idx, color, borderWidth = 3)` <br />
+@param idx — index of the current color that is going to be changed <br />
+@param color — color value like '#FF00FF' <br />
+@param borderWidth — thickness of highlight in nodes <br />
+Changes the highlight color specified with `idx`. If you specify the `borderWidth`, it will change the border width of nodes as well. The default value for ``borderWidth` is 3.
+
+`instance.changeNumColor(n)` <br />
+@param n — number of different colors you might use. It must be an integer in range **[4, 32]**<br />
+Does not changes currently setted colors if you increase the number of colors. The new colors will be selected randomly.
 
 ## Default Options
 ```javascript
@@ -135,6 +124,7 @@ Disables marquee zoom.
               'target-arrow-color': 'black'
             }
           },
+          colorCount: 4,
           setVisibilityOnHide: false, // whether to set visibility on hide/show
           setDisplayOnHide: true, // whether to set display on hide/show
           zoomAnimationDuration: 1500, //default duration for zoom animation speed
