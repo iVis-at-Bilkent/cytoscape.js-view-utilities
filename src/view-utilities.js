@@ -30,7 +30,7 @@ var viewUtilities = function (cy, options) {
       }
       if (!cssEdge) {
         cssEdge = { 'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color };
-      } 
+      }
 
       updateCyStyle(c1, cssNode, cssEdge);
       highlightColors.push(color);
@@ -40,22 +40,12 @@ var viewUtilities = function (cy, options) {
   function updateCyStyle(className, cssNode, cssEdge) {
     var c1 = className;
     var c2 = c1 + ':selected';
-    var j = cy.style().json();
-    updateStyleJson(j, 'node.' + c1, cssNode);
-    updateStyleJson(j, 'node.' + c2, cssNode);
-    updateStyleJson(j, 'edge.' + c1, cssEdge);
-    updateStyleJson(j, 'edge.' + c2, cssEdge);
-    cy.style().clear().fromJson(j).update();
-  }
-
-  // change 'json' object inplace
-  function updateStyleJson(json, selector, css) {
-    let elem = json.find(x => x.selector == selector);
-    if (elem == undefined) {
-      json.push({'selector': selector, 'style': css});
-    } else {
-      elem.style = css;
-    }
+    cy.style()
+      .selector('node.' + c1).css(cssNode)
+      .selector('node.' + c2).css(cssNode)
+      .selector('edge.' + c1).css(cssNode)
+      .selector('edge.' + c2).css(cssNode)
+      .update();
   }
 
   function getRandomColor() {
