@@ -441,7 +441,7 @@
                 });
 
                 document.getElementById('colorCountInp').addEventListener('change', function(e) {
-                  api.changeNumColor(e.target.value);
+                  api.changeNumHighlight(e.target.value);
                   addHighlightColorOptions();
                 });
 
@@ -522,7 +522,7 @@
             </div>
             <br/>
 
-            <b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Elements</b> <br/><br/>
+            <b id="highlightElements" style="cursor: pointer; color: darkmagenta">Highlight Selected</b> <br/><br/>
             <b id="highlightNeighbors" style="cursor: pointer; color: darkmagenta">Highlight Neighbors</b><br/><br/>
             <b id="showHiddenNeighbors" style="cursor: pointer; color: darkmagenta">Show Hidden Neighbors of Selected</b> <br/><br/>
             <b id="removeSelectedHighlights" style="cursor: pointer; color: darkmagenta">Remove Selected Highlights</b> <br/><br/>

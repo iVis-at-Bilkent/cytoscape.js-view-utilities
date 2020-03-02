@@ -43,8 +43,8 @@ var viewUtilities = function (cy, options) {
     cy.style()
       .selector('node.' + c1).css(cssNode)
       .selector('node.' + c2).css(cssNode)
-      .selector('edge.' + c1).css(cssNode)
-      .selector('edge.' + c2).css(cssNode)
+      .selector('edge.' + c1).css(cssEdge)
+      .selector('edge.' + c2).css(cssEdge)
       .update();
   }
 
@@ -207,7 +207,7 @@ var viewUtilities = function (cy, options) {
   };
 
   // limit maximum/minimum number of colors to [4,32] range
-  instance.changeNumColor = function (newNum) {
+  instance.changeNumHighlight = function (newNum) {
     if (newNum > 32) {
       newNum = 32;
     }

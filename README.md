@@ -67,9 +67,9 @@ Returns an string array. An array of currently used colors during highlight. lik
 @param borderWidth — thickness of highlight in nodes <br />
 Changes the highlight color specified with `idx`. If you specify the `borderWidth`, it will change the border width of nodes as well. The default value for ``borderWidth` is 3.
 
-`instance.changeNumColor(n)` <br />
+`instance.changeNumHighlight(n)` <br />
 @param n — number of different colors you might use. It must be an integer in range **[4, 32]**<br />
-Does not changes currently setted colors if you increase the number of colors. The new colors will be selected randomly.
+Does not changes currently setted colors if you increase the number of colors. The new colors will be generated randomly.
 
 ## Default Options
 ```javascript
