@@ -147,6 +147,10 @@ var viewUtilities = function (cy, options) {
     return highlightColors;
   };
 
+  instance.getHighlightStyles = function () {
+    return { node: options.node, edge: options.edge };
+  };
+
   // Highlights eles' neighborhood
   instance.highlightNeighbors = function (args) {
     var eles = args.eles;
@@ -203,6 +207,21 @@ var viewUtilities = function (cy, options) {
       options.edge[c1]['line-color'] = color;
       options.edge[c1]['source-arrow-color'] = color;
       options.edge[c1]['target-arrow-color'] = color;
+    }
+  };
+
+  instance.changeHighlightStyle = function (idx, nodeStyle, edgeStyle) {
+    var c1 = highlightClasses[idx];
+    updateCyStyle(c1, nodeStyle, edgeStyle);
+
+    if (nodeStyle['border-color']) {
+      highlightColors[idx] = nodeStyle['border-color'];
+    }
+    if (options.node[c1]) {
+      options.node[c1] = nodeStyle;
+    }
+    if (options.edge[c1]) {
+      options.edge[c1] = edgeStyle;
     }
   };
 
