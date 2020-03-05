@@ -1,72 +1,45 @@
 var viewUtilities = function (cy, options) {
 
-  var highlightClasses = [];
-  var highlightColors = [];
-
-  init(options);
-  function init(opt) {
-    highlightClasses = [];
-    highlightColors = [];
-
-    for (var i = 0; i < opt.colorCount; i++) {
-      if (i > 0) {
-        highlightClasses.push('highlighted' + (i + 1));
-      } else {
-        highlightClasses.push('highlighted');
-      }
+  init();
+  function init() {
+    // add provided styles
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      updateCyStyle(i);
     }
 
-    // Set style for highlighted and unhighligthed eles
-    for (var i = 0; i < highlightClasses.length; i++) {
-      var c1 = highlightClasses[i];
-      var cssNode = opt.node[c1];
-      var cssEdge = opt.edge[c1];
-      var color = getRandomColor();
-      var borderWidth = 3;
-      if (!cssNode) {
-        cssNode = { 'border-color': color, 'border-width': borderWidth };
-      } else {
-        color = opt.node[c1]['border-color']
-      }
-      if (!cssEdge) {
-        cssEdge = { 'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color };
-      }
+    // add styles for selected
+    addSelectionStyles();
+  }
 
-      updateCyStyle(c1, cssNode, cssEdge);
-      highlightColors.push(color);
+  function addSelectionStyles() {
+    if (options.selectStyles.node) {
+      cy.style().selector('node:selected').css(options.selectStyles.node).update();
+    }
+    if (options.selectStyles.edge) {
+      cy.style().selector('edge:selected').css(options.selectStyles.edge).update();
     }
   }
 
-  function updateCyStyle(className, cssNode, cssEdge) {
-    var c1 = className;
-    var c2 = c1 + ':selected';
-    cy.style()
-      .selector('node.' + c1).css(cssNode)
-      .selector('node.' + c2).css(cssNode)
-      .selector('edge.' + c1).css(cssEdge)
-      .selector('edge.' + c2).css(cssEdge)
-      .update();
+  function updateCyStyle(classIdx) {
+    var className = getCyClassName4Idx(classIdx);
+    var cssNode = options.highlightStyles[classIdx].node;
+    var cssEdge = options.highlightStyles[classIdx].edge;
+    cy.style().selector('node.' + className).css(cssNode).update();
+    cy.style().selector('edge.' + className).css(cssEdge).update();
   }
 
-  function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+  function getCyClassName4Idx(i) {
+    return '__highligtighted__' + i;
   }
 
   // Helper functions for internal usage (not to be exposed)
-  function highlight(eles, option) {
-    for (var i = 0; i < highlightClasses.length; i++) {
-      eles.removeClass(highlightClasses[i]);
+  function highlight(eles, idx) {
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      var className = getCyClassName4Idx(i);
+      eles.removeClass(className);
     }
-    if (typeof option === 'string') {
-      eles.addClass(option);
-    } else {
-      eles.addClass(highlightClasses[option]);
-    }
+    var className = getCyClassName4Idx(idx);
+    eles.addClass(className);
     eles.unselect();
   }
 
@@ -126,46 +99,22 @@ var viewUtilities = function (cy, options) {
 
   // Section highlight
   instance.showHiddenNeighbors = function (eles) {
-
     return this.show(getWithNeighbors(eles));
   };
 
   // Highlights eles
-  instance.highlight = function (args) {
-    var eles = args.eles;
-    var option = args.option;
-    if (args.option == null) {
-      eles = args;
-      option = 0;
-    }
-    highlight(eles, option); // Use the helper here
-
+  instance.highlight = function (eles, idx = 0) {
+    highlight(eles, idx); // Use the helper here
     return eles;
   };
-
-  instance.getHighlightColors = function () {
-    return highlightColors;
-  };
-
+ 
   instance.getHighlightStyles = function () {
-    return { node: options.node, edge: options.edge };
+    return options.highlightStyles;
   };
 
   // Highlights eles' neighborhood
-  instance.highlightNeighbors = function (args) {
-    var eles = args.eles;
-    var option = args.option;
-    if (args.option == null) {
-      eles = args;
-      option = 0;
-    }
-
-    return this.highlight({ eles: getWithNeighbors(eles), option: option });
-  };
-
-  // Aliases: this.highlightNeighbours()
-  instance.highlightNeighbours = function (args) {
-    return this.highlightNeighbors(args);
+  instance.highlightNeighbors = function (eles, idx = 0) {
+    return this.highlight(getWithNeighbors(eles), idx);
   };
 
   // Remove highlights from eles.
@@ -175,9 +124,10 @@ var viewUtilities = function (cy, options) {
       eles = cy.elements();
     }
 
-    for (var i = 0; i < highlightClasses.length; i++) {
-      eles.removeClass(highlightClasses[i]);
-      eles.removeData(highlightClasses[i]);
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      var className = getCyClassName4Idx(i);
+      eles.removeClass(className);
+      eles.removeData(className);
     }
     return eles.unselect();
     // TODO check if remove data is needed here
@@ -186,55 +136,35 @@ var viewUtilities = function (cy, options) {
   // Indicates if the ele is highlighted
   instance.isHighlighted = function (ele) {
     var isHigh = false;
-    for (var i = 0; i < highlightClasses.length; i++) {
-      if (ele.is('.' + highlightClasses[i] + ':selected')) {
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      var className = getCyClassName4Idx(i);
+      if (ele.is('.' + className + ':visible')) {
         isHigh = true;
       }
     }
     return isHigh;
   };
 
-  // borderWidth is optional
-  instance.changeHighlightColor = function (idx, color, borderWidth = 3) {
-    var c1 = highlightClasses[idx];
-    highlightColors[idx] = color;
-    var cssNode = { 'border-color': color, 'border-width': borderWidth };
-    var cssEdge = { 'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color };
-    updateCyStyle(c1, cssNode, cssEdge);
-
-    if (options.node[c1]) {
-      options.node[c1]['border-color'] = color;
-      options.edge[c1]['line-color'] = color;
-      options.edge[c1]['source-arrow-color'] = color;
-      options.edge[c1]['target-arrow-color'] = color;
-    }
-  };
-
   instance.changeHighlightStyle = function (idx, nodeStyle, edgeStyle) {
-    var c1 = highlightClasses[idx];
-    updateCyStyle(c1, nodeStyle, edgeStyle);
-
-    if (nodeStyle['border-color']) {
-      highlightColors[idx] = nodeStyle['border-color'];
-    }
-    if (options.node[c1]) {
-      options.node[c1] = nodeStyle;
-    }
-    if (options.edge[c1]) {
-      options.edge[c1] = edgeStyle;
-    }
+    options.highlightStyles[idx].node = nodeStyle;
+    options.highlightStyles[idx].edge = edgeStyle;
+    updateCyStyle(idx);
+    addSelectionStyles();
   };
 
-  // limit maximum/minimum number of colors to [4,32] range
-  instance.changeNumHighlight = function (newNum) {
-    if (newNum > 32) {
-      newNum = 32;
+  instance.addHighlightStyle = function (nodeStyle, edgeStyle) {
+    var o = { node: nodeStyle, edge: edgeStyle };
+    options.highlightStyles.push(o);
+    updateCyStyle(options.highlightStyles.length - 1);
+    addSelectionStyles();
+  };
+
+  instance.getAllHighlightClasses = function() {
+    var a = [];
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      a.push(getCyClassName4Idx(i));
     }
-    if (newNum < 4) {
-      newNum = 4;
-    }
-    options.colorCount = newNum;
-    init(options);
+    return a;
   };
 
   //Zoom selected Nodes

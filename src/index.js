@@ -10,68 +10,16 @@
     } // can't register if cytoscape unspecified
 
     var options = {
-      node: {
-        highlighted: {
-          'border-color': '#0B9BCD',  //blue
-          'border-width': 3
-        },
-
-        highlighted2: {
-          'border-color': '#04F06A',  //green
-          'border-width': 3
-        },
-        highlighted3: {
-          'border-color': '#F5E663',   //yellow
-          'border-width': 3
-        },
-        highlighted4: {
-          'border-color': '#BF0603',    //red
-          'border-width': 3
-        },
-        selected: {
-          'border-color': 'black',
-          'border-width': 3,
-          'background-color': 'lightgrey'
-        }
-
-      },
-      edge: {
-        highlighted: {
-          'line-color': '#0B9BCD',    //blue
-          'source-arrow-color': '#0B9BCD',
-          'target-arrow-color': '#0B9BCD'
-        },
-        highlighted2: {
-          'line-color': '#04F06A',   //green
-          'source-arrow-color': '#04F06A',
-          'target-arrow-color': '#04F06A'          
-        },
-        highlighted3: {
-          'line-color': '#F5E663',    //yellow
-          'source-arrow-color': '#F5E663',
-          'target-arrow-color': '#F5E663'            
-        },
-        highlighted4: {
-          'line-color': '#BF0603',    //red
-          'source-arrow-color': '#BF0603',
-          'target-arrow-color': '#BF0603'          
-        },
-        selected: {
-          'line-color': 'black',
-          'source-arrow-color': 'black',
-          'target-arrow-color': 'black' 
-        }
-      },
-      colorCount: 4,
+      highlightStyles: [],
+      selectStyles: {},
       setVisibilityOnHide: false, // whether to set visibility on hide/show
       setDisplayOnHide: true, // whether to set display on hide/show
       zoomAnimationDuration: 1500, //default duration for zoom animation speed
-      neighbor: function(node){ // return desired neighbors of tapheld node
+      neighbor: function (node) { // return desired neighbors of tapheld node
         return false;
       },
       neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
     };
-
 
     var undoRedo = require("./undo-redo");
     var viewUtilities = require("./view-utilities");

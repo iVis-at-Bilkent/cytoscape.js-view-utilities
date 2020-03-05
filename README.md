@@ -19,17 +19,37 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
-Initializes the extension and sets options. This can be used to override default options.
+`highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want tp override the highlighted styles when the objects are selected.
+e.g
+```
+var options = {
+  highlightStyles: [
+    { node: { 'border-color': '#0b9bcd',  'border-width': 3 }, edge: {'line-color': '#0b9bcd', 'source-arrow-color': '#0b9bcd', 'target-arrow-color': '#0b9bcd', 'width' : 3} },
+    { node: { 'border-color': '#04f06a',  'border-width': 3 }, edge: {'line-color': '#04f06a', 'source-arrow-color': '#04f06a', 'target-arrow-color': '#04f06a', 'width' : 3} },
+  ],
+  selectStyles: { 
+    node: {'border-color': 'black', 'border-width': 3, 'background-color': 'lightgrey'}, 
+    edge: {'line-color': 'black', 'source-arrow-color': 'black', 'target-arrow-color': 'black', 'width' : 3} 
+  },
+  setVisibilityOnHide: false, // whether to set visibility on hide/show
+  setDisplayOnHide: true, // whether to set display on hide/show
+  zoomAnimationDuration: 1500, //default duration for zoom animation speed
+  neighbor: function(node){
+      return node.closedNeighborhood();
+  },
+  neighborSelectTime: 1000
+};
+var api = cy.viewUtilities(options);
+```
 
-`instance.highlight(args)` <br />
-Highlights eles based on the given arguments.<br />
-@param args — `args = {eles: eles, option: 'highlighted'};` <br />
-`args.eles` is [a cytoscape.js collection](https://js.cytoscape.org/#cy.collection) (collection of elements) to be highlighted.<br />
-`args.option` contains the highlighting color option. It can be the index of the highlight color. Values like 0, 1, 2, ... It can be also be class name for [a cytoscape.js selector](https://js.cytoscape.org/#selectors/group-class-amp-id). Values like 'highlighted', 'highlighted2', 'highlighted3', ... This argument is optional. If you don't specify it, default hightlight color will be used.
+`instance.highlight(eles, idx = 0)` <br />
+@param eles — [a cytoscape.js collection](https://js.cytoscape.org/#cy.collection) (collection of elements) to be highlighted <br />
+@param idx — The index of the cytoscape.js style. If you don't specify it, the first style will be used. <br />
+Apply style class to the specified elements. Style class is specified with its index <br />
 
-`instance.highlightNeighbors(args)` <br />
+`instance.highlightNeighbors(eles, idx = 0)` <br />
 @param args — `args = {eles: eles, option: 'highlighted'};` <br />
-Highlights eles' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
+Highlights elements' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
 `instance.removeHighlights(eles)` <br />
 @param eles — elements to remove highlights <br />
@@ -58,108 +78,40 @@ Enables marquee zoom.
 `instance.disableMarqueeZoom()` <br />
 Disables marquee zoom.
 
-`instance.getHighlightColors()` <br />
-Returns an string array. An array of currently used colors during highlight.like `['#23f021', '#12e432']` 
-
 `instance.getHighlightStyles()` <br />
-Returns an object like a format 
-
+Returns current `highlightStyles` which is an array of objects like below
 ``` 
-{
-  node: {
-    highlighted: {
-      'border-color': '#0B9BCD',  //blue
-      'border-width': 3
-    },
-  },
-  edge: {
-    highlighted: {
-      'line-color': '#0B9BCD',    //blue
-      'source-arrow-color': '#0B9BCD',
-      'target-arrow-color': '#0B9BCD'
-    },
-  }
-}
+[
+  { node: { 'border-color': '#0b9bcd',  'border-width': 3 }, edge: {'line-color': '#0b9bcd', 'source-arrow-color': '#0b9bcd', 'target-arrow-color': '#0b9bcd', 'width' : 3} },
+  { node: { 'border-color': '#bf0603',  'border-width': 3 }, edge: {'line-color': '#bf0603', 'source-arrow-color': '#bf0603', 'target-arrow-color': '#bf0603', 'width' : 3} },
+],
 ```
 
-`instance.changeHighlightColor(idx, color, borderWidth = 3)` <br />
-@param idx — index of the current color that is going to be changed <br />
-@param color — color value like '#FF00FF' <br />
-@param borderWidth — thickness of highlight in nodes <br />
-Changes the highlight color specified with `idx` . If you specify the `borderWidth` , it will change the border width of nodes as well. The default value for ` ` borderWidth` is 3.
+`instance.getAllHighlightClasses()` <br />
+Returns all currently used [cytoscape.js style classes](https://js.cytoscape.org/#selectors/group-class-amp-id) 
 
 `instance.changeHighlightStyle(idx, nodeStyle, edgeStyle) ` <br />
 @param idx — index of the style that is going to be changed <br />
 @param nodeStyle — [cytoscape style](https://js.cytoscape.org/#style) for nodes <br />
 @param edgeStyle — [cytoscape style](https://js.cytoscape.org/#style) for edges <br />
-Changes the style specified with `idx` .
+Changes the style specified with `idx`.
 
-`instance.changeNumHighlight(n)` <br />
-@param n — number of different colors you might use. It must be an integer in range **[4, 32]**<br />
-Does not changes currently setted colors if you increase the number of colors. The new colors will be generated randomly.
+`instance.addHighlightStyle(nodeStyle, edgeStyle) ` <br />
+@param nodeStyle — [cytoscape style](https://js.cytoscape.org/#style) for nodes <br />
+@param edgeStyle — [cytoscape style](https://js.cytoscape.org/#style) for edges <br />
+Adds a new style to the `highlightStyles` array.
 
 ## Default Options
-
-``` javascript
-          node: {
-                  highlighted: {
-                      'border-color': '#0B9BCD', //blue
-                      'border-width': 3
-                  },
-                  highlighted2: {
-                      'border-color': '#04F06A', //green
-                      'border-width': 3
-                  },
-                  highlighted3: {
-                      'border-color': '#F5E663', //yellow
-                      'border-width': 3
-                  },
-                  highlighted4: {
-                      'border-color': '#BF0603', //red
-                      'border-width': 3
-                  },
-                  selected: {
-                      'border-color': 'black',
-                      'border-width': 3,
-                      'background-color': 'lightgrey'
-                  }
-
-              },
-              edge: {
-                  highlighted: {
-                      'line-color': '#0B9BCD', //blue
-                      'source-arrow-color': '#0B9BCD',
-                      'target-arrow-color': '#0B9BCD'
-                  },
-                  highlighted2: {
-                      'line-color': '#04F06A', //green
-                      'source-arrow-color': '#04F06A',
-                      'target-arrow-color': '#04F06A'
-                  },
-                  highlighted3: {
-                      'line-color': '#F5E663', //yellow
-                      'source-arrow-color': '#F5E663',
-                      'target-arrow-color': '#F5E663'
-                  },
-                  highlighted4: {
-                      'line-color': '#BF0603', //red
-                      'source-arrow-color': '#BF0603',
-                      'target-arrow-color': '#BF0603'
-                  },
-                  selected: {
-                      'line-color': 'black',
-                      'source-arrow-color': 'black',
-                      'target-arrow-color': 'black'
-                  }
-              },
-              colorCount: 4,
-              setVisibilityOnHide: false, // whether to set visibility on hide/show
-              setDisplayOnHide: true, // whether to set display on hide/show
-              zoomAnimationDuration: 1500, //default duration for zoom animation speed
-              neighbor: function(node) { // return desired neighbors of tapheld node
-                  return false;
-              },
-              neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+```
+highlightStyles: [],
+selectStyles: {},
+setVisibilityOnHide: false, // whether to set visibility on hide/show
+setDisplayOnHide: true, // whether to set display on hide/show
+zoomAnimationDuration: 1500, //default duration for zoom animation speed
+neighbor: function (node) { // return desired neighbors of tapheld node
+  return false;
+},
+neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
 ```
 
 ## Default Undo-Redo Actions

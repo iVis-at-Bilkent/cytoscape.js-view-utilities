@@ -247,60 +247,15 @@
                 });
 
                 var api = cy.viewUtilities({
-                    node: {
-                        highlighted: {
-                        'border-color': '#0B9BCD',  //blue
-                        'border-width': 3
-                        },
-                        highlighted2: {
-                        'border-color': '#04F06A',  //green
-                        'border-width': 3
-                        },
-                        highlighted3: {
-                        'border-color': '#F5E663',   //yellow
-                        'border-width': 3
-                        },
-                        highlighted4: {
-                        'border-color': '#BF0603',    //red
-                        'border-width': 3
-                        },
-                        selected: {
-                        'border-color': 'black',
-                        'border-width': 3,
-                        'background-color': 'lightgrey'
-                        }
-                    },
-                    edge: {
-                        highlighted: {
-                          'line-color': '#0B9BCD',    //blue
-                          'source-arrow-color': '#0B9BCD',
-                          'target-arrow-color': '#0B9BCD',
-                          'width' : 3
-                        },
-                        highlighted2: {
-                          'line-color': '#04F06A',   //green
-                          'source-arrow-color': '#04F06A',
-                          'target-arrow-color': '#04F06A',          
-                          'width' : 3
-                        },
-                        highlighted3: {
-                          'line-color': '#F5E663',    //yellow
-                          'source-arrow-color': '#F5E663',
-                          'target-arrow-color': '#F5E663',             
-                          'width' : 3
-                        },
-                        highlighted4: {
-                          'line-color': '#BF0603',    //red
-                          'source-arrow-color': '#BF0603',
-                          'target-arrow-color': '#BF0603',           
-                          'width' : 3
-                        },
-                        selected: {
-                          'line-color': 'black',
-                          'source-arrow-color': 'black',
-                          'target-arrow-color': 'black', 
-                          'width' : 3
-                        }
+                    highlightStyles: [
+                      { node: { 'border-color': '#0b9bcd',  'border-width': 3 }, edge: {'line-color': '#0b9bcd', 'source-arrow-color': '#0b9bcd', 'target-arrow-color': '#0b9bcd', 'width' : 3} },
+                      { node: { 'border-color': '#04f06a',  'border-width': 3 }, edge: {'line-color': '#04f06a', 'source-arrow-color': '#04f06a', 'target-arrow-color': '#04f06a', 'width' : 3} },
+                      { node: { 'border-color': '#f5e663',  'border-width': 3 }, edge: {'line-color': '#f5e663', 'source-arrow-color': '#f5e663', 'target-arrow-color': '#f5e663', 'width' : 3} },
+                      { node: { 'border-color': '#bf0603',  'border-width': 3 }, edge: {'line-color': '#bf0603', 'source-arrow-color': '#bf0603', 'target-arrow-color': '#bf0603', 'width' : 3} },
+                    ],
+                    selectStyles: { 
+                      node: {'border-color': 'black', 'border-width': 3, 'background-color': 'lightgrey'}, 
+                      edge: {'line-color': 'black', 'source-arrow-color': 'black', 'target-arrow-color': 'black', 'width' : 3} 
                     },
                     setVisibilityOnHide: false, // whether to set visibility on hide/show
                     setDisplayOnHide: true, // whether to set display on hide/show
@@ -417,31 +372,12 @@
                       layout.run();
                     }
                 });
-
-                function rgb2hex(rgb) {
-                    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
-
-                    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                    function hex(x) {
-                        return ("0" + parseInt(x).toString(16)).slice(-2);
-                    }
-                    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-                }
-
-                function hex2rgb(hex) {
-                  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                  return result ? {
-                    r: parseInt(result[1], 16),
-                    g: parseInt(result[2], 16),
-                    b: parseInt(result[3], 16)
-                  } : null;
-                }
-
+                
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
-                      api.highlightNeighbors({ eles: cy.$(":selected"), option: idx });
+                      api.highlightNeighbors(cy.$(":selected"), idx);
                     }
                 });
 
@@ -449,7 +385,7 @@
                     api.disableMarqueeZoom();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
-                      api.highlight({ eles: cy.$(":selected"), option: idx });
+                      api.highlight(cy.$(":selected"), idx);
                     }
                 });
 
@@ -464,35 +400,37 @@
                     api.removeHighlights();
                 });
 
-                document.getElementById('highlightColors').addEventListener('change', function(e) {
-                  document.getElementById('colorShower').style.background = e.target.value;
-                });
-
-                document.getElementById('colorCountInp').addEventListener('change', function(e) {
-                  api.changeNumHighlight(e.target.value);
+                document.getElementById('addColorBtn').addEventListener('click', function() {
+                  let color = document.getElementById('colorInp').value;
+                  let nodeStyle = { 'border-color': color,  'border-width': 3 };
+                  let edgeStyle = {'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width' : 3}
+                  api.addHighlightStyle(nodeStyle, edgeStyle);
                   addHighlightColorOptions();
                 });
 
                 document.getElementById('colorChangerBtn').addEventListener('click', function () {
-                  document.getElementById('colorInp').focus();
-                  document.getElementById('colorInp').value = rgb2hex(document.getElementById("colorShower").style.background);
-                  document.getElementById('colorInp').click();
-                });
-
-                document.getElementById('colorInp').addEventListener('change', function (e) {
-                  var color = e.target.value;
+                  let color = document.getElementById('colorInp').value;
                   var idx = document.getElementById('highlightColors').selectedIndex;
-                  api.changeHighlightColor(idx, color);
-                  document.getElementById('colorShower').style.background = color;
+                  let nodeStyle = { 'border-color': color,  'border-width': 3 };
+                  let edgeStyle = {'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width' : 3}
+                  api.changeHighlightStyle(idx, nodeStyle, edgeStyle);
 
                   var opt = document.getElementById('highlightColors').options[idx];
                   opt.value =  color;
                   opt.text = color;
                 });
 
-                addHighlightColorOptions(); // thanks to hoisting
+                document.getElementById('highlightColors').addEventListener('change', function(e) {
+                  document.getElementById('colorInp').value = e.target.value;
+                });
+
+                addHighlightColorOptions();
+                var s =  api.getHighlightStyles()[0];
+                if (s) {
+                  document.getElementById('colorInp').value = s.node['border-color'];
+                }
                 function addHighlightColorOptions() {
-                  var colors = api.getHighlightColors();
+                  var colors = api.getHighlightStyles().map(x => x.node['border-color']);
                   
                   document.getElementById('highlightColors').innerHTML = '';
 
@@ -501,12 +439,10 @@
                     o.text = colors[i];
                     o.value = colors[i];
                     if (i == 0) {
-                      document.getElementById('colorShower').style.background = colors[i];
                       o.selected = 'selected';
                     }
                     document.getElementById('highlightColors').appendChild(o);
                   }
-                  document.getElementById('colorCountInp').value = colors.length;
                 }
                 
             });
@@ -520,17 +456,13 @@
         <div class="topnav">
             <b id="hide" style="cursor: pointer; color: brown">Hide Selected</b> / <b id="showAll" style="cursor: pointer; color: brown">Show All</b> <br/><br/>
 
-            <b>Highlight Color Count:</b>
-            <div class="m-1">
-              <input type="number" min="4" max="32" id="colorCountInp" value="4">
-            </div>
-
             <b>Highlight Color:</b>
-            <div class="m-1" id="colorShower">
+            <div class="m-1">
                 <select id="highlightColors">
                 </select>
-                <input type="color" id="colorInp" style="display: none;">
-                <button id="colorChangerBtn">Change Color</button>
+                <input type="color" id="colorInp">
+                <button id="colorChangerBtn">Update Color</button>
+                <button id="addColorBtn">Add Color</button>
             </div>
             <br/>
 
