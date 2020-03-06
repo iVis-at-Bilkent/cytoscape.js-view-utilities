@@ -19,7 +19,7 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
-`highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want tp override the highlighted styles when the objects are selected.
+`highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
 e.g
 ```
 var options = {
@@ -48,7 +48,8 @@ var api = cy.viewUtilities(options);
 Apply style class to the specified elements. Style class is specified with its index <br />
 
 `instance.highlightNeighbors(eles, idx = 0)` <br />
-@param args — `args = {eles: eles, option: 'highlighted'};` <br />
+@param eles — [a cytoscape.js collection](https://js.cytoscape.org/#cy.collection) (collection of elements) to be highlighted <br />
+@param idx — The index of the cytoscape.js style. If you don't specify it, the first style will be used. <br />
 Highlights elements' neighborhood (based on the color option). Similar to the highlight function, either the elements and highlighting option can both be sent in the arguments. If only the elements are sent, then the default highlight color is used.
 
 `instance.removeHighlights(eles)` <br />
