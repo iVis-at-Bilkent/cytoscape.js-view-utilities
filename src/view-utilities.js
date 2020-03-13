@@ -129,7 +129,7 @@ var viewUtilities = function (cy, options) {
       eles.removeClass(className);
       eles.removeData(className);
     }
-    return eles.unselect();
+    return eles;
     // TODO check if remove data is needed here
   };
 
