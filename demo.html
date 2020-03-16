@@ -21,16 +21,16 @@
                 font-size: 14px;
             }
             #cy {
-                width: 80%;
+                width: 75%;
                 height: 100%;
-                left: 21%;
+                left: 26%;
                 top: 0%;
                 float: left;
                 overflow: hidden;
                 position: fixed;
             }
             .topnav {
-                width: 20%;
+                width: 25%;
                 background-color: #e9e9e9;
                 font-weight: bold;
                 border-color: black;
@@ -401,11 +401,13 @@
                 });
 
                 document.getElementById('addColorBtn').addEventListener('click', function() {
-                  let color = document.getElementById('colorInp').value;
+                  let color = getRandomColor();
                   let nodeStyle = { 'border-color': color,  'border-width': 3 };
                   let edgeStyle = {'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width' : 3}
                   api.addHighlightStyle(nodeStyle, edgeStyle);
                   addHighlightColorOptions();
+                  document.getElementById('highlightColors').selectedIndex = api.getHighlightStyles().length - 1;
+                  document.getElementById('colorInp').value = color;
                 });
 
                 document.getElementById('colorChangerBtn').addEventListener('click', function () {
@@ -443,6 +445,15 @@
                     }
                     document.getElementById('highlightColors').appendChild(o);
                   }
+                }
+
+                function getRandomColor() {
+                  const letters = '0123456789ABCDEF';
+                  let color = '#';
+                  for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                  }
+                  return color;
                 }
                 
             });
