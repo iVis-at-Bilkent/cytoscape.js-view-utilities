@@ -2,63 +2,51 @@
 function highlightUR(cy, ur, viewUtilities) {
   function getStatus(eles) {
     eles = eles ? eles : cy.elements();
-    return {
-      highlighteds: eles.filter(".highlighted:visible"),
-      highlighteds2: eles.filter(".highlighted2:visible"),
-      highlighteds3: eles.filter(".highlighted3:visible"),
-      highlighteds4: eles.filter(".highlighted4:visible"),
-      notHighlighteds: eles.filter(":visible").not(".highlighted, .highlighted2, .highlighted3, .highlighted4")
-    };
-  }
-
-  function createArgs(eles, option) {
-    this.eles = eles;
-    this.option = option;
+    var classes = viewUtilities.getAllHighlightClasses();
+    var r = [];
+    for (var i = 0; i < classes.length; i++) {
+      r.push(eles.filter(`.${classes[i]}:visible`))
+    }
+    var selector = classes.map(x => '.' + x).join(',');
+    // last element of array is elements which are not highlighted by any style
+    r.push(eles.filter(":visible").not(selector));
+    
+    return r;
   }
 
   function generalUndo(args) {
     var current = args.current;
-    var highlighteds = viewUtilities.highlight({eles: args.highlighteds, option: "highlighted"});
-    var highlighteds2 = viewUtilities.highlight({eles: args.highlighteds2, option: "highlighted2"});
-    var highlighteds3 = viewUtilities.highlight({eles: args.highlighteds3, option: "highlighted3"});
-    var highlighteds4 = viewUtilities.highlight({eles: args.highlighteds4, option: "highlighted4"});
-    var notHighlighteds = viewUtilities.removeHighlights(args.notHighlighteds);
+    var r = [];
+    for (var i = 0; i < args.length - 1; i++) {
+      r.push(viewUtilities.highlight(args[i], i));
+    }
+    // last element is for not highlighted by any style
+    r.push(viewUtilities.removeHighlights(args[args.length - 1]));
 
-    return {
-      highlighteds: highlighteds,
-      highlighteds2: highlighteds2,
-      highlighteds3: highlighteds3,
-      highlighteds4: highlighteds4,
-      notHighlighteds: notHighlighteds,
-      current: current
-    };
+    r['current'] = current;
+    return r;
   }
 
   function generalRedo(args) {
     var current = args.current;
-    var highlighteds = viewUtilities.highlight({eles: args.current.highlighteds, option: "highlighted"});
-    var highlighteds2 = viewUtilities.highlight({eles: args.current.highlighteds2, option: "highlighted2"});
-    var highlighteds3 = viewUtilities.highlight({eles: args.current.highlighteds3, option: "highlighted3"});
-    var highlighteds4 = viewUtilities.highlight({eles: args.current.highlighteds4, option: "highlighted4"});
-    var notHighlighteds = viewUtilities.removeHighlights(args.current.notHighlighteds);
+    var r = [];
+    for (var i = 0; i < current.length - 1; i++) {
+      r.push(viewUtilities.highlight(current[i], i));
+    }
+    // last element is for not highlighted by any style
+    r.push(viewUtilities.removeHighlights(current[current.length - 1]));
 
-    return {
-      highlighteds: highlighteds,
-      highlighteds2: highlighteds2,
-      highlighteds3: highlighteds3,
-      highlighteds4: highlighteds4,
-      notHighlighteds: notHighlighteds,
-      current: current
-    };
+    r['current'] = current;
+    return r;
   }
 
   function generateDoFunc(func) {
-    return function (eles) {
+    return function (args) {
       var res = getStatus();
-      if (eles.firstTime)
-        viewUtilities[func](eles);
+      if (args.firstTime)
+        viewUtilities[func](args.eles, args.idx);
       else
-        generalRedo(eles);
+        generalRedo(args);
 
       res.current = getStatus();
 
@@ -66,21 +54,7 @@ function highlightUR(cy, ur, viewUtilities) {
     };
   }
 
-  function urRemoveHighlights(args) {
-    var res = getStatus();
-
-    if (args.firstTime)
-      viewUtilities.removeHighlights(eles);
-    else
-      generalRedo(args);
-
-    res.current = getStatus();
-
-    return res;
-  }
-
   ur.action("highlightNeighbors", generateDoFunc("highlightNeighbors"), generalUndo);
-  ur.action("highlightNeighbours", generateDoFunc("highlightNeighbours"), generalUndo);
   ur.action("highlight", generateDoFunc("highlight"), generalUndo);
   ur.action("removeHighlights", generateDoFunc("removeHighlights"), generalUndo);
 }
