@@ -34,13 +34,15 @@ var viewUtilities = function (cy, options) {
 
   // Helper functions for internal usage (not to be exposed)
   function highlight(eles, idx) {
-    for (var i = 0; i < options.highlightStyles.length; i++) {
-      var className = getCyClassName4Idx(i);
-      eles.removeClass(className);
-    }
-    var className = getCyClassName4Idx(idx);
-    eles.addClass(className);
-    eles.unselect();
+    cy.batch(() => {
+      for (var i = 0; i < options.highlightStyles.length; i++) {
+        var className = getCyClassName4Idx(i);
+        eles.removeClass(className);
+      }
+      var className = getCyClassName4Idx(idx);
+      eles.addClass(className);
+      eles.unselect();
+    });
   }
 
   function getWithNeighbors(eles) {
@@ -123,14 +125,13 @@ var viewUtilities = function (cy, options) {
     if (eles == null || eles.length == null) {
       eles = cy.elements();
     }
-
-    for (var i = 0; i < options.highlightStyles.length; i++) {
-      var className = getCyClassName4Idx(i);
-      eles.removeClass(className);
-      eles.removeData(className);
-    }
+    cy.batch(() => {
+      for (var i = 0; i < options.highlightStyles.length; i++) {
+        var className = getCyClassName4Idx(i);
+        eles.removeClass(className);
+      }
+    });
     return eles;
-    // TODO check if remove data is needed here
   };
 
   // Indicates if the ele is highlighted
