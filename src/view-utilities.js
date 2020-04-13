@@ -1,9 +1,11 @@
 var viewUtilities = function (cy, options) {
 
+  var classNames4Styles = [];
   init();
   function init() {
     // add provided styles
     for (var i = 0; i < options.highlightStyles.length; i++) {
+      classNames4Styles.push('__highligtighted__' + i);
       updateCyStyle(i);
     }
 
@@ -21,28 +23,22 @@ var viewUtilities = function (cy, options) {
   }
 
   function updateCyStyle(classIdx) {
-    var className = getCyClassName4Idx(classIdx);
+    var className = classNames4Styles[classIdx];
     var cssNode = options.highlightStyles[classIdx].node;
     var cssEdge = options.highlightStyles[classIdx].edge;
     cy.style().selector('node.' + className).css(cssNode).update();
     cy.style().selector('edge.' + className).css(cssEdge).update();
   }
 
-  function getCyClassName4Idx(i) {
-    return '__highligtighted__' + i;
-  }
-
   // Helper functions for internal usage (not to be exposed)
   function highlight(eles, idx) {
-    cy.batch(() => {
-      for (var i = 0; i < options.highlightStyles.length; i++) {
-        var className = getCyClassName4Idx(i);
-        eles.removeClass(className);
-      }
-      var className = getCyClassName4Idx(idx);
-      eles.addClass(className);
-      eles.unselect();
-    });
+    cy.startBatch();
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      eles.removeClass(classNames4Styles[i]);
+    }
+    eles.addClass(classNames4Styles[idx]);
+    eles.unselect();
+    cy.endBatch();
   }
 
   function getWithNeighbors(eles) {
@@ -109,7 +105,7 @@ var viewUtilities = function (cy, options) {
     highlight(eles, idx); // Use the helper here
     return eles;
   };
- 
+
   instance.getHighlightStyles = function () {
     return options.highlightStyles;
   };
@@ -122,15 +118,14 @@ var viewUtilities = function (cy, options) {
   // Remove highlights from eles.
   // If eles is not defined considers cy.elements()
   instance.removeHighlights = function (eles) {
+    cy.startBatch();
     if (eles == null || eles.length == null) {
       eles = cy.elements();
     }
-    cy.batch(() => {
-      for (var i = 0; i < options.highlightStyles.length; i++) {
-        var className = getCyClassName4Idx(i);
-        eles.removeClass(className);
-      }
-    });
+    for (var i = 0; i < options.highlightStyles.length; i++) {
+      eles.removeClass(classNames4Styles[i]);
+    }
+    cy.endBatch();
     return eles;
   };
 
@@ -138,8 +133,7 @@ var viewUtilities = function (cy, options) {
   instance.isHighlighted = function (ele) {
     var isHigh = false;
     for (var i = 0; i < options.highlightStyles.length; i++) {
-      var className = getCyClassName4Idx(i);
-      if (ele.is('.' + className + ':visible')) {
+      if (ele.is('.' + classNames4Styles[i] + ':visible')) {
         isHigh = true;
       }
     }
@@ -156,16 +150,27 @@ var viewUtilities = function (cy, options) {
   instance.addHighlightStyle = function (nodeStyle, edgeStyle) {
     var o = { node: nodeStyle, edge: edgeStyle };
     options.highlightStyles.push(o);
+    var s = '__highligtighted__' + (options.highlightStyles.length - 1);
+    classNames4Styles.push(s);
     updateCyStyle(options.highlightStyles.length - 1);
     addSelectionStyles();
   };
 
-  instance.getAllHighlightClasses = function() {
+  instance.removeHighlightStyle = function (styleIdx) {
+    if (styleIdx < 0 || styleIdx > options.highlightStyles.length - 1) {
+      return;
+    }
+    cy.elements().removeClass(classNames4Styles[styleIdx]);
+    options.highlightStyles.splice(styleIdx, 1);
+    classNames4Styles.splice(styleIdx, 1);
+  };
+
+  instance.getAllHighlightClasses = function () {
     var a = [];
     for (var i = 0; i < options.highlightStyles.length; i++) {
-      a.push(getCyClassName4Idx(i));
+      a.push(classNames4Styles[i]);
     }
-    return a;
+    return classNames4Styles;
   };
 
   //Zoom selected Nodes
