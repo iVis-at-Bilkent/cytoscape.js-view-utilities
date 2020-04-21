@@ -1,11 +1,15 @@
 var viewUtilities = function (cy, options) {
 
   var classNames4Styles = [];
+  // give a unique name for each unique style EVER added
+  var totStyleCnt = 0;
   init();
   function init() {
     // add provided styles
     for (var i = 0; i < options.highlightStyles.length; i++) {
-      classNames4Styles.push('__highligtighted__' + i);
+      var s = '__highligtighted__' + totStyleCnt;
+      classNames4Styles.push(s);
+      totStyleCnt++;
       updateCyStyle(i);
     }
 
@@ -150,8 +154,9 @@ var viewUtilities = function (cy, options) {
   instance.addHighlightStyle = function (nodeStyle, edgeStyle) {
     var o = { node: nodeStyle, edge: edgeStyle };
     options.highlightStyles.push(o);
-    var s = '__highligtighted__' + (options.highlightStyles.length - 1);
+    var s = '__highligtighted__' + totStyleCnt;
     classNames4Styles.push(s);
+    totStyleCnt++;
     updateCyStyle(options.highlightStyles.length - 1);
     addSelectionStyles();
   };
