@@ -102,6 +102,10 @@ Changes the style specified with `idx`.
 @param edgeStyle — [cytoscape style](https://js.cytoscape.org/#style) for edges <br />
 Adds a new style to the `highlightStyles` array.
 
+`instance.removeHighlightStyle(styleIdx): void` <br />
+@param styleIdx —  index of the style to delete (0 based) <br />
+Removes the style from `highlightStyles` array.
+
 ## Default Options
 ```
 highlightStyles: [],
