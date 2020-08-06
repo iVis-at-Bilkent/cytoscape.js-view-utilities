@@ -259,7 +259,6 @@
                 //In below functions, finding the nodes to hide/show are sample specific.
                 //If the sample graph changes, those calculations may also need a change.
                 document.getElementById("hide").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -275,7 +274,6 @@
                 });
                 
                 document.getElementById("showAll").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
@@ -300,7 +298,6 @@
                         .connectedNodes().intersection(hiddenEles.nodes());
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});*/
 
-                    api.disableMarqueeZoom();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -321,7 +318,6 @@
                 });
                 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -352,8 +348,6 @@
                 });
                 
                 cy.on('doubleTap', 'node', function (event) {
-
-                    api.disableMarqueeZoom();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]")).difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
@@ -492,9 +486,9 @@
             <b id="removeSelectedHighlights" style="cursor: pointer; color: darkmagenta">Remove Selected Highlights</b> <br/><br/>
             <b id="removeAllHighlights" style="cursor: pointer; color: darkmagenta">Remove All Highlights</b> <br/><br/>
             <b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
-            <b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b>
+            <b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Enable Marquee Zoom</b>
             <br/>
-            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
+            <span style="font-weight: normal !important; font-size: 14px !important;">CTRL+Shift+Drag to specify the region</span>
             <br/><br/>
             
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>

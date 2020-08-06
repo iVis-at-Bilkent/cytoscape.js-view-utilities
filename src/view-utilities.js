@@ -206,33 +206,68 @@ var viewUtilities = function (cy, options) {
   //Marquee Zoom
   var tabStartHandler;
   var tabEndHandler;
+  var marqueeZoomEnabled = false;
 
   instance.enableMarqueeZoom = function (callback) {
 
+    //abort if already enabled
+    //if enabled twice all the events fire twice, and so on.
+    if (marqueeZoomEnabled) {
+      if(callback) {
+        callback();
+      }
+      return;
+    }
+    marqueeZoomEnabled = true;
     var shiftKeyDown = false;
+    var ctrlKeyDown = false;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
-    //Make the cy unselectable
-    cy.autounselectify(true);
+
+    //stops 'tapend' event from firing over and over again, which was causing
+    //marquee zoom animation to start over and over again
+    //thus solves the demo issues where we were having to disable and enable
+    //marquee zoom every time
+    var marqueeZoomEventHasStarted = false; 
 
     document.addEventListener('keydown', function (event) {
+      console.log(event.key);
       if (event.key == "Shift") {
         shiftKeyDown = true;
       }
+      if (event.key == "Control") {
+        ctrlKeyDown = true;
+      }
     });
     document.addEventListener('keyup', function (event) {
+      console.log(event.key);
       if (event.key == "Shift") {
         shiftKeyDown = false;
       }
-    });
+      if (event.key == "Control") {
+        ctrlKeyDown = false;
+      }
 
-    cy.one('tapstart', tabStartHandler = function (event) {
-      if (shiftKeyDown == true) {
+    });
+    cy.on('tapstart', tabStartHandler = function (event) {
+      //ctrl + shift is the shortcut
+      if (shiftKeyDown == true && 
+          ctrlKeyDown == true) {
         rect_start_pos_x = event.position.x;
         rect_start_pos_y = event.position.y;
         rect_end_pos_x = undefined;
+        marqueeZoomEventHasStarted = true;
+        //Make the cy unselectable
+        cy.autounselectify(true);
       }
     });
-    cy.one('tapend', tabEndHandler = function (event) {
+    cy.on('tapend', tabEndHandler = function (event) {
+      if (!marqueeZoomEventHasStarted) {
+        cy.autounselectify(false);
+        if (callback) {
+          callback();
+        }
+        return;
+      }
       rect_end_pos_x = event.position.x;
       rect_end_pos_y = event.position.y;
       //check whether corners of rectangle is undefined
@@ -244,6 +279,7 @@ var viewUtilities = function (cy, options) {
         }
         return;
       }
+      marqueeZoomEventHasStarted = false;
       //Reoder rectangle positions
       //Top left of the rectangle (rect_start_pos_x, rect_start_pos_y)
       //right bottom of the rectangle (rect_end_pos_x, rect_end_pos_y)
@@ -308,6 +344,7 @@ var viewUtilities = function (cy, options) {
     cy.off('tapstart', tabStartHandler);
     cy.off('tapend', tabEndHandler);
     cy.autounselectify(false);
+    marqueeZoomEnabled = false;
   };
 
   // return the instance
