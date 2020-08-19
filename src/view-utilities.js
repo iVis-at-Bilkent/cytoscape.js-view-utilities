@@ -3,6 +3,8 @@ var viewUtilities = function (cy, options) {
   var classNames4Styles = [];
   // give a unique name for each unique style EVER added
   var totStyleCnt = 0;
+  var marqueeZoomEnabled = false;
+  var shiftKeyDown = false;
   init();
   function init() {
     // add provided styles
@@ -15,6 +17,27 @@ var viewUtilities = function (cy, options) {
 
     // add styles for selected
     addSelectionStyles();
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key == "Control" && !marqueeZoomEnabled) {
+        instance.enableMarqueeZoom();
+        marqueeZoomEnabled = true;
+      }
+      else if (event.key == "Shift") {
+        shiftKeyDown = true;
+      }
+    }); 
+
+    document.addEventListener("keyup", function() {
+      if (event.key == "Control" && marqueeZoomEnabled) {
+        instance.disableMarqueeZoom();
+        marqueeZoomEnabled = false;
+      }
+      else if (event.key == "Shift") {
+        shiftKeyDown = false;
+      }
+    }); 
+
   }
 
   function addSelectionStyles() {
@@ -208,22 +231,10 @@ var viewUtilities = function (cy, options) {
   var tabEndHandler;
 
   instance.enableMarqueeZoom = function (callback) {
-
-    var shiftKeyDown = false;
+    marqueeZoomEnabled = true;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
     //Make the cy unselectable
     cy.autounselectify(true);
-
-    document.addEventListener('keydown', function (event) {
-      if (event.key == "Shift") {
-        shiftKeyDown = true;
-      }
-    });
-    document.addEventListener('keyup', function (event) {
-      if (event.key == "Shift") {
-        shiftKeyDown = false;
-      }
-    });
 
     cy.one('tapstart', tabStartHandler = function (event) {
       if (shiftKeyDown == true) {
@@ -308,6 +319,7 @@ var viewUtilities = function (cy, options) {
     cy.off('tapstart', tabStartHandler);
     cy.off('tapend', tabEndHandler);
     cy.autounselectify(false);
+    marqueeZoomEnabled = false;
   };
 
   // return the instance
