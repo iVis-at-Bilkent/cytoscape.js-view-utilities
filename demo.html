@@ -256,6 +256,7 @@
                 }
 
                 document.getElementById("hide").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
@@ -267,6 +268,7 @@
                 });
                 
                 document.getElementById("showAll").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
@@ -276,6 +278,7 @@
                 });
 
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -288,6 +291,7 @@
                 });
 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -326,7 +330,7 @@
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     changeBorder(nodesWithHiddenNeighbor);
                     */
-                    //api.disableMarqueeZoom();
+                    api.disableMarqueeZoom();
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -339,6 +343,7 @@
                 });
                 
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlightNeighbors(cy.$(":selected"), idx);
@@ -346,6 +351,7 @@
                 });
 
                 document.getElementById("highlightElements").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlight(cy.$(":selected"), idx);
@@ -353,11 +359,13 @@
                 });
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
 										if(cy.$(":selected").length > 0)
                     	api.removeHighlights(cy.$(":selected"));
                 });
 
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
                     api.removeHighlights();
                 });
 
@@ -444,9 +452,9 @@
             <b id="removeSelectedHighlights" style="cursor: pointer; color: brown">Remove Selected Highlights</b> <br/><br/>
             <b id="removeAllHighlights" style="cursor: pointer; color: brown">Remove All Highlights</b> <br/><br/>
             <b id="zoomToSelected" style="cursor: pointer; color: brown">Zoom to Selected</b><br/><br/>
-            <b id="marqueeZoom" style="cursor: pointer; color: brown">Enable Marquee Zoom</b>
+            <b id="marqueeZoom" style="cursor: pointer; color: brown">Marquee Zoom</b>
             <br/>
-            <span style="font-weight: normal !important; font-size: 14px !important;">CTRL+Shift+Drag to specify the region</span>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
             <br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
             <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
