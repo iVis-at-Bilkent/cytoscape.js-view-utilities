@@ -31,7 +31,6 @@ var viewUtilities = function (cy, options) {
         shiftKeyDown = true;
       }
       if (ctrlKeyDown && shiftKeyDown && !marqueeZoomEnabled) {
-        console.log("marquee enabled");
         instance.enableMarqueeZoom();
         marqueeZoomEnabled = true;
       }
@@ -48,7 +47,6 @@ var viewUtilities = function (cy, options) {
         ctrlKeyDown = false;
       }
       if (marqueeZoomEnabled && (!shiftKeyDown || !ctrlKeyDown)) {
-        console.log("marquee disabled");
         instance.disableMarqueeZoom();
         marqueeZoomEnabled = false;
       }
