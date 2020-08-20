@@ -19,21 +19,21 @@ var viewUtilities = function (cy, options) {
     addSelectionStyles();
 
     document.addEventListener("keydown", function(event) {
-      if (event.key == "Control" && !marqueeZoomEnabled) {
+      if ((event.metaKey || event.ctrlKey) && !marqueeZoomEnabled) {
         instance.enableMarqueeZoom();
         marqueeZoomEnabled = true;
       }
-      else if (event.key == "Shift") {
+      else if (event.shiftKey) {
         shiftKeyDown = true;
       }
     }); 
 
-    document.addEventListener("keyup", function() {
-      if (event.key == "Control" && marqueeZoomEnabled) {
+    document.addEventListener("keyup", function(event) {
+      if ((event.metaKey || event.ctrlKey) && marqueeZoomEnabled) {
         instance.disableMarqueeZoom();
         marqueeZoomEnabled = false;
       }
-      else if (event.key == "Shift") {
+      else if (event.shiftKey) {
         shiftKeyDown = false;
       }
     }); 
