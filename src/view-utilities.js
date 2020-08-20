@@ -5,6 +5,7 @@ var viewUtilities = function (cy, options) {
   var totStyleCnt = 0;
   var marqueeZoomEnabled = false;
   var shiftKeyDown = false;
+  var ctrlKeyDown = false;
   init();
   function init() {
     // add provided styles
@@ -19,22 +20,37 @@ var viewUtilities = function (cy, options) {
     addSelectionStyles();
 
     document.addEventListener("keydown", function(event) {
-      if ((event.metaKey || event.ctrlKey) && !marqueeZoomEnabled) {
+      if (event.key != "Control" && event.key != "Shift" && event.key != "Meta") {
+        return;
+      }
+      
+      if (event.key == "Control" || event.key == "Meta") {
+        ctrlKeyDown = true;
+      }
+      else if (event.key == "Shift") {
+        shiftKeyDown = true;
+      }
+      if (ctrlKeyDown && shiftKeyDown && !marqueeZoomEnabled) {
+        console.log("marquee enabled");
         instance.enableMarqueeZoom();
         marqueeZoomEnabled = true;
-      }
-      else if (event.shiftKey) {
-        shiftKeyDown = true;
       }
     }); 
 
     document.addEventListener("keyup", function(event) {
-      if ((event.metaKey || event.ctrlKey) && marqueeZoomEnabled) {
+      if (event.key != "Control" && event.key != "Shift" && event.key != "Meta") {
+        return;
+      }
+      if (event.key == "Shift") {
+        shiftKeyDown = false;
+      }
+      else if (event.key == "Control" || event.key == "Meta") {
+        ctrlKeyDown = false;
+      }
+      if (marqueeZoomEnabled && (!shiftKeyDown || !ctrlKeyDown)) {
+        console.log("marquee disabled");
         instance.disableMarqueeZoom();
         marqueeZoomEnabled = false;
-      }
-      else if (event.shiftKey) {
-        shiftKeyDown = false;
       }
     }); 
 
