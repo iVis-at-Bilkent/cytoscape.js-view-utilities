@@ -39,5 +39,8 @@
   },
   "peerDependencies": {
     "cytoscape": "^3.2.0"
+  },
+  "dependencies": {
+    "geometric": "^2.2.3"
   }
 }

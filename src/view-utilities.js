@@ -310,6 +310,109 @@ var viewUtilities = function (cy, options) {
     cy.autounselectify(false);
   };
 
+  var geometric = require('geometric')
+
+  instance.enableLassoMode = function (callback) {
+    
+    var isClicked = false;
+    var tempCanv = document.createElement('canvas');
+    tempCanv.id = 'temporary-canvas';
+    const container = cy.container();
+    container.appendChild(tempCanv);
+    
+
+    const width = container.offsetWidth;
+    const height = container.offsetHeight;
+
+    tempCanv.width = width;
+    tempCanv.height = height;
+    tempCanv.setAttribute("style",`z-index: 1000; position: absolute; top: 0; left: 0;`,);
+    
+    cy.panningEnabled(false);
+    cy.zoomingEnabled(false);
+    cy.autounselectify(true);
+    var points = [];
+
+    tempCanv.onclick = function(event) {
+      
+      if(isClicked == false)  {
+        isClicked = true;
+        context = tempCanv.getContext("2d");
+        context.strokeStyle = "#d67614";
+        context.lineJoin = "round";
+        context.lineWidth = 3;
+        cy.panningEnabled(false);
+        cy.zoomingEnabled(false);
+        cy.autounselectify(true);
+        var formerX = event.offsetX;
+        var formerY = event.offsetY;
+        
+        points.push([formerX,formerY]);
+        tempCanv.onmouseleave = function(e) {
+          isClicked = false;
+          container.removeChild(tempCanv);
+          delete tempCanv;
+          callback();
+        };
+        tempCanv.onmousemove = function(e)  {
+          context.beginPath();
+          points.push([e.offsetX,e.offsetY]);
+          context.moveTo(formerX, formerY);
+          context.lineTo(e.offsetX, e.offsetY);
+          formerX = e.offsetX;
+          formerY = e.offsetY;
+          context.stroke();
+          context.closePath();
+        };
+      }
+      else{
+        var eles = cy.elements();
+        points.push(points[0]);
+        for(var i = 0; i < eles.length; i++) {
+          if(eles[i].isEdge())  {
+            
+            var p1 = [eles[i].sourceEndpoint().x+cy.pan().x,eles[i].sourceEndpoint().y+cy.pan().y];
+            var p2 = [eles[i].targetEndpoint().x+cy.pan().x,eles[i].targetEndpoint().y+cy.pan().y];
+
+            if(geometric.pointInPolygon(p1,points) && geometric.pointInPolygon(p2,points))  {
+              eles[i].select();
+            }
+
+          }
+          else{
+            cy.autounselectify(false);
+            var bb = [[eles[i].renderedBoundingBox().x1,eles[i].renderedBoundingBox().y1],
+                      [eles[i].renderedBoundingBox().x1,eles[i].renderedBoundingBox().y2],
+                      [eles[i].renderedBoundingBox().x2,eles[i].renderedBoundingBox().y2],
+                      [eles[i].renderedBoundingBox().x2,eles[i].renderedBoundingBox().y1]];
+
+            if (geometric.polygonIntersectsPolygon(bb,points) || geometric.polygonInPolygon(bb, points) 
+            || geometric.polygonInPolygon(points,bb)){
+              eles[i].select();
+            }
+          }
+        }
+        isClicked = false;
+        container.removeChild(tempCanv);
+        delete tempCanv;
+        
+        cy.panningEnabled(true);
+        cy.zoomingEnabled(true);
+        callback();
+      }
+    };
+  };
+
+  instance.disableLassoMode = function () {
+    var c=document.getElementById('temporary-canvas');
+    if ( c != null ){
+      c.parentElement.removeChild(c);
+      delete c;
+    }
+    cy.panningEnabled(true);
+    cy.zoomingEnabled(true);
+    cy.autounselectify(true);
+  }
   // return the instance
   return instance;
 };
