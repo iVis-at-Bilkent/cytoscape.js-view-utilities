@@ -1159,11 +1159,11 @@ var viewUtilities = function (cy, options) {
         points.push([formerX,formerY]);
         tempCanv.onmouseleave = function(e) {
           isClicked = false;
+          container.removeChild(tempCanv);
+          delete tempCanv;
           cy.panningEnabled(true);
           cy.zoomingEnabled(true);
 	        cy.autounselectify(true);
-          container.removeChild(tempCanv);
-          delete tempCanv;
           if (callback) {
             callback();
           }
