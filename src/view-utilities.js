@@ -376,6 +376,9 @@ var viewUtilities = function (cy, options) {
         tempCanv.onmouseleave = function(e) {
           isClicked = false;
           container.removeChild(tempCanv);
+          cy.panningEnabled(true);
+          cy.zoomingEnabled(true);
+	        cy.autounselectify(true);
           delete tempCanv;
           if (callback) {
             callback();
