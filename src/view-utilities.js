@@ -377,7 +377,9 @@ var viewUtilities = function (cy, options) {
           isClicked = false;
           container.removeChild(tempCanv);
           delete tempCanv;
-          callback();
+          if (callback) {
+            callback();
+          }
         };
         tempCanv.onmousemove = function(e)  {
           context.beginPath();
@@ -396,8 +398,8 @@ var viewUtilities = function (cy, options) {
         for(var i = 0; i < eles.length; i++) {
           if(eles[i].isEdge())  {
             
-            var p1 = [eles[i].sourceEndpoint().x+cy.pan().x,eles[i].sourceEndpoint().y+cy.pan().y];
-            var p2 = [eles[i].targetEndpoint().x+cy.pan().x,eles[i].targetEndpoint().y+cy.pan().y];
+            var p1 = [(eles[i].sourceEndpoint().x)*cy.zoom()+cy.pan().x,(eles[i].sourceEndpoint().y)*cy.zoom()+cy.pan().y];
+            var p2 = [(eles[i].targetEndpoint().x)*cy.zoom()+cy.pan().x,(eles[i].targetEndpoint().y)*cy.zoom()+cy.pan().y];
 
             if(geometric.pointInPolygon(p1,points) && geometric.pointInPolygon(p2,points))  {
               eles[i].select();
@@ -423,7 +425,9 @@ var viewUtilities = function (cy, options) {
         
         cy.panningEnabled(true);
         cy.zoomingEnabled(true);
-        callback();
+        if (callback) {
+          callback();
+        }
       }
     };
   };

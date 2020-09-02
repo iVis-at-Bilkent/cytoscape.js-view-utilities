@@ -257,6 +257,7 @@
 
                 document.getElementById("hide").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
@@ -269,6 +270,7 @@
                 
                 document.getElementById("showAll").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
@@ -279,6 +281,7 @@
 
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -292,6 +295,7 @@
 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -301,7 +305,16 @@
 
                 document.getElementById("marqueeZoom").addEventListener("click", function () {
                     //document.getElementById("cy").style.cursor ="crosshair";
+                    api.disableLassoMode();
                     api.enableMarqueeZoom();
+                    if( document.getElementById('layout').checked){
+                        layout.run();
+                    }
+                });
+
+                document.getElementById("lassoTool").addEventListener("click", function () {
+                    //document.getElementById("cy").style.cursor ="crosshair";
+                    api.enableLassoMode();
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
@@ -344,6 +357,7 @@
                 
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlightNeighbors(cy.$(":selected"), idx);
@@ -352,6 +366,7 @@
 
                 document.getElementById("highlightElements").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlight(cy.$(":selected"), idx);
@@ -360,12 +375,14 @@
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
 										if(cy.$(":selected").length > 0)
                     	api.removeHighlights(cy.$(":selected"));
                 });
 
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
                     api.removeHighlights();
                 });
 
@@ -456,6 +473,7 @@
             <br/>
             <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
             <br/><br/>
+            <b id="lassoTool" style="cursor: pointer; color: brown">Lasso Tool</b><br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
             <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
             <br/><br/>
