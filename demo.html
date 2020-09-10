@@ -314,7 +314,7 @@
                     //document.getElementById("cy").style.cursor ="crosshair";
                     api.disableLassoMode();
                     getButtonsToDef();
-                    document.getElementById("marqueeZoom").style.backgroundColor = "lightblue";
+                    document.getElementById("marqueeZoom").style.backgroundColor = "darkgray";
                     var callbackFunc = function() {
                       document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
                     }; 
@@ -329,7 +329,8 @@
                 document.getElementById('colorInpSec').value = "#d67614";
 
                 document.getElementById("lassoTool").addEventListener("click", function () {
-                  document.getElementById("lassoTool").style.backgroundColor = "lightblue";
+                  getButtonsToDef();
+                  document.getElementById("lassoTool").style.backgroundColor = "darkgray";
                   var callbackFunc = function() {
                     document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
                   }; 
@@ -378,6 +379,7 @@
                 document.getElementById("highlightNeighbors").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.disableLassoMode();
+                    getButtonsToDef();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlightNeighbors(cy.$(":selected"), idx);
@@ -387,6 +389,7 @@
                 document.getElementById("highlightElements").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.disableLassoMode();
+                    getButtonsToDef();
                     if (cy.$(":selected").length > 0) {
                       var idx = document.getElementById('highlightColors').selectedIndex;
                       api.highlight(cy.$(":selected"), idx);
@@ -396,6 +399,7 @@
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.disableLassoMode();
+                    getButtonsToDef();
 										if(cy.$(":selected").length > 0)
                     	api.removeHighlights(cy.$(":selected"));
                 });
@@ -403,10 +407,12 @@
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
                     api.disableMarqueeZoom();
                     api.disableLassoMode();
+                    getButtonsToDef();
                     api.removeHighlights();
                 });
 
                 document.getElementById('addColorBtn').addEventListener('click', function() {
+                  getButtonsToDef();
                   let color = getRandomColor();
                   let nodeStyle = { 'border-color': color,  'border-width': 3 };
                   let edgeStyle = {'line-color': color, 'source-arrow-color': color, 'target-arrow-color': color, 'width' : 3}
@@ -417,6 +423,7 @@
                 });
 
                 document.getElementById('colorChangerBtn').addEventListener('click', function () {
+                  getButtonsToDef();
                   let color = document.getElementById('colorInp').value;
                   var idx = document.getElementById('highlightColors').selectedIndex;
                   let nodeStyle = { 'border-color': color,  'border-width': 3 };
@@ -505,7 +512,7 @@
             <br/>
             <span style="font-weight: normal !important; font-size: 14px !important;">Left click to start specifying region; left click again to complete the region.</span>
             <br/>
-            <span style="font-weight: normal !important; font-size: 14px !important;">Line Width (between 1 and 10) and Color:</span>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Line width (between 1 and 10) and Color:</span>
             <input type="number" id="lineWidth" min="1" max="10">
             <input type="color" id="colorInpSec"><br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
