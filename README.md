@@ -80,7 +80,7 @@ Enables marquee zoom.
 Disables marquee zoom.
 
 `instance.enableLassoMode({callback = undefined, lineColour = "#d67614", lineWidth = 3})` <br />
-@param {} is an object that contains:
+@param {} is an object that contains: <br />
 callback — is called at the end of the function, default does nothing <br />
 lineColour — is the color of lasso line drawn by the user, default is dark orange <br />
 lineWidth — is the width of the line, default is 3 <br />
