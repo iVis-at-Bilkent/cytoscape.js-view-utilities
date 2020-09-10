@@ -79,6 +79,16 @@ Enables marquee zoom.
 `instance.disableMarqueeZoom()` <br />
 Disables marquee zoom.
 
+`instance.enableLassoMode({callback = undefined, lineColour = "#d67614", lineWidth = 3})` <br />
+@param {} is an object that contains:
+callback — is called at the end of the function, default does nothing <br />
+lineColour — is the color of lasso line drawn by the user, default is dark orange <br />
+lineWidth — is the width of the line, default is 3 <br />
+Enables lasso tool.
+
+`instance.disableLassoMode()` <br />
+Disables lasso tool.
+
 `instance.getHighlightStyles()` <br />
 Returns current `highlightStyles` which is an array of objects like below
 ``` 

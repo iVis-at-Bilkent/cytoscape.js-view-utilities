@@ -253,6 +253,12 @@
                     eles.removeData("thickBorder");
                     return eles;
                 }
+
+                function getButtonsToDef(){
+                  document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
+                  document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
+                }
+
                 ur.action("thickenBorder", thickenBorder, thinBorder);
                 ur.action("thinBorder", thinBorder, thickenBorder);
                 
@@ -260,6 +266,8 @@
                 //If the sample graph changes, those calculations may also need a change.
                 document.getElementById("hide").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -276,6 +284,8 @@
                 
                 document.getElementById("showAll").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
@@ -300,6 +310,8 @@
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});*/
 
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -321,6 +333,8 @@
                 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -329,7 +343,29 @@
                 });
                 
                 document.getElementById("marqueeZoom").addEventListener("click", function () {
-                    api.enableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
+                    document.getElementById("marqueeZoom").style.backgroundColor = "darkgray";
+                    var callbackFunc = function() {
+                      document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
+                    }; 
+                    api.enableMarqueeZoom(callbackFunc);
+                    if( document.getElementById('layout').checked){
+                        layout.run();
+                    }
+                });
+
+                var lassoSelectColor = "#d67614";
+                var lassoLineWidth = 3;
+                document.getElementById('colorInpSec').value = "#d67614";
+
+                document.getElementById("lassoTool").addEventListener("click", function () {
+                  getButtonsToDef();
+                  document.getElementById("lassoTool").style.backgroundColor = "darkgray";
+                  var callbackFunc = function() {
+                    document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
+                  }; 
+                    api.enableLassoMode({callback:callbackFunc,lineColour:lassoSelectColor,lineWidth:lassoLineWidth});
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
@@ -351,8 +387,9 @@
                 });
                 
                 cy.on('doubleTap', 'node', function (event) {
-
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]")).difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
@@ -403,6 +440,13 @@
                 
                 document.getElementById('highlightColors').addEventListener('change', function(e) {
                   document.getElementById('colorInp').value = e.target.value;
+                });
+
+                document.getElementById('colorInpSec').addEventListener('change', function(e) {
+                  lassoSelectColor = document.getElementById('colorInpSec').value;
+                });
+                document.getElementById("lineWidth").addEventListener('change', function(e) {
+                  lassoLineWidth = document.getElementById("lineWidth").value;
                 });
 
                 document.getElementById('colorChangerBtn').addEventListener('click', function () {
@@ -493,9 +537,15 @@
             <b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
             <b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b>
             <br/>
-            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls.</span>
             <br/><br/>
-            
+            <b id="lassoTool" style="cursor: pointer; color: darkmagenta">Lasso Tool</b>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Left click to start specifying region; left click again to complete the region.</span>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Line width (between 1 and 10) and Color:</span>
+            <input type="number" id="lineWidth" min="1" max="10">
+            <input type="color" id="colorInpSec"><br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
             <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
             <br/><br/>
