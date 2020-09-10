@@ -337,7 +337,7 @@ var viewUtilities = function (cy, options) {
   };
   var geometric = require('geometric')
 
-  instance.enableLassoMode = function (callback) {
+  instance.enableLassoMode = function ({callback = undefined, lineColour = "#d67614", lineWidth = 3} = {}) {
     
     var isClicked = false;
     var tempCanv = document.createElement('canvas');

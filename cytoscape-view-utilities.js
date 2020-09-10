@@ -1121,7 +1121,7 @@ var viewUtilities = function (cy, options) {
   };
   var geometric = require('geometric')
 
-  instance.enableLassoMode = function (callback) {
+  instance.enableLassoMode = function ({callback = undefined, lineColour = "#d67614", lineWidth = 3} = {}) {
     
     var isClicked = false;
     var tempCanv = document.createElement('canvas');
@@ -1147,9 +1147,9 @@ var viewUtilities = function (cy, options) {
       if(isClicked == false)  {
         isClicked = true;
         context = tempCanv.getContext("2d");
-        context.strokeStyle = "#d67614";
+        context.strokeStyle = lineColour;
         context.lineJoin = "round";
-        context.lineWidth = 3;
+        context.lineWidth = lineWidth;
         cy.panningEnabled(false);
         cy.zoomingEnabled(false);
         cy.autounselectify(true);
