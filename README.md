@@ -20,8 +20,7 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
 `highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
-`lassoStyle` will be used to override the lasso line<br />
-e.g
+`lassoStyle` will be used to override the lasso line e.g
 ```
 var options = {
   highlightStyles: [
