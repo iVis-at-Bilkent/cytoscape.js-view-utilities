@@ -1155,7 +1155,7 @@ var viewUtilities = function (cy, options) {
      if(isClicked == false)  {
        isClicked = true;
        var context = tempCanv.getContext("2d");
-       context.strokeStyle = options.lassoStyle.lineColour;
+       context.strokeStyle = options.lassoStyle.lineColor;
        context.lineWidth = options.lassoStyle.lineWidth;
        context.lineJoin = "round";
        cy.panningEnabled(false);
