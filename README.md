@@ -20,6 +20,7 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
 `highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
+`lassoStyle` will be used to override the lasso line style.<br />
 e.g
 ```
 var options = {
@@ -33,11 +34,12 @@ var options = {
   },
   setVisibilityOnHide: false, // whether to set visibility on hide/show
   setDisplayOnHide: true, // whether to set display on hide/show
-  zoomAnimationDuration: 1500, //default duration for zoom animation speed
+  zoomAnimationDuration: 1500, // default duration for zoom animation speed
   neighbor: function(node){
       return node.closedNeighborhood();
   },
-  neighborSelectTime: 1000
+  neighborSelectTime: 500,
+  lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
 };
 var api = cy.viewUtilities(options);
 ```
@@ -79,6 +81,13 @@ Enables marquee zoom.
 `instance.disableMarqueeZoom()` <br />
 Disables marquee zoom.
 
+`instance.enableLassoMode(callback)` <br />
+@param callback — is called at the end of the function<br />
+Enables lasso tool.
+
+`instance.disableLassoMode()` <br />
+Disables lasso tool.
+
 `instance.getHighlightStyles()` <br />
 Returns current `highlightStyles` which is an array of objects like below
 ``` 
@@ -106,17 +115,21 @@ Adds a new style to the `highlightStyles` array.
 @param styleIdx —  index of the style to delete (0 based) <br />
 Removes the style from `highlightStyles` array.
 
+`instance.changeLassoStyle(styleObj) ` <br />
+@param styleObj — lasso line style object with lineColor and/or lineWidth properties
+
 ## Default Options
 ```
 highlightStyles: [],
 selectStyles: {},
 setVisibilityOnHide: false, // whether to set visibility on hide/show
 setDisplayOnHide: true, // whether to set display on hide/show
-zoomAnimationDuration: 1500, //default duration for zoom animation speed
+zoomAnimationDuration: 1500, // default duration for zoom animation speed
 neighbor: function (node) { // return desired neighbors of tapheld node
   return false;
 },
-neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+neighborSelectTime: 500, // ms, time to taphold to select desired neighbors
+lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
 ```
 
 ## Default Undo-Redo Actions
@@ -135,6 +148,7 @@ neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
 ## Dependencies
 
  * Cytoscape.js ^3.2.0
+ * Geometric.js ^2.2.3
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 ## Usage instructions
@@ -175,7 +189,7 @@ This project is set up to automatically be published to npm and bower. To publis
 
 ## Team
 
-  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), [Hasan Balci](https://github.com/hasanbalci), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 
