@@ -20,6 +20,7 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
 `highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
+`lassoStyle` will be used to override the lasso line<br />
 e.g
 ```
 var options = {
@@ -38,6 +39,7 @@ var options = {
       return node.closedNeighborhood();
   },
   neighborSelectTime: 1000
+  lassoStyle: {lineColor: "#d67614", lineWidth: 3} //default lasso line color, dark orange, and default line width
 };
 var api = cy.viewUtilities(options);
 ```
@@ -80,10 +82,7 @@ Enables marquee zoom.
 Disables marquee zoom.
 
 `instance.enableLassoMode({callback = undefined, lineColour = "#d67614", lineWidth = 3})` <br />
-@param {} is an object that contains: <br />
-callback — is called at the end of the function, default does nothing <br />
-lineColour — is the color of lasso line drawn by the user, default is dark orange <br />
-lineWidth — is the width of the line, default is 3 <br />
+@param callback — is called at the end of the function<br />
 Enables lasso tool.
 
 `instance.disableLassoMode()` <br />

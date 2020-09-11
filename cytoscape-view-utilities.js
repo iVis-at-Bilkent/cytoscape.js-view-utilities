@@ -1121,11 +1121,13 @@ var viewUtilities = function (cy, options) {
     marqueeZoomEnabled = false;
   };
  //Lasso Mode
- var geometric = require('geometric')
+ var geometric = require('geometric');
 
- instance.changeLassoStyle = function({lineColour = "#d67614", lineWidth = 3} = {})  {
-   options.lassoStyle.lineWidth = lineWidth;
-   options.lassoStyle.lineColour = lineColour;
+ instance.changeLassoStyle = function(styleObj)  {
+   if(styleObj.lineWidth)
+     options.lassoStyle.lineWidth = styleObj.lineWidth;
+   if(styleObj.lineColor)
+     options.lassoStyle.lineColor = styleObj.lineColor;
  };
 
  instance.enableLassoMode = function (callback) {
@@ -1226,7 +1228,7 @@ var viewUtilities = function (cy, options) {
  };
 
  instance.disableLassoMode = function () {
-   var c = document.getElementById('temporary-canvas');
+   var c = document.getElementById('lasso-canvas');
    if ( c != null ){
      c.parentElement.removeChild(c);
      delete c;

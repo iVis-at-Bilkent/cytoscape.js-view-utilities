@@ -324,7 +324,7 @@
                     }
                 });
                 
-                api.changeLassoStyle({lineColour: "#d67614",lineWidth: 3});
+                api.changeLassoStyle({lineColor: "#d67614",lineWidth: 3});
                 document.getElementById('colorInpSec').value = "#d67614";
                 document.getElementById('lineWidth').value = 3;
 
@@ -440,7 +440,7 @@
                 });
 
                 document.getElementById('colorInpSec').addEventListener('change', function(e) {
-                  api.changeLassoStyle({lineColour:document.getElementById('colorInpSec').value});
+                  api.changeLassoStyle({lineColor:document.getElementById('colorInpSec').value});
                 });
                 document.getElementById("lineWidth").addEventListener('change', function(e) {
                   api.changeLassoStyle({lineWidth:document.getElementById("lineWidth").value});
