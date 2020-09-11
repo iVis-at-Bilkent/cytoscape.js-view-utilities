@@ -324,9 +324,9 @@
                     }
                 });
                 
-                var lassoSelectColor = "#d67614";
-                var lassoLineWidth = 3;
+                api.changeLassoStyle({lineColor: "#d67614",lineWidth: 3});
                 document.getElementById('colorInpSec').value = "#d67614";
+                document.getElementById('lineWidth').value = 3;
 
                 document.getElementById("lassoTool").addEventListener("click", function () {
                   getButtonsToDef();
@@ -334,7 +334,7 @@
                   var callbackFunc = function() {
                     document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
                   }; 
-                    api.enableLassoMode({callback:callbackFunc,lineColour:lassoSelectColor,lineWidth:lassoLineWidth});
+                    api.enableLassoMode(callbackFunc);
                     if( document.getElementById('layout').checked){
                         layout.run();
                     }
@@ -440,10 +440,10 @@
                 });
 
                 document.getElementById('colorInpSec').addEventListener('change', function(e) {
-                  lassoSelectColor = document.getElementById('colorInpSec').value;
+                  api.changeLassoStyle({lineColor:document.getElementById('colorInpSec').value});
                 });
                 document.getElementById("lineWidth").addEventListener('change', function(e) {
-                  lassoLineWidth = document.getElementById("lineWidth").value;
+                  api.changeLassoStyle({lineWidth:document.getElementById("lineWidth").value});
                 });
                 
 
