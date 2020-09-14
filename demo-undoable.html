@@ -349,9 +349,6 @@
                       document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
                     }; 
                     api.enableMarqueeZoom(callbackFunc);
-                    if( document.getElementById('layout').checked){
-                        layout.run();
-                    }
                 });
 
                 api.changeLassoStyle({lineColor: "#d67614",lineWidth: 3});
@@ -359,16 +356,13 @@
                 document.getElementById('lineWidth').value = 3;
 
                 document.getElementById("lassoTool").addEventListener("click", function () {
-                  api.disableMarqueeZoom();
-                  getButtonsToDef();
-                  document.getElementById("lassoTool").style.backgroundColor = "darkgray";
-                  var callbackFunc = function() {
-                    document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
-                  }; 
+                    api.disableMarqueeZoom();
+                    getButtonsToDef();
+                    document.getElementById("lassoTool").style.backgroundColor = "darkgray";
+                    var callbackFunc = function() {
+                        document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
+                    };
                     api.enableLassoMode(callbackFunc);
-                    if( document.getElementById('layout').checked){
-                        layout.run();
-                    }
                 });
 
                 var tappedBefore;
