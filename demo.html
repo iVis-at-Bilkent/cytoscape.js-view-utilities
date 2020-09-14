@@ -259,9 +259,6 @@
                   document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
                 }
                 document.getElementById("hide").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.hide(cy.$(":selected"));
@@ -273,9 +270,6 @@
                 });
                 
                 document.getElementById("showAll").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
                     api.show(cy.elements());
@@ -285,9 +279,6 @@
                 });
 
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
@@ -363,8 +354,6 @@
                     nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     changeBorder(nodesWithHiddenNeighbor);
                     */
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes(':visible');
                     revertBorder(nodesWithHiddenNeighbor);
