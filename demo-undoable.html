@@ -265,9 +265,6 @@
                 //In below functions, finding the nodes to hide/show are sample specific.
                 //If the sample graph changes, those calculations may also need a change.
                 document.getElementById("hide").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -283,9 +280,6 @@
                 });
                 
                 document.getElementById("showAll").addEventListener("click", function () {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
@@ -308,10 +302,6 @@
                     nodesWithHiddenNeighbor = hiddenEles.nodes().edgesWith(cy.nodes(":hidden").difference(hiddenEles.nodes()))
                         .connectedNodes().intersection(hiddenEles.nodes());
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});*/
-
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -387,9 +377,6 @@
                 });
                 
                 cy.on('doubleTap', 'node', function (event) {
-                    api.disableMarqueeZoom();
-                    api.disableLassoMode();
-                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]")).difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
