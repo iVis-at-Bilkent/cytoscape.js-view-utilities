@@ -386,7 +386,7 @@ var viewUtilities = function (cy, options) {
          delete tempCanv;
          cy.panningEnabled(true);
          cy.zoomingEnabled(true);
-         cy.autounselectify(true);
+         cy.autounselectify(false);
          if (callback) {
            callback();
          }
@@ -444,13 +444,13 @@ var viewUtilities = function (cy, options) {
 
  instance.disableLassoMode = function () {
    var c = document.getElementById('lasso-canvas');
-   if ( c != null ){
+   if ( c ){
      c.parentElement.removeChild(c);
      delete c;
    }
    cy.panningEnabled(true);
    cy.zoomingEnabled(true);
-   cy.autounselectify(true);
+   cy.autounselectify(false);
  }
   // return the instance
   return instance;
