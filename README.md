@@ -3,7 +3,7 @@ cytoscape-view-utilities
 
 ## Description
 
-This Cytoscape.js extension provides miscellenaous view utilities such as hiding, highlighting and zooming nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+This Cytoscape.js extension provides miscellenaous view utilities such as hide/show, highlight, marquee zoom and free form selection, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
 ![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
 
@@ -189,7 +189,7 @@ This project is set up to automatically be published to npm and bower. To publis
 
 ## Team
 
-  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Huseyin Eren Calik](https://github.com/herencalik), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 
