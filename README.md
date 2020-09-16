@@ -5,7 +5,7 @@ cytoscape-view-utilities
 
 This Cytoscape.js extension provides miscellenaous view utilities such as hide/show, highlight, marquee zoom and free form selection, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
-![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
+![](view-utilities-extension-demo.gif)
 
 Please cite the following paper when using this extension: 
 
