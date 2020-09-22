@@ -383,7 +383,7 @@ var viewUtilities = function (cy, options) {
        tempCanv.onmouseleave = function(e) {
          isClicked = false;
          container.removeChild(tempCanv);
-         delete tempCanv;
+         tempCanv = null;
          cy.panningEnabled(true);
          cy.zoomingEnabled(true);
          cy.autounselectify(false);
@@ -431,7 +431,7 @@ var viewUtilities = function (cy, options) {
        }
        isClicked = false;
        container.removeChild(tempCanv);
-       delete tempCanv;
+       tempCanv = null;
        
        cy.panningEnabled(true);
        cy.zoomingEnabled(true);
@@ -446,7 +446,7 @@ var viewUtilities = function (cy, options) {
    var c = document.getElementById('lasso-canvas');
    if ( c ){
      c.parentElement.removeChild(c);
-     delete c;
+     c = null;
    }
    cy.panningEnabled(true);
    cy.zoomingEnabled(true);
