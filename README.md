@@ -183,8 +183,8 @@ Plain HTML/JS has the extension registered for you automatically, because no `re
 
 ## Build targets
 
-* `npm run build` : Build `./src/**` into `cytoscape-edge-editing.js` in production environment and minimize the file.
-* `npm run build:dev` :  Build `./src/**` into `cytoscape-edge-editing.js` in development environment without minimizing the file.
+* `npm run build` : Build `./src/**` into `cytoscape-view-utilities.js` in production environment and minimize the file.
+* `npm run build:dev` :  Build `./src/**` into `cytoscape-view-utilities.js` in development environment without minimizing the file.
 
 ## Publishing instructions
 
