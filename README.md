@@ -22,7 +22,7 @@ Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities
 `highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
 `lassoStyle` will be used to override the lasso line style.<br />
 e.g
-```
+```js
 var options = {
   highlightStyles: [
     { node: { 'border-color': '#0b9bcd',  'border-width': 3 }, edge: {'line-color': '#0b9bcd', 'source-arrow-color': '#0b9bcd', 'target-arrow-color': '#0b9bcd', 'width' : 3} },
@@ -119,17 +119,19 @@ Removes the style from `highlightStyles` array.
 @param styleObj — lasso line style object with lineColor and/or lineWidth properties
 
 ## Default Options
-```
-highlightStyles: [],
-selectStyles: {},
-setVisibilityOnHide: false, // whether to set visibility on hide/show
-setDisplayOnHide: true, // whether to set display on hide/show
-zoomAnimationDuration: 1500, // default duration for zoom animation speed
-neighbor: function (node) { // return desired neighbors of tapheld node
-  return false;
-},
-neighborSelectTime: 500, // ms, time to taphold to select desired neighbors
-lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
+```js
+var options = {
+  highlightStyles: [],
+  selectStyles: {},
+  setVisibilityOnHide: false, // whether to set visibility on hide/show
+  setDisplayOnHide: true, // whether to set display on hide/show
+  zoomAnimationDuration: 1500, // default duration for zoom animation speed
+  neighbor: function (node) { // return desired neighbors of tapheld node
+    return false;
+  },
+  neighborSelectTime: 500, // ms, time to taphold to select desired neighbors
+  lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
+};
 ```
 
 ## Default Undo-Redo Actions
@@ -179,13 +181,21 @@ require(['cytoscape', 'cytoscape-view-utilities'], function(cytoscape, view - ut
 
 Plain HTML/JS has the extension registered for you automatically, because no `require()` is needed.
 
+## Build targets
+
+* `npm run build` : Build `./src/**` into `cytoscape-edge-editing.js` in production environment and minimize the file.
+* `npm run build:dev` :  Build `./src/**` into `cytoscape-edge-editing.js` in development environment without minimizing the file.
+
 ## Publishing instructions
 
-This project is set up to automatically be published to npm and bower. To publish:
+This project is set up to automatically be published to npm and bower.  To publish:
 
-1. Set the version number environment variable: `export VERSION=1.2.3` 
-1. Publish: `gulp publish` 
-1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git` 
+1. Build the extension : `npm run build`
+1. Commit the build : `git commit -am "Build for release"`
+1. Bump the version number and tag: `npm version major|minor|patch`
+1. Push to origin: `git push && git push --tags`
+1. Publish to npm: `npm publish .`
+1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git`
 
 ## Team
 

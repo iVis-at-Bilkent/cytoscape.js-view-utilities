@@ -1,13 +1,15 @@
 {
   "name": "cytoscape-view-utilities",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Package of view utilities for cytoscape.js",
   "main": "src/index.js",
   "spm": {
     "main": "src/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build:dev": "cross-env NODE_ENV=development webpack"
   },
   "repository": {
     "type": "git",
@@ -23,19 +25,13 @@
   },
   "homepage": "https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities",
   "devDependencies": {
-    "browserify": "^11.2.0",
-    "gulp": "^3.9.1",
-    "gulp-derequire": "^2.1.0",
-    "gulp-jshint": "^1.11.2",
-    "gulp-prompt": "^0.1.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-shell": "^0.5.0",
-    "gulp-util": "^3.0.8",
-    "jshint-stylish": "^2.0.1",
-    "node-notifier": "^4.3.1",
-    "run-sequence": "^1.1.4",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "camelcase": "^6.0.0",
+    "cross-env": "^7.0.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   },
   "peerDependencies": {
     "cytoscape": "^3.2.0"

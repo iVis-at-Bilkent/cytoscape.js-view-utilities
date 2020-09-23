@@ -15,7 +15,8 @@
         <script src="https://unpkg.com/cose-base/cose-base.js"></script>
         <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
         <script src="https://unpkg.com/cytoscape-undo-redo/cytoscape-undo-redo.js"></script>
-
+        <script src="https://unpkg.com/geometric@2.2.3/build/geometric.min.js"></script>
+        
         <script src="cytoscape-view-utilities.js"></script>
 
         <style>
@@ -425,7 +426,7 @@
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
-                    	ur.do("removeHighlights", cy.$(":selected"));
+                    	ur.do("removeHighlights", {eles: cy.$(":selected")});
                 });
 
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
