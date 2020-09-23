@@ -15,7 +15,8 @@
         <script src="https://unpkg.com/cose-base/cose-base.js"></script>
         <script src="https://unpkg.com/cytoscape-cose-bilkent/cytoscape-cose-bilkent.js"></script>
         <script src="https://unpkg.com/cytoscape-undo-redo/cytoscape-undo-redo.js"></script>
-
+        <script src="https://unpkg.com/geometric@2.2.3/build/geometric.min.js"></script>
+        
         <script src="cytoscape-view-utilities.js"></script>
 
         <style>
@@ -253,6 +254,12 @@
                     eles.removeData("thickBorder");
                     return eles;
                 }
+
+                function getButtonsToDef(){
+                  document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
+                  document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
+                }
+
                 ur.action("thickenBorder", thickenBorder, thinBorder);
                 ur.action("thinBorder", thinBorder, thickenBorder);
                 
@@ -260,6 +267,8 @@
                 //If the sample graph changes, those calculations may also need a change.
                 document.getElementById("hide").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var actions = [];
                     var nodesToHide = cy.$(":selected").add(cy.$(":selected").nodes().descendants());
                     var nodesWithHiddenNeighbor = cy.edges(":hidden").connectedNodes().intersection(nodesToHide);
@@ -276,6 +285,8 @@
                 
                 document.getElementById("showAll").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var actions = [];
                     var nodesWithHiddenNeighbor = cy.nodes("[thickBorder]");
                     actions.push({name: "thinBorder", param: nodesWithHiddenNeighbor});
@@ -289,7 +300,6 @@
                 document.getElementById("showHiddenNeighbors").addEventListener("click", function () {
 
                     /*
-
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var actions = [];
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -299,8 +309,9 @@
                     nodesWithHiddenNeighbor = hiddenEles.nodes().edgesWith(cy.nodes(":hidden").difference(hiddenEles.nodes()))
                         .connectedNodes().intersection(hiddenEles.nodes());
                     actions.push({name: "thickenBorder", param: nodesWithHiddenNeighbor});*/
-
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]"))
@@ -322,6 +333,8 @@
                 
                 document.getElementById("zoomToSelected").addEventListener("click", function () {
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var selectedEles = cy.$(":selected");
                     api.zoomToSelected(selectedEles);
                     if(document.getElementById('layout').checked){
@@ -330,10 +343,27 @@
                 });
                 
                 document.getElementById("marqueeZoom").addEventListener("click", function () {
-                    api.enableMarqueeZoom();
-                    if( document.getElementById('layout').checked){
-                        layout.run();
-                    }
+                    api.disableLassoMode();
+                    getButtonsToDef();
+                    document.getElementById("marqueeZoom").style.backgroundColor = "darkgray";
+                    var callbackFunc = function() {
+                      document.getElementById("marqueeZoom").style.backgroundColor = "#11ffee00";
+                    }; 
+                    api.enableMarqueeZoom(callbackFunc);
+                });
+
+                api.changeLassoStyle({lineColor: "#d67614",lineWidth: 3});
+                document.getElementById('colorInpSec').value = "#d67614";
+                document.getElementById('lineWidth').value = 3;
+
+                document.getElementById("lassoTool").addEventListener("click", function () {
+                    api.disableMarqueeZoom();
+                    getButtonsToDef();
+                    document.getElementById("lassoTool").style.backgroundColor = "darkgray";
+                    var callbackFunc = function() {
+                        document.getElementById("lassoTool").style.backgroundColor = "#11ffee00";
+                    };
+                    api.enableLassoMode(callbackFunc);
                 });
 
                 var tappedBefore;
@@ -352,8 +382,9 @@
                 });
                 
                 cy.on('doubleTap', 'node', function (event) {
-
                     api.disableMarqueeZoom();
+                    api.disableLassoMode();
+                    getButtonsToDef();
                     var hiddenEles = cy.$(":selected").neighborhood().filter(':hidden');
                     var selectedNodes = cy.nodes(":selected");
                     var nodesWithHiddenNeighbor = (hiddenEles.neighborhood(":visible").nodes("[thickBorder]")).difference(cy.edges(":hidden").difference(hiddenEles.edges().union(hiddenEles.nodes().connectedEdges())).connectedNodes());
@@ -395,7 +426,7 @@
 
                 document.getElementById("removeSelectedHighlights").addEventListener("click", function () {
                     if(cy.$(":selected").length > 0)
-                    	ur.do("removeHighlights", cy.$(":selected"));
+                    	ur.do("removeHighlights", {eles: cy.$(":selected")});
                 });
 
                 document.getElementById("removeAllHighlights").addEventListener("click", function () {
@@ -404,6 +435,13 @@
                 
                 document.getElementById('highlightColors').addEventListener('change', function(e) {
                   document.getElementById('colorInp').value = e.target.value;
+                });
+
+                document.getElementById('colorInpSec').addEventListener('change', function(e) {
+                  api.changeLassoStyle({lineColor:document.getElementById('colorInpSec').value});
+                });
+                document.getElementById("lineWidth").addEventListener('change', function(e) {
+                  api.changeLassoStyle({lineWidth:document.getElementById("lineWidth").value});
                 });
 
                 document.getElementById('colorChangerBtn').addEventListener('click', function () {
@@ -494,9 +532,15 @@
             <b id="zoomToSelected" style="cursor: pointer; color: darkmagenta">Zoom to Selected</b><br/><br/>
             <b id="marqueeZoom" style="cursor: pointer; color: darkmagenta">Marquee Zoom</b>
             <br/>
-            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls</span>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Shift + drag to specify region; gets disabled after zoom, mouse events on canvas and other api functions calls.</span>
             <br/><br/>
-            
+            <b id="lassoTool" style="cursor: pointer; color: darkmagenta">Lasso Tool</b>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Left click to start specifying region; left click again to complete the region.</span>
+            <br/>
+            <span style="font-weight: normal !important; font-size: 14px !important;">Line width (between 1 and 10) and Color:</span>
+            <input type="number" id="lineWidth" min="1" max="10">
+            <input type="color" id="colorInpSec"><br/><br/>
             <label for="layout" style="vertical-align:middle;">Rearrange on Hide/Show</label>
             <input type="checkbox" id="layout" name="layout" style="vertical-align:middle;" value="checked">
             <br/><br/>

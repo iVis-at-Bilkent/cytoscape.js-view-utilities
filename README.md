@@ -3,9 +3,9 @@ cytoscape-view-utilities
 
 ## Description
 
-This Cytoscape.js extension provides miscellenaous view utilities such as hiding, highlighting and zooming nodes/edges, distributed under [The MIT License](https://opensource.org/licenses/MIT).
+This Cytoscape.js extension provides miscellenaous view utilities such as hide/show, highlight, marquee zoom and free form selection, distributed under [The MIT License](https://opensource.org/licenses/MIT).
 
-![](https://github.com/iVis-at-Bilkent/cytoscape.js-view-utilities/blob/master/view-utilities-extension-demo.gif)
+![](view-utilities-extension-demo.gif)
 
 Please cite the following paper when using this extension: 
 
@@ -13,15 +13,16 @@ U. Dogrusoz , A. Karacelik, I. Safarli, H. Balci, L. Dervishi, and M. C. Siper, 
 
 ## Demo
 
-Click [here](https://ivis-at-bilkent.github.io/cytoscape.js-view-utilities/demo.html) (no undo) or [here](https://ivis-at-bilkent.github.io/cytoscape.js-view-utilities/demo-undoable.html) (undoable) for a demo
+Click [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo.html) (no undo) or [here](https://raw.githack.com/iVis-at-Bilkent/cytoscape.js-view-utilities/unstable/demo-undoable.html) (undoable) for a demo
 
 ## API
 
 `var instance = cy.viewUtilities(options)` <br />
 @param options — If not provided, default options will be used. See the below section for default options.
 `highlightStyles` is array of objects. The objects should follow the format `{node: ..., edge: ...}`. `selectStyles` will be used if you want to override the highlighted styles when the objects are selected.
+`lassoStyle` will be used to override the lasso line style.<br />
 e.g
-```
+```js
 var options = {
   highlightStyles: [
     { node: { 'border-color': '#0b9bcd',  'border-width': 3 }, edge: {'line-color': '#0b9bcd', 'source-arrow-color': '#0b9bcd', 'target-arrow-color': '#0b9bcd', 'width' : 3} },
@@ -33,11 +34,12 @@ var options = {
   },
   setVisibilityOnHide: false, // whether to set visibility on hide/show
   setDisplayOnHide: true, // whether to set display on hide/show
-  zoomAnimationDuration: 1500, //default duration for zoom animation speed
+  zoomAnimationDuration: 1500, // default duration for zoom animation speed
   neighbor: function(node){
       return node.closedNeighborhood();
   },
-  neighborSelectTime: 1000
+  neighborSelectTime: 500,
+  lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
 };
 var api = cy.viewUtilities(options);
 ```
@@ -79,6 +81,13 @@ Enables marquee zoom.
 `instance.disableMarqueeZoom()` <br />
 Disables marquee zoom.
 
+`instance.enableLassoMode(callback)` <br />
+@param callback — is called at the end of the function<br />
+Enables lasso tool.
+
+`instance.disableLassoMode()` <br />
+Disables lasso tool.
+
 `instance.getHighlightStyles()` <br />
 Returns current `highlightStyles` which is an array of objects like below
 ``` 
@@ -106,17 +115,23 @@ Adds a new style to the `highlightStyles` array.
 @param styleIdx —  index of the style to delete (0 based) <br />
 Removes the style from `highlightStyles` array.
 
+`instance.changeLassoStyle(styleObj) ` <br />
+@param styleObj — lasso line style object with lineColor and/or lineWidth properties
+
 ## Default Options
-```
-highlightStyles: [],
-selectStyles: {},
-setVisibilityOnHide: false, // whether to set visibility on hide/show
-setDisplayOnHide: true, // whether to set display on hide/show
-zoomAnimationDuration: 1500, //default duration for zoom animation speed
-neighbor: function (node) { // return desired neighbors of tapheld node
-  return false;
-},
-neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+```js
+var options = {
+  highlightStyles: [],
+  selectStyles: {},
+  setVisibilityOnHide: false, // whether to set visibility on hide/show
+  setDisplayOnHide: true, // whether to set display on hide/show
+  zoomAnimationDuration: 1500, // default duration for zoom animation speed
+  neighbor: function (node) { // return desired neighbors of tapheld node
+    return false;
+  },
+  neighborSelectTime: 500, // ms, time to taphold to select desired neighbors
+  lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
+};
 ```
 
 ## Default Undo-Redo Actions
@@ -135,6 +150,7 @@ neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
 ## Dependencies
 
  * Cytoscape.js ^3.2.0
+ * Geometric.js ^2.2.3
  * cytoscape-undo-redo.js ^1.0.8 (optional)
 
 ## Usage instructions
@@ -165,17 +181,25 @@ require(['cytoscape', 'cytoscape-view-utilities'], function(cytoscape, view - ut
 
 Plain HTML/JS has the extension registered for you automatically, because no `require()` is needed.
 
+## Build targets
+
+* `npm run build` : Build `./src/**` into `cytoscape-view-utilities.js` in production environment and minimize the file.
+* `npm run build:dev` :  Build `./src/**` into `cytoscape-view-utilities.js` in development environment without minimizing the file.
+
 ## Publishing instructions
 
-This project is set up to automatically be published to npm and bower. To publish:
+This project is set up to automatically be published to npm and bower.  To publish:
 
-1. Set the version number environment variable: `export VERSION=1.2.3` 
-1. Publish: `gulp publish` 
-1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git` 
+1. Build the extension : `npm run build`
+1. Commit the build : `git commit -am "Build for release"`
+1. Bump the version number and tag: `npm version major|minor|patch`
+1. Push to origin: `git push && git push --tags`
+1. Publish to npm: `npm publish .`
+1. If publishing to bower for the first time, you'll need to run `bower register cytoscape-view-utilities https://github.com/iVis-at-Bilkent/view-utilities.git`
 
 ## Team
 
-  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Mubashira Zaman](https://github.com/MobiZaman), [Hasan Balci](https://github.com/hasanbalci), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
+  + [Hasan Balci](https://github.com/hasanbalci), [Metin Can Siper](https://github.com/metincansiper), [Huseyin Eren Calik](https://github.com/herencalik), [Mubashira Zaman](https://github.com/MobiZaman), and [Ugur Dogrusoz](https://github.com/ugurdogrusoz) of [i-Vis at Bilkent University](http://www.cs.bilkent.edu.tr/~ivis)
 
 ## Alumni
 

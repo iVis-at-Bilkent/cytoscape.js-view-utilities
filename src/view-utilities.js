@@ -3,6 +3,9 @@ var viewUtilities = function (cy, options) {
   var classNames4Styles = [];
   // give a unique name for each unique style EVER added
   var totStyleCnt = 0;
+  var marqueeZoomEnabled = false;
+  var shiftKeyDown = false;
+  var ctrlKeyDown = false;
   init();
   function init() {
     // add provided styles
@@ -15,6 +18,40 @@ var viewUtilities = function (cy, options) {
 
     // add styles for selected
     addSelectionStyles();
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key != "Control" && event.key != "Shift" && event.key != "Meta") {
+        return;
+      }
+      
+      if (event.key == "Control" || event.key == "Meta") {
+        ctrlKeyDown = true;
+      }
+      else if (event.key == "Shift") {
+        shiftKeyDown = true;
+      }
+      if (ctrlKeyDown && shiftKeyDown && !marqueeZoomEnabled) {
+        instance.enableMarqueeZoom();
+        marqueeZoomEnabled = true;
+      }
+    }); 
+
+    document.addEventListener("keyup", function(event) {
+      if (event.key != "Control" && event.key != "Shift" && event.key != "Meta") {
+        return;
+      }
+      if (event.key == "Shift") {
+        shiftKeyDown = false;
+      }
+      else if (event.key == "Control" || event.key == "Meta") {
+        ctrlKeyDown = false;
+      }
+      if (marqueeZoomEnabled && (!shiftKeyDown || !ctrlKeyDown)) {
+        instance.disableMarqueeZoom();
+        marqueeZoomEnabled = false;
+      }
+    }); 
+
   }
 
   function addSelectionStyles() {
@@ -208,22 +245,10 @@ var viewUtilities = function (cy, options) {
   var tabEndHandler;
 
   instance.enableMarqueeZoom = function (callback) {
-
-    var shiftKeyDown = false;
+    marqueeZoomEnabled = true;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
     //Make the cy unselectable
     cy.autounselectify(true);
-
-    document.addEventListener('keydown', function (event) {
-      if (event.key == "Shift") {
-        shiftKeyDown = true;
-      }
-    });
-    document.addEventListener('keyup', function (event) {
-      if (event.key == "Shift") {
-        shiftKeyDown = false;
-      }
-    });
 
     cy.one('tapstart', tabStartHandler = function (event) {
       if (shiftKeyDown == true) {
@@ -308,8 +333,125 @@ var viewUtilities = function (cy, options) {
     cy.off('tapstart', tabStartHandler);
     cy.off('tapend', tabEndHandler);
     cy.autounselectify(false);
+    marqueeZoomEnabled = false;
   };
+ //Lasso Mode
+ var geometric = require('geometric');
 
+ instance.changeLassoStyle = function(styleObj)  {
+   if(styleObj.lineWidth)
+     options.lassoStyle.lineWidth = styleObj.lineWidth;
+   if(styleObj.lineColor)
+     options.lassoStyle.lineColor = styleObj.lineColor;
+ };
+
+ instance.enableLassoMode = function (callback) {
+   
+   var isClicked = false;
+   var tempCanv = document.createElement('canvas');
+   tempCanv.id = 'lasso-canvas';
+   const container = cy.container();
+   container.appendChild(tempCanv);
+   
+   const width = container.offsetWidth;
+   const height = container.offsetHeight;
+
+   tempCanv.width = width;
+   tempCanv.height = height;
+   tempCanv.setAttribute("style",`z-index: 1000; position: absolute; top: 0; left: 0;`,);
+   
+   cy.panningEnabled(false);
+   cy.zoomingEnabled(false);
+   cy.autounselectify(true);
+   var points = [];
+
+   tempCanv.onclick = function(event) {
+     
+     if(isClicked == false)  {
+       isClicked = true;
+       var context = tempCanv.getContext("2d");
+       context.strokeStyle = options.lassoStyle.lineColor;
+       context.lineWidth = options.lassoStyle.lineWidth;
+       context.lineJoin = "round";
+       cy.panningEnabled(false);
+       cy.zoomingEnabled(false);
+       cy.autounselectify(true);
+       var formerX = event.offsetX;
+       var formerY = event.offsetY;
+       
+       points.push([formerX,formerY]);
+       tempCanv.onmouseleave = function(e) {
+         isClicked = false;
+         container.removeChild(tempCanv);
+         tempCanv = null;
+         cy.panningEnabled(true);
+         cy.zoomingEnabled(true);
+         cy.autounselectify(false);
+         if (callback) {
+           callback();
+         }
+       };
+       tempCanv.onmousemove = function(e)  {
+         context.beginPath();
+         points.push([e.offsetX,e.offsetY]);
+         context.moveTo(formerX, formerY);
+         context.lineTo(e.offsetX, e.offsetY);
+         formerX = e.offsetX;
+         formerY = e.offsetY;
+         context.stroke();
+         context.closePath();
+       };
+     }
+     else{
+       var eles = cy.elements();
+       points.push(points[0]);
+       for(var i = 0; i < eles.length; i++) {
+         if(eles[i].isEdge())  {
+           
+           var p1 = [(eles[i].sourceEndpoint().x)*cy.zoom()+cy.pan().x,(eles[i].sourceEndpoint().y)*cy.zoom()+cy.pan().y];
+           var p2 = [(eles[i].targetEndpoint().x)*cy.zoom()+cy.pan().x,(eles[i].targetEndpoint().y)*cy.zoom()+cy.pan().y];
+
+           if(geometric.pointInPolygon(p1,points) && geometric.pointInPolygon(p2,points))  {
+             eles[i].select();
+           }
+
+         }
+         else{
+           cy.autounselectify(false);
+           var bb = [[eles[i].renderedBoundingBox().x1,eles[i].renderedBoundingBox().y1],
+                     [eles[i].renderedBoundingBox().x1,eles[i].renderedBoundingBox().y2],
+                     [eles[i].renderedBoundingBox().x2,eles[i].renderedBoundingBox().y2],
+                     [eles[i].renderedBoundingBox().x2,eles[i].renderedBoundingBox().y1]];
+
+           if (geometric.polygonIntersectsPolygon(bb,points) || geometric.polygonInPolygon(bb, points) 
+           || geometric.polygonInPolygon(points,bb)){
+             eles[i].select();
+           }
+         }
+       }
+       isClicked = false;
+       container.removeChild(tempCanv);
+       tempCanv = null;
+       
+       cy.panningEnabled(true);
+       cy.zoomingEnabled(true);
+       if (callback) {
+         callback();
+       }
+     }
+   };
+ };
+
+ instance.disableLassoMode = function () {
+   var c = document.getElementById('lasso-canvas');
+   if ( c ){
+     c.parentElement.removeChild(c);
+     c = null;
+   }
+   cy.panningEnabled(true);
+   cy.zoomingEnabled(true);
+   cy.autounselectify(false);
+ }
   // return the instance
   return instance;
 };

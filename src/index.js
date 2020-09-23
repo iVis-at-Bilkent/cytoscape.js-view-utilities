@@ -18,7 +18,8 @@
       neighbor: function (node) { // return desired neighbors of tapheld node
         return false;
       },
-      neighborSelectTime: 500 //ms, time to taphold to select desired neighbors
+      neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
+      lassoStyle: {lineColor: "#d67614", lineWidth: 3}
     };
 
     var undoRedo = require("./undo-redo");
