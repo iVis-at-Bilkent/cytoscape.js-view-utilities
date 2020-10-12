@@ -137,6 +137,9 @@
                 tapheld = false;
               }, 100);
             }
+            else {
+              clearTimeout(timeout);
+            }
           });
 
           cy.one('drag', 'node', function(e) {
