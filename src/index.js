@@ -15,7 +15,7 @@
       setVisibilityOnHide: false, // whether to set visibility on hide/show
       setDisplayOnHide: true, // whether to set display on hide/show
       zoomAnimationDuration: 1500, //default duration for zoom animation speed
-      neighbor: function (node) { // return desired neighbors of tapheld node
+      neighbor: function (ele) { // return desired neighbors of tapheld node
         return false;
       },
       neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
@@ -100,7 +100,7 @@
           }
         });
         //Select the desired neighbors after taphold-and-free
-        cy.on('taphold', 'node', function(event){
+        cy.on('taphold', 'node, edge', function(event){
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
@@ -111,23 +111,36 @@
               if(neighborhood)
                 neighborhood.select();
               target.lock();
+
+              // this call is necessary to make sure
+              // the tapheld node or edge stays selected
+              // after releasing taphold
+              target.unselectify();
+              
+              // tracks whether the taphold event happened
+              // necessary if we want to keep 'neighborSelectTime'
+              // property, otherwise unnecessary 
               tapheld = true;
             }
           }, options.neighborSelectTime - 500);
-          cy.on('free', 'node', function(){
-            var targetTapheld = event.target || event.cyTarget;
-            if(target == targetTapheld && tapheld === true){
-              tapheld = false;
-              if(neighborhood)
-                neighborhood.select();
-              target.unlock();
-            }
-            else{
-              clearTimeout(timeout);
+
+          // this listener prevents the original tapheld node or edge
+          // from being unselected after releasing from taphold
+          // together with the 'unselectify' call above
+          // called as one time event since it's defined inside another event,
+          // shouldn't be defined over and over with 'on'
+          cy.one('tapend', function() {
+            if (tapheld) {
+              setTimeout(function() {
+                target.selectify();
+                target.unlock();
+                tapheld = false;
+              }, 100);
             }
           });
-          cy.on('drag', 'node', function(){
-            var targetDragged = event.target || event.cyTarget;
+
+          cy.one('drag', 'node', function(e) {
+            var targetDragged = e.target || e.cyTarget;
             if(target == targetDragged && tapheld === false){
               clearTimeout(timeout);
             }

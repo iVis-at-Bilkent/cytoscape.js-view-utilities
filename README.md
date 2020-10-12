@@ -35,8 +35,8 @@ var options = {
   setVisibilityOnHide: false, // whether to set visibility on hide/show
   setDisplayOnHide: true, // whether to set display on hide/show
   zoomAnimationDuration: 1500, // default duration for zoom animation speed
-  neighbor: function(node){
-      return node.closedNeighborhood();
+  neighbor: function(ele){
+      return ele.closedNeighborhood();
   },
   neighborSelectTime: 500,
   lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
@@ -126,10 +126,10 @@ var options = {
   setVisibilityOnHide: false, // whether to set visibility on hide/show
   setDisplayOnHide: true, // whether to set display on hide/show
   zoomAnimationDuration: 1500, // default duration for zoom animation speed
-  neighbor: function (node) { // return desired neighbors of tapheld node
+  neighbor: function (ele) { // return desired neighbors of tapheld element
     return false;
   },
-  neighborSelectTime: 500, // ms, time to taphold to select desired neighbors
+  neighborSelectTime: 500, // ms, time to taphold to select desired neighbors in addition to the taphold event detect time by cytoscape
   lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
 };
 ```
