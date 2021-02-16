@@ -78,7 +78,6 @@ var viewUtilities = function (cy, options) {
       eles.removeClass(classNames4Styles[i]);
     }
     eles.addClass(classNames4Styles[idx]);
-    eles.unselect();
     cy.endBatch();
   }
 
