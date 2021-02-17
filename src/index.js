@@ -20,8 +20,8 @@
       },
       neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
       lassoStyle: { lineColor: "#d67614", lineWidth: 3 },
-      htmlElem4marqueeZoom: '',
-      marqueeZoomCursor: 'se-resize'
+      htmlElem4marqueeZoom: '', // should be string like `#cy` or `.cy`. `#cy` means get element with the ID 'cy'. `.cy` means the element with class 'cy' 
+      marqueeZoomCursor: 'se-resize' // the cursor that should be used when marquee zoom is enabled. It can also be an image if a URL to an image is given 
     };
 
     var undoRedo = require("./undo-redo");

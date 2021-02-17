@@ -40,6 +40,8 @@ var options = {
   },
   neighborSelectTime: 500,
   lassoStyle: {lineColor: "#d67614", lineWidth: 3} // default lasso line color, dark orange, and default line width
+  htmlElem4marqueeZoom: '', // should be string like `#cy` or `.cy`. `#cy` means get element with the ID 'cy'. `.cy` means the element with class 'cy' 
+  marqueeZoomCursor: 'se-resize' // the cursor that should be used when marquee zoom is enabled. It can also be an image if a URL to an image is given
 };
 var api = cy.viewUtilities(options);
 ```
@@ -76,10 +78,10 @@ Zoom to selected eles.
 
 `instance.enableMarqueeZoom(callback)` <br />
 @param callback — is called at the end of the function <br />
-Enables marquee zoom.
+Enables marquee zoom. It is automatically called when CTRL+Shift keys are down.
 
 `instance.disableMarqueeZoom()` <br />
-Disables marquee zoom.
+Disables marquee zoom. It is automatically called when CTRL+Shift keys are up.
 
 `instance.enableLassoMode(callback)` <br />
 @param callback — is called at the end of the function<br />
