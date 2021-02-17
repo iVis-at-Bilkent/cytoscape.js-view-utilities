@@ -19,7 +19,9 @@
         return false;
       },
       neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
-      lassoStyle: {lineColor: "#d67614", lineWidth: 3}
+      lassoStyle: {lineColor: "#d67614", lineWidth: 3},
+      htmlElem4marqueeZoom: null,
+      marqueeZoomCursor: 'se-resize'
     };
 
     var undoRedo = require("./undo-redo");
@@ -71,7 +73,7 @@
 
         return out;
       };
-
+      
       options = extendOptions({}, options, opts);
 
       // create a view utilities instance

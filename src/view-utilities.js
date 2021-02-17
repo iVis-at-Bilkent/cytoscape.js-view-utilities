@@ -6,6 +6,9 @@ var viewUtilities = function (cy, options) {
   var marqueeZoomEnabled = false;
   var shiftKeyDown = false;
   var ctrlKeyDown = false;
+  var timer4KeyUp = false;
+  var isDownedKeyUp = false;
+  var prevCursor = null;
   init();
   function init() {
     // add provided styles
@@ -30,6 +33,9 @@ var viewUtilities = function (cy, options) {
       else if (event.key == "Shift") {
         shiftKeyDown = true;
       }
+      isDownedKeyUp = false;
+      clearTimeout(timer4KeyUp);
+      timer4KeyUp = setTimeout(callKeyUpManually, 1000);
       if (ctrlKeyDown && shiftKeyDown && !marqueeZoomEnabled) {
         instance.enableMarqueeZoom();
         marqueeZoomEnabled = true;
@@ -40,6 +46,7 @@ var viewUtilities = function (cy, options) {
       if (event.key != "Control" && event.key != "Shift" && event.key != "Meta") {
         return;
       }
+      isDownedKeyUp = true;
       if (event.key == "Shift") {
         shiftKeyDown = false;
       }
@@ -52,6 +59,49 @@ var viewUtilities = function (cy, options) {
       }
     });
 
+  }
+
+  // ctrl + shift + tab does not call keyup after keydown
+  function callKeyUpManually() {
+    timer4KeyUp = null;
+    if (isDownedKeyUp) {
+      return;
+    }
+    setCursor(true);
+    isDownedKeyUp = true;
+    shiftKeyDown = false;
+    ctrlKeyDown = false;
+    if (marqueeZoomEnabled) {
+      instance.disableMarqueeZoom();
+      marqueeZoomEnabled = false;
+    }
+  }
+
+  function setCursor(isReturnBack = false) {
+    if (!options.htmlElem4marqueeZoom) {
+      return;
+    }
+    let el = null;
+    if (options.htmlElem4marqueeZoom.startsWith('.')) {
+      el = document.getElementsByClassName(options.htmlElem4marqueeZoom.substr(1))[0];
+    }
+    if (options.htmlElem4marqueeZoom.startsWith('#')) {
+      el = document.getElementById(options.htmlElem4marqueeZoom.substr(1));
+    }
+    if (!el) {
+      console.log('element not found!');
+      return;
+    }
+    if (isReturnBack) {
+      el.style.cursor = prevCursor;
+    } else {
+      prevCursor = el.style.cursor;
+      if (options.marqueeZoomCursor.includes('.')) {
+        el.style.cursor = `url('${options.marqueeZoomCursor}'), pointer`;
+      } else {
+        el.style.cursor = options.marqueeZoomCursor;
+      }
+    }
   }
 
   function addSelectionStyles() {
@@ -244,6 +294,7 @@ var viewUtilities = function (cy, options) {
   var tabEndHandler;
 
   instance.enableMarqueeZoom = function (callback) {
+    setCursor(false);
     marqueeZoomEnabled = true;
     var rect_start_pos_x, rect_start_pos_y, rect_end_pos_x, rect_end_pos_y;
     //Make the cy unselectable
@@ -329,6 +380,7 @@ var viewUtilities = function (cy, options) {
   };
 
   instance.disableMarqueeZoom = function () {
+    setCursor(true);
     cy.off('tapstart', tabStartHandler);
     cy.off('tapend', tabEndHandler);
     cy.autounselectify(false);
