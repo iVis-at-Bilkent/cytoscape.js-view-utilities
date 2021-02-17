@@ -20,7 +20,7 @@
       },
       neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
       lassoStyle: { lineColor: "#d67614", lineWidth: 3 },
-      htmlElem4marqueeZoom: null,
+      htmlElem4marqueeZoom: '',
       marqueeZoomCursor: 'se-resize'
     };
 
