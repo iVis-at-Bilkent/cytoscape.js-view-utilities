@@ -19,7 +19,7 @@
         return false;
       },
       neighborSelectTime: 500, //ms, time to taphold to select desired neighbors
-      lassoStyle: {lineColor: "#d67614", lineWidth: 3},
+      lassoStyle: { lineColor: "#d67614", lineWidth: 3 },
       htmlElem4marqueeZoom: null,
       marqueeZoomCursor: 'se-resize'
     };
@@ -37,12 +37,12 @@
 
         return eleOrCy.scratch("_viewUtilities");
       }
-      
+
       // If 'get' is given as the param then return the extension instance
       if (opts === 'get') {
         return getScratch(cy).instance;
       }
-      
+
       /**
       * Deep copy or merge objects - replacement for jQuery deep extend
       * Taken from http://youmightnotneedjquery.com/#deep_extend
@@ -73,7 +73,7 @@
 
         return out;
       };
-      
+
       options = extendOptions({}, options, opts);
 
       // create a view utilities instance
@@ -91,26 +91,26 @@
         getScratch(cy).initialized = true;
 
         var shiftKeyDown = false;
-        document.addEventListener('keydown', function(event){
-          if(event.key == "Shift") {
+        document.addEventListener('keydown', function (event) {
+          if (event.key == "Shift") {
             shiftKeyDown = true;
           }
         });
-        document.addEventListener('keyup', function(event){
-          if(event.key == "Shift") {
+        document.addEventListener('keyup', function (event) {
+          if (event.key == "Shift") {
             shiftKeyDown = false;
           }
         });
         //Select the desired neighbors after taphold-and-free
-        cy.on('taphold', 'node, edge', function(event){
+        cy.on('taphold', 'node, edge', function (event) {
           var target = event.target || event.cyTarget;
           var tapheld = false;
           var neighborhood;
-          var timeout = setTimeout(function(){
-            if(shiftKeyDown){
+          var timeout = setTimeout(function () {
+            if (shiftKeyDown) {
               cy.elements().unselect();
               neighborhood = options.neighbor(target);
-              if(neighborhood)
+              if (neighborhood)
                 neighborhood.select();
               target.lock();
 
@@ -118,7 +118,7 @@
               // the tapheld node or edge stays selected
               // after releasing taphold
               target.unselectify();
-              
+
               // tracks whether the taphold event happened
               // necessary if we want to keep 'neighborSelectTime'
               // property, otherwise unnecessary 
@@ -131,9 +131,9 @@
           // together with the 'unselectify' call above
           // called as one time event since it's defined inside another event,
           // shouldn't be defined over and over with 'on'
-          cy.one('tapend', function() {
+          cy.one('tapend', function () {
             if (tapheld) {
-              setTimeout(function() {
+              setTimeout(function () {
                 target.selectify();
                 target.unlock();
                 tapheld = false;
@@ -144,9 +144,9 @@
             }
           });
 
-          cy.one('drag', 'node', function(e) {
+          cy.one('drag', 'node', function (e) {
             var targetDragged = e.target || e.cyTarget;
-            if(target == targetDragged && tapheld === false){
+            if (target == targetDragged && tapheld === false) {
               clearTimeout(timeout);
             }
           })
