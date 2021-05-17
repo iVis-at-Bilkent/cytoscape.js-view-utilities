@@ -161,16 +161,15 @@ var viewUtilities = function (cy, options) {
   instance.show = function (eles) {
     eles = eles.not(":visible");
 
-    var connectedEdges = eles.connectedEdges(function (edge) {
-
-      if ((edge.source().visible() || eles.contains(edge.source())) && (edge.target().visible() || eles.contains(edge.target()))) {
-        return true;
-      } else {
+    if (options.isShowEdgesBetweenVisibleNodes) {
+      var connectedEdges = eles.connectedEdges(function (edge) {
+        if ((edge.source().visible() || eles.contains(edge.source())) && (edge.target().visible() || eles.contains(edge.target()))) {
+          return true;
+        }
         return false;
-      }
-
-    });
-    eles = eles.union(connectedEdges);
+      });
+      eles = eles.union(connectedEdges);
+    }
 
     eles.unselect();
 
