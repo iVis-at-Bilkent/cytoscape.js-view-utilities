@@ -225,8 +225,13 @@
                   setVisibilityOnHide: false, // whether to set visibility on hide/show
                   setDisplayOnHide: true, // whether to set display on hide/show
                   zoomAnimationDuration: 1500, //default duration for zoom animation speed
-                  neighbor: function(node){
-                      return node.closedNeighborhood();
+                  neighbor: function(ele){
+                      if (ele.isNode()) {
+                          return ele.closedNeighborhood();
+                      }
+                      else if (ele.isEdge()) {
+                          return ele.source().closedNeighborhood().union(ele.target().closedNeighborhood());
+                      }
                   },
                   neighborSelectTime: 1000
                 });

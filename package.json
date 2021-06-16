@@ -2,9 +2,9 @@
   "name": "cytoscape-view-utilities",
   "version": "5.0.0",
   "description": "Package of view utilities for cytoscape.js",
-  "main": "src/index.js",
+  "main": "cytoscape-view-utilities.js",
   "spm": {
-    "main": "src/index.js"
+    "main": "cytopscape-view-utilities.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
