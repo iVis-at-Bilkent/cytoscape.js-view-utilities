@@ -35,7 +35,7 @@ var viewUtilities = function (cy, options) {
       }
       isDownedKeyUp = false;
       clearTimeout(timer4KeyUp);
-      timer4KeyUp = setTimeout(callKeyUpManually, 750);
+      timer4KeyUp = setTimeout(callKeyUpManually, 4000); 
       if (ctrlKeyDown && shiftKeyDown && !marqueeZoomEnabled) {
         instance.enableMarqueeZoom();
         marqueeZoomEnabled = true;
